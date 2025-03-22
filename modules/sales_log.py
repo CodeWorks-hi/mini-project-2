@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 CSV_PATH = "data/세일즈파일/sales_records.csv"
-DELETED_LOG_PATH = "data/processed/deleted_log.csv"
+DELETED_LOG_PATH = "data/세일즈파일/deleted_log.csv"
 
 def show_sales_log_table(df: pd.DataFrame):
     st.subheader("📋 판매 내역 관리")
@@ -49,7 +49,10 @@ def show_sales_log_table(df: pd.DataFrame):
 
             keep_rows.to_csv(CSV_PATH, index=False)
             st.success(f"✅ {len(delete_rows)}건 삭제됨. 로그 저장 완료.")
-            st.experimental_rerun()
+            if hasattr(st, "experimental_rerun"):
+                st.experimental_rerun()
+            else:
+                st.info("페이지를 수동으로 새로고침 해주세요.")
 
         st.download_button(
             "📤 필터된 결과 다운로드",

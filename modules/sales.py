@@ -1,8 +1,3 @@
-# modules/sales.py
-# -----------------------------
-# 판매 등록 화면 및 저장 로직
-# -----------------------------
-
 import streamlit as st
 import pandas as pd
 import os
@@ -41,6 +36,19 @@ def save_sale_record(data: dict):
     df.to_csv(CSV_PATH, index=False)
     st.success("✅ 판매 등록 완료")
 
+# 삭제 함수 (입력된 판매기록과 일치하는 행 삭제 후 리런)
+def delete_sale_record(del_data: dict):
+    if os.path.exists(CSV_PATH):
+        df = pd.read_csv(CSV_PATH)
+        # 해당 조건에 맞는 행을 제외
+        df = df[~((df['판매일'] == del_data['판매일']) &
+                  (df['모델명'] == del_data['모델명']) &
+                  (df['지역'] == del_data['지역']) &
+                  (df['담당자'] == del_data['담당자']))]
+        df.to_csv(CSV_PATH, index=False)
+        st.success("✅ 판매 기록 삭제 완료")
+        st.experimental_rerun()  # 삭제 후 페이지 자동 새로고침
+
 # 메인 판매 UI
 def sales_ui():
     st.title("🛒 판매 관리")
@@ -67,6 +75,7 @@ def sales_ui():
         st.text_input("차종", 차종, disabled=True)
         st.number_input("가격 (기본값)", value=int(가격), step=100000, key="price_display", disabled=True)
 
+    # 판매 등록 폼
     with st.form("판매 등록 폼"):
         col1, col2 = st.columns(2)
         with col1:
@@ -103,12 +112,31 @@ def sales_ui():
             }
             save_sale_record(record)
 
+    # 판매 기록, KPI, 차트 표시
     if os.path.exists(CSV_PATH):
         sales_df = pd.read_csv(CSV_PATH)
         show_kpi_cards(sales_df)
         show_sales_log_table(sales_df)
         show_sales_charts(sales_df)
 
+    # 삭제 UI: 삭제할 판매 기록 정보를 입력받고 삭제 버튼 클릭 시 자동 새로고침
+    with st.expander("판매 기록 삭제"):
+        st.info("삭제할 판매 기록의 정보를 입력하세요.")
+        del_판매일 = st.date_input("삭제할 판매일")
+        del_모델명 = st.text_input("삭제할 모델명")
+        del_지역 = st.text_input("삭제할 지역")
+        del_담당자 = st.text_input("삭제할 담당자")
+        if st.button("삭제"):
+            delete_sale_record({
+                "판매일": str(del_판매일),
+                "모델명": del_모델명,
+                "지역": del_지역,
+                "담당자": del_담당자
+            })
+
     st.download_button("📥 차량정보 포함 샘플 다운로드",
         data=open(SAMPLE_PATH, "rb").read(),
         file_name="판매기록_샘플_차정보포함.xlsx")
+
+if __name__ == "__main__":
+    sales_ui()

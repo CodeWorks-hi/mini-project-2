@@ -9,6 +9,7 @@
 # ----------------------------
 
 import streamlit as st
+st.set_page_config(page_title="ERP 차량 관리 시스템", layout="wide")
 from components.navbar import navbar
 from core.master_auth import master_login, is_master_logged_in, logout
 
@@ -23,7 +24,7 @@ import modules.recommendations as recommendations
 import modules.settings as settings
 
 # ✅ 페이지 설정
-st.set_page_config(page_title="ERP 차량 관리 시스템", layout="wide")
+
 
 # ✅ 관리자 로그인
 master_login()
@@ -62,3 +63,4 @@ if is_master_logged_in():
         settings.settings_ui()
 else:
     st.warning("🔐 관리자 로그인 후 사용 가능합니다.")
+
