@@ -11,7 +11,7 @@ from modules.sales_kpi import show_kpi_cards
 from modules.sales_log import show_sales_log_table
 from modules.sales_chart import show_sales_charts
 
-CSV_PATH = "data/processed/sales_records.csv"
+CSV_PATH = "data/세일즈파일/sales_records.csv"
 CAR_INFO_PATH = "data/세일즈파일/차량정보.csv"
 SAMPLE_PATH = "data/세일즈파일/판매기록_샘플_차정보포함.xlsx"
 

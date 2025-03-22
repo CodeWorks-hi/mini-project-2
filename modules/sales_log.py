@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 
-CSV_PATH = "data/processed/sales_records.csv"
+CSV_PATH = "data/세일즈파일/sales_records.csv"
 DELETED_LOG_PATH = "data/processed/deleted_log.csv"
 
 def show_sales_log_table(df: pd.DataFrame):
