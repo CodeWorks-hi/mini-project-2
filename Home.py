@@ -1,5 +1,5 @@
 # 앱 로컬 실행 시 : streamlit run Home.py
-# 앱 스트림릿 서버상 실행 시 : 
+# 앱 스트림릿 서버상 실행 시 : https://hyundai-kia-dashboard-codeworks.streamlit.app/
 
 import streamlit as st
 
