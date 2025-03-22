@@ -30,7 +30,6 @@ master_login()
 
 if is_master_logged_in():
     logout()
-    st.sidebar.image("images/hyunlogo.png", use_container_width=True)
 
     selected_page = navbar()
 
