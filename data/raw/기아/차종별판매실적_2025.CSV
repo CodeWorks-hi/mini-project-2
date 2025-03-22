@@ -1,0 +1,52 @@
+Model,Vehicle Type,Trade,Jan
+ Morning,Ordinary Vehicle,Domestic,1484
+ Ray,Ordinary Vehicle,Domestic,3876
+ K3,Ordinary Vehicle,Domestic,0
+ EV4,Ordinary Vehicle,Domestic,0
+ K5,Ordinary Vehicle,Domestic,2583
+ K7 / K8,Ordinary Vehicle,Domestic,2297
+ K9,Ordinary Vehicle,Domestic,123
+ EV3,Ordinary Vehicle,Domestic,429
+ Seltos,Ordinary Vehicle,Domestic,4342
+ Niro,Ordinary Vehicle,Domestic,571
+ EV5,Ordinary Vehicle,Domestic,0
+ EV6,Ordinary Vehicle,Domestic,72
+ Sportage,Ordinary Vehicle,Domestic,6547
+ Sorento,Ordinary Vehicle,Domestic,7454
+ EV9,Ordinary Vehicle,Domestic,37
+ Carnival,Ordinary Vehicle,Domestic,6068
+ Bongo,Ordinary Vehicle,Domestic,2419
+ Bus,Ordinary Vehicle,Domestic,101
+ Tasman,Ordinary Vehicle,Domestic,0
+ PV5,Ordinary Vehicle,Domestic,0
+ Tasman,Special Vehicle,Domestic,0
+ Military,Special Vehicle,Domestic,9
+ Bongo,Special Vehicle,Domestic,0
+ Bus,Special Vehicle,Domestic,0
+ Morning / Picanto,Ordinary Vehicle,Export,7802
+ Pride / Rio,Ordinary Vehicle,Export,0
+ K3,Ordinary Vehicle,Export,0
+ EV4,Ordinary Vehicle,Export,6
+ K5 / Optima,Ordinary Vehicle,Export,5522
+ K7 / K8 / Cadenza,Ordinary Vehicle,Export,85
+ K9,Ordinary Vehicle,Export,0
+ Stonic,Ordinary Vehicle,Export,4482
+ EV3,Ordinary Vehicle,Export,7646
+ Seltos,Ordinary Vehicle,Export,8336
+ Soul,Ordinary Vehicle,Export,5377
+ Niro,Ordinary Vehicle,Export,9293
+ EV5,Ordinary Vehicle,Export,0
+ EV6,Ordinary Vehicle,Export,1357
+ Sportage,Ordinary Vehicle,Export,10293
+ Sorento,Ordinary Vehicle,Export,6334
+ Mohave / Borrego,Ordinary Vehicle,Export,0
+ EV9,Ordinary Vehicle,Export,1117
+ Carnival / Sedona,Ordinary Vehicle,Export,6600
+ Tasman,Ordinary Vehicle,Export,2
+ Bongo,Ordinary Vehicle,Export,2758
+ Bus,Ordinary Vehicle,Export,0
+ PV5,Ordinary Vehicle,Export,0
+ Tasman,Special Vehicle,Export,0
+ Military,Special Vehicle,Export,0
+ Bongo,Special Vehicle,Export,17
+ Bus,Special Vehicle,Export,0

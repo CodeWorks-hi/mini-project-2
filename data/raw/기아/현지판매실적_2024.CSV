@@ -1,0 +1,949 @@
+Model,Plant,Month,Korea,U.S.A,Canada,Mexico,*Europe,Eastern Europe,Latin America,Middle East,Africa,Asia Pacific,India,China
+Morning / Picanto,Korea Plants,January,1214,0,0,0,4726,68,1564,1274,748,315,0,0
+Pride / Rio,Korea Plants,January,0,0,0,0,82,2,0,148,2,0,0,0
+Ray,Korea Plants,January,4020,0,0,0,0,0,0,0,0,0,0,0
+Ray EV,Korea Plants,January,110,0,0,0,0,0,0,0,0,0,0,0
+K3,Korea Plants,January,1419,0,9,39,0,71,10,749,104,1030,0,0
+K5 / Optima,Korea Plants,January,3336,0,0,0,0,772,5,926,13,2,0,0
+Stinger,Korea Plants,January,0,-1,7,0,33,2,0,13,0,0,0,0
+"K7,8 / Cadenza",Korea Plants,January,2917,0,0,0,0,30,0,110,0,0,0,0
+K9,Korea Plants,January,175,0,0,0,0,12,0,0,0,0,0,0
+Stonic,Korea Plants,January,0,0,0,0,5338,475,127,770,115,755,0,0
+Seltos,Korea Plants,January,3944,4000,1726,0,0,359,551,513,0,992,0,0
+Soul,Korea Plants,January,0,3271,175,188,0,22,170,0,0,24,0,0
+Soul EV,Korea Plants,January,0,0,0,0,76,0,1,0,0,0,0,0
+Niro,Korea Plants,January,1220,1226,102,136,3440,0,89,238,34,158,0,0
+Niro EV,Korea Plants,January,19,836,258,0,2606,51,8,160,3,60,0,0
+Niro Plus,Korea Plants,January,0,0,0,0,0,0,0,766,3,0,0,0
+Niro Plus EV,Korea Plants,January,2,0,0,0,0,0,0,14,1,1,0,0
+EV3,Korea Plants,January,0,0,0,0,0,0,0,0,0,0,0,0
+EV4,Korea Plants,January,0,0,0,0,0,0,0,0,0,0,0,0
+EV6,Korea Plants,January,29,1213,438,7,2315,14,15,40,13,280,29,18
+EV9,Korea Plants,January,449,1408,50,0,1296,11,8,12,1,151,0,0
+Sportage,Korea Plants,January,5934,4739,1608,608,0,789,707,0,0,2613,0,0
+Sorento,Korea Plants,January,9284,1280,0,0,1461,108,117,980,40,767,0,0
+Mohave / Borrego,Korea Plants,January,291,0,0,0,0,30,0,0,0,0,0,0
+Carnival / Sedona,Korea Plants,January,7049,3013,382,0,0,43,68,264,22,915,0,0
+Bongo / Frontier,Korea Plants,January,3055,0,0,0,0,13,993,1671,189,145,0,0
+Bongo EV,Korea Plants,January,19,0,0,0,0,0,0,0,0,0,0,0
+Bus,Korea Plants,January,122,0,0,0,0,0,0,0,0,0,0,0
+Cee'd,Slovakia Plant,January,0,0,0,0,6445,362,6,0,16,15,0,0
+Cee'd CUV,Slovakia Plant,January,0,0,0,0,2970,142,6,0,120,0,0,0
+Sportage,Slovakia Plant,January,0,0,0,0,13961,949,382,1359,616,0,0,0
+Pride / Rio (SC),Mexico Plant,January,0,929,358,4480,0,0,969,135,61,9,0,0
+K3,Mexico Plant,January,0,8977,753,797,0,0,148,0,0,17,0,0
+Pride / Rio (FB),*Russia Plant(HMMR),January,0,0,0,0,0,1,0,0,0,0,0,0
+Optima / K5,US Plant,January,0,3288,15,0,0,0,16,0,0,0,0,0
+Sportage,US Plant,January,0,5255,0,0,0,0,10,0,0,0,0,0
+Sorento,US Plant,January,0,4740,388,159,0,0,25,0,0,0,0,0
+Telluride,US Plant,January,0,6916,254,0,0,0,4,109,0,0,0,0
+EV9,US Plant,January,0,0,0,0,0,0,0,0,0,0,0,0
+Pegas,China Plants,January,0,0,0,0,0,0,1446,2855,191,155,0,380
+Forte,China Plants,January,0,0,0,0,0,0,0,0,0,0,0,2354
+K3,China Plants,January,0,0,0,0,0,0,0,0,0,0,0,875
+K4,China Plants,January,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,China Plants,January,0,0,0,0,0,0,0,0,0,0,0,115
+KX1,China Plants,January,0,0,0,0,0,0,0,0,0,141,0,446
+Sonet,China Plants,January,,,,,,,,,,,,
+KX3 / Seltos,China Plants,January,0,0,0,1765,0,0,764,918,7,61,0,854
+Zhipao,China Plants,January,0,0,0,0,0,0,0,0,0,0,0,654
+KX5 / Sportage,China Plants,January,0,0,0,0,0,0,0,0,0,0,0,1446
+Carnival,China Plants,January,0,0,0,0,0,0,0,0,0,0,0,166
+EV5,China Plants,January,0,0,0,0,0,0,0,0,0,0,0,709
+Sonet,India Plant,January,0,0,0,0,0,0,970,393,534,158,7003,0
+Seltos,India Plant,January,0,0,0,25,0,0,126,0,202,80,7025,0
+Carens MPV,India Plant,January,0,0,0,0,0,0,241,434,48,51,4597,0
+Carnival (CKD),India Plant,January,0,0,0,0,0,0,0,0,0,0,0,0
+Morning / Picanto,CKD,January,0,0,0,0,0,0,0,50,0,1,0,0
+Pegas,CKD,January,0,0,0,0,0,0,0,0,0,48,0,0
+K3,CKD,January,0,0,0,0,0,145,0,0,0,44,0,0
+K4,CKD,January,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,CKD,January,0,0,0,0,0,0,0,0,0,2,0,0
+"K7, K8 / Cadenza",CKD,January,0,0,0,0,0,0,0,0,0,0,0,0
+Sonet,CKD,January,0,0,0,0,0,0,240,0,0,530,0,0
+Stonic,CKD,January,0,0,0,0,0,0,0,19,0,0,0,0
+Seltos,CKD,January,0,0,0,0,0,322,0,0,0,563,0,0
+Soul,CKD,January,0,0,0,0,0,287,0,0,0,0,0,0
+EV5,CKD,January,0,0,0,0,0,0,0,0,0,0,0,0
+EV9,CKD,January,0,0,0,0,0,0,0,0,0,0,0,0
+Sportage,CKD,January,0,0,0,0,0,890,0,120,0,91,0,0
+Sorento,CKD,January,0,0,0,0,0,0,0,54,0,35,0,0
+New Carens,CKD,January,0,0,0,0,0,0,0,0,0,0,0,0
+Carens MPV,CKD,January,0,0,0,0,0,0,0,0,0,6,0,0
+Carnival / Sedona,CKD,January,0,0,0,0,0,0,0,0,0,568,0,0
+Bongo / Frontier,CKD,January,0,0,0,0,0,0,279,0,0,502,0,0
+Bongo,Special Vehicle,January,0,0,0,0,0,72,0,0,0,3,0,0
+Millitary,Special Vehicle,January,75,0,0,0,0,10,0,0,0,0,0,0
+Bus,Special Vehicle,January,0,0,0,0,0,0,0,0,0,0,0,0
+Bongo (CKD),Special Vehicle,January,0,0,0,0,0,0,0,0,0,0,0,0
+Millitary (CKD),Special Vehicle,January,0,0,0,0,0,0,0,72,0,0,0,0
+Bus (CKD),Special Vehicle,January,0,0,0,0,0,0,0,0,0,26,0,0
+Morning / Picanto,Korea Plants,Febuary,1140,0,0,0,3529,174,1754,471,775,384,0,0
+Pride / Rio,Korea Plants,Febuary,0,0,0,0,86,1,1,58,0,1,0,0
+Ray,Korea Plants,Febuary,3160,0,0,0,0,0,0,0,0,0,0,0
+Ray EV,Korea Plants,Febuary,812,0,0,0,0,0,0,0,0,0,0,0
+K3,Korea Plants,Febuary,1315,0,38,31,0,117,19,766,189,1163,0,0
+K5 / Optima,Korea Plants,Febuary,2970,0,0,0,0,735,12,719,2,1,0,0
+Stinger,Korea Plants,Febuary,0,0,4,0,10,0,1,14,0,0,0,0
+"K7,8 / Cadenza",Korea Plants,Febuary,2165,0,0,0,0,11,0,94,0,0,0,0
+K9,Korea Plants,Febuary,191,0,0,0,0,14,0,0,0,0,0,0
+Stonic,Korea Plants,Febuary,0,0,0,0,4496,429,143,208,267,1015,0,0
+Seltos,Korea Plants,Febuary,3967,4766,1714,0,0,319,468,351,0,946,0,0
+Soul,Korea Plants,Febuary,0,3897,250,131,0,10,199,0,0,1,0,0
+Soul EV,Korea Plants,Febuary,0,0,0,0,125,0,3,0,0,1,0,0
+Niro,Korea Plants,Febuary,938,1210,119,98,3074,2,88,88,42,172,0,0
+Niro EV,Korea Plants,Febuary,2,1301,394,0,2082,44,7,58,1,137,0,0
+Niro Plus,Korea Plants,Febuary,0,0,0,0,0,0,0,430,0,1,0,0
+Niro Plus EV,Korea Plants,Febuary,0,0,0,0,0,0,0,260,0,9,0,0
+EV3,Korea Plants,Febuary,0,0,0,0,0,0,0,0,0,0,0,0
+EV4,Korea Plants,Febuary,0,0,0,0,0,0,0,0,0,0,0,0
+EV6,Korea Plants,Febuary,155,1309,457,7,1841,17,12,38,17,289,21,6
+EV9,Korea Plants,Febuary,124,1318,83,0,714,14,9,1,1,109,0,0
+Sportage,Korea Plants,Febuary,6991,5334,1691,562,0,526,567,0,0,1969,0,0
+Sorento,Korea Plants,Febuary,8671,1334,0,0,1020,453,202,1761,45,1066,0,0
+Mohave / Borrego,Korea Plants,Febuary,241,0,0,0,0,37,0,0,0,0,0,0
+Carnival / Sedona,Korea Plants,Febuary,7989,3074,283,0,0,59,64,232,21,663,0,0
+Bongo / Frontier,Korea Plants,Febuary,2897,0,0,0,0,214,1056,1149,186,126,0,0
+Bongo EV,Korea Plants,Febuary,180,0,0,0,0,0,0,0,0,0,0,0
+Bus,Korea Plants,Febuary,100,0,0,0,0,0,0,0,0,0,0,0
+Cee'd,Slovakia Plant,Febuary,0,0,0,0,6773,315,2,105,9,5,0,0
+Cee'd CUV,Slovakia Plant,Febuary,0,0,0,0,3008,48,17,0,232,0,0,0
+Sportage,Slovakia Plant,Febuary,0,0,0,0,12326,692,442,1480,476,0,0,0
+Pride / Rio (SC),Mexico Plant,Febuary,0,648,229,4592,0,0,941,369,0,3,0,0
+K3,Mexico Plant,Febuary,0,11229,982,801,0,0,217,0,0,0,0,0
+Pride / Rio (FB),*Russia Plant(HMMR),Febuary,0,0,0,0,0,9,0,0,0,0,0,0
+Optima / K5,US Plant,Febuary,0,2291,4,0,0,0,4,0,0,0,0,0
+Sportage,US Plant,Febuary,0,6747,0,0,0,0,14,0,0,0,0,0
+Sorento,US Plant,Febuary,0,6091,332,136,0,0,24,0,0,0,0,0
+Telluride,US Plant,Febuary,0,8510,162,0,0,0,13,434,0,0,0,0
+EV9,US Plant,Febuary,0,0,0,0,0,0,0,0,0,0,0,0
+Pegas,China Plants,Febuary,0,0,0,0,0,0,2000,2691,162,168,0,45
+Forte,China Plants,Febuary,0,0,0,0,0,0,0,0,0,0,0,2146
+K3,China Plants,Febuary,0,0,0,0,0,0,0,0,0,0,0,1089
+K4,China Plants,Febuary,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,China Plants,Febuary,0,0,0,0,0,0,0,0,0,0,0,67
+KX1,China Plants,Febuary,0,0,0,0,0,0,0,0,0,104,0,348
+Sonet,China Plants,Febuary,0,0,0,0,0,0,1,0,0,0,0,0
+KX3 / Seltos,China Plants,Febuary,0,0,0,1726,0,0,782,1183,18,45,0,697
+Zhipao,China Plants,Febuary,0,0,0,0,0,0,0,0,0,0,0,300
+KX5 / Sportage,China Plants,Febuary,0,0,0,0,0,0,0,0,0,0,0,752
+Carnival,China Plants,Febuary,0,0,0,0,0,0,0,0,0,0,0,77
+EV5,China Plants,Febuary,0,0,0,0,0,0,1,0,0,0,0,159
+Sonet,India Plant,Febuary,0,0,0,0,0,0,1098,558,683,163,7562,0
+Seltos,India Plant,Febuary,0,0,0,11,0,0,147,1,191,92,6250,0
+Carens MPV,India Plant,Febuary,0,0,0,0,0,0,190,275,26,59,4176,0
+Carnival (CKD),India Plant,Febuary,0,0,0,0,0,0,0,0,0,0,0,0
+Morning / Picanto,CKD,Febuary,0,0,0,0,0,0,0,92,0,39,0,0
+Pegas,CKD,Febuary,0,0,0,0,0,0,0,0,0,25,0,0
+K3,CKD,Febuary,0,0,0,0,0,256,0,0,0,198,0,0
+K4,CKD,Febuary,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,CKD,Febuary,0,0,0,0,0,0,0,0,0,17,0,0
+"K7, K8 / Cadenza",CKD,Febuary,0,0,0,0,0,0,0,0,0,0,0,0
+Sonet,CKD,Febuary,0,0,0,0,0,0,250,0,0,330,0,0
+Stonic,CKD,Febuary,0,0,0,0,0,0,0,38,0,0,0,0
+Seltos,CKD,Febuary,0,0,0,0,0,319,0,0,0,276,0,0
+Soul,CKD,Febuary,0,0,0,0,0,255,0,0,0,0,0,0
+EV5,CKD,Febuary,0,0,0,0,0,0,0,0,0,0,0,0
+EV9,CKD,Febuary,0,0,0,0,0,0,0,0,0,0,0,0
+Sportage,CKD,Febuary,0,0,0,0,0,1120,0,233,0,46,0,0
+Sorento,CKD,Febuary,0,0,0,0,0,0,0,127,0,48,0,0
+New Carens,CKD,Febuary,0,0,0,0,0,0,0,0,0,0,0,0
+Carens MPV,CKD,Febuary,0,0,0,0,0,0,0,0,0,343,0,0
+Carnival / Sedona,CKD,Febuary,0,0,0,0,0,0,0,0,0,510,0,0
+Bongo / Frontier,CKD,Febuary,0,0,0,0,0,0,163,0,0,500,0,0
+Bongo,Special Vehicle,Febuary,0,0,0,0,0,94,0,0,4,3,0,0
+Millitary,Special Vehicle,Febuary,68,0,0,0,3,0,0,0,0,0,0,0
+Bus,Special Vehicle,Febuary,0,0,0,0,0,0,0,0,0,0,0,0
+Bongo (CKD),Special Vehicle,Febuary,0,0,0,0,0,13,0,0,0,0,0,0
+Millitary (CKD),Special Vehicle,Febuary,0,0,0,0,0,0,0,0,0,0,0,0
+Bus (CKD),Special Vehicle,Febuary,0,0,0,0,0,0,0,0,0,96,0,0
+Morning / Picanto,Korea Plants,March,1416,0,0,0,6287,310,1212,589,429,687,0,0
+Pride / Rio,Korea Plants,March,0,0,0,0,78,7,0,0,2,0,0,0
+Ray,Korea Plants,March,3172,0,0,0,0,0,0,0,0,0,0,0
+Ray EV,Korea Plants,March,1520,0,0,0,0,0,0,0,0,0,0,0
+K3,Korea Plants,March,1460,0,58,53,0,60,31,653,136,1203,0,0
+K5 / Optima,Korea Plants,March,3577,0,0,0,0,396,13,1019,15,0,0,0
+Stinger,Korea Plants,March,0,1,4,0,8,1,2,12,0,0,0,0
+"K7,8 / Cadenza",Korea Plants,March,2016,0,0,0,0,7,0,101,1,0,0,0
+K9,Korea Plants,March,140,0,0,0,0,19,0,0,0,0,0,0
+Stonic,Korea Plants,March,0,0,0,0,6494,857,260,150,134,838,0,0
+Seltos,Korea Plants,March,4748,6017,2160,0,0,185,538,317,0,1161,0,0
+Soul,Korea Plants,March,0,5284,130,146,0,73,194,0,0,2,0,0
+Soul EV,Korea Plants,March,0,0,0,0,198,0,4,0,0,0,0,0
+Niro,Korea Plants,March,917,1693,184,135,5210,5,144,35,67,261,0,0
+Niro EV,Korea Plants,March,134,1209,443,0,3372,45,82,56,28,178,0,0
+Niro Plus,Korea Plants,March,0,0,0,0,0,0,0,13,0,0,0,0
+Niro Plus EV,Korea Plants,March,86,0,0,0,0,0,0,679,0,2,0,0
+EV3,Korea Plants,March,0,0,0,0,0,0,0,0,0,0,0,0
+EV4,Korea Plants,March,0,0,0,0,0,0,0,0,0,0,0,0
+EV6,Korea Plants,March,1275,1537,533,10,2662,48,9,36,32,273,20,1
+EV9,Korea Plants,March,183,1281,248,0,1008,26,13,2,3,111,0,0
+Sportage,Korea Plants,March,6736,6580,1732,502,0,654,723,0,0,2866,0,0
+Sorento,Korea Plants,March,8974,1222,2,0,1619,993,238,2353,35,1077,0,0
+Mohave / Borrego,Korea Plants,March,298,0,0,0,0,81,0,0,0,0,0,0
+Carnival / Sedona,Korea Plants,March,7643,3451,279,0,0,34,141,298,14,896,0,0
+Bongo / Frontier,Korea Plants,March,3404,0,0,0,0,960,1117,1184,231,364,0,0
+Bongo EV,Korea Plants,March,1180,0,0,0,0,0,0,0,0,0,0,0
+Bus,Korea Plants,March,127,0,0,0,0,0,0,0,0,0,0,0
+Cee'd,Slovakia Plant,March,0,0,0,0,8684,180,2,70,29,1,0,0
+Cee'd CUV,Slovakia Plant,March,0,0,0,0,4363,87,12,0,83,0,0,0
+Sportage,Slovakia Plant,March,0,0,0,0,19388,1067,459,2454,743,0,0,0
+Pride / Rio (SC),Mexico Plant,March,0,246,63,4783,0,0,1189,215,48,1,0,0
+K3,Mexico Plant,March,0,13417,1038,906,0,0,325,0,0,0,0,0
+Pride / Rio (FB),*Russia Plant(HMMR),March,0,0,0,0,0,5,0,0,0,0,0,0
+Optima / K5,US Plant,March,0,1174,2,0,0,0,7,0,0,0,0,0
+Sportage,US Plant,March,0,8631,0,0,0,0,31,0,0,0,0,0
+Sorento,US Plant,March,0,7577,869,124,0,0,31,0,0,0,0,0
+Telluride,US Plant,March,0,10152,211,0,0,0,12,69,0,3,0,0
+EV9,US Plant,March,0,0,0,0,0,0,0,0,0,0,0,0
+Pegas,China Plants,March,0,0,0,0,0,0,2060,2418,110,137,0,40
+Forte,China Plants,March,0,0,0,0,0,0,0,0,0,0,0,3438
+K3,China Plants,March,0,0,0,0,0,0,0,0,0,0,0,853
+K4,China Plants,March,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,China Plants,March,0,0,0,0,0,0,0,0,0,0,0,96
+KX1,China Plants,March,0,0,0,0,0,0,0,0,0,190,0,745
+Sonet,China Plants,March,0,0,0,112,0,0,21,0,0,0,0,1
+KX3 / Seltos,China Plants,March,0,0,0,1710,0,0,815,1204,120,48,0,611
+Zhipao,China Plants,March,0,0,0,0,0,0,0,0,0,0,0,273
+KX5 / Sportage,China Plants,March,0,0,0,0,0,0,0,0,0,0,0,879
+Carnival,China Plants,March,0,0,0,0,0,0,0,0,0,0,0,139
+EV5,China Plants,March,0,0,0,0,0,0,1,0,0,0,0,533
+Sonet,India Plant,March,0,0,0,0,0,0,736,558,710,154,8170,0
+Seltos,India Plant,March,0,0,0,24,0,0,201,2,174,75,7345,0
+Carens MPV,India Plant,March,0,0,0,0,0,0,201,375,101,58,4486,0
+Carnival (CKD),India Plant,March,0,0,0,0,0,0,0,0,0,0,0,0
+Morning / Picanto,CKD,March,0,0,0,0,0,0,0,64,0,95,0,0
+Pegas,CKD,March,0,0,0,0,0,0,0,0,0,27,0,0
+K3,CKD,March,0,0,0,0,0,448,0,0,0,167,0,0
+K4,CKD,March,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,CKD,March,0,0,0,0,0,0,0,0,0,29,0,0
+"K7, K8 / Cadenza",CKD,March,0,0,0,0,0,0,0,0,0,0,0,0
+Sonet,CKD,March,0,0,0,0,0,0,400,0,0,791,0,0
+Stonic,CKD,March,0,0,0,0,0,0,0,34,0,0,0,0
+Seltos,CKD,March,0,0,0,0,0,583,0,0,0,314,0,0
+Soul,CKD,March,0,0,0,0,0,503,0,0,0,0,0,0
+EV5,CKD,March,0,0,0,0,0,0,0,0,0,0,0,0
+EV9,CKD,March,0,0,0,0,0,0,0,0,0,0,0,0
+Sportage,CKD,March,0,0,0,0,0,666,0,313,0,126,0,0
+Sorento,CKD,March,0,0,0,0,0,0,0,89,0,72,0,0
+New Carens,CKD,March,0,0,0,0,0,0,0,0,0,0,0,0
+Carens MPV,CKD,March,0,0,0,0,0,0,0,0,0,275,0,0
+Carnival / Sedona,CKD,March,0,0,0,0,0,0,0,0,0,762,0,0
+Bongo / Frontier,CKD,March,0,0,0,0,0,0,204,0,0,600,0,0
+Bongo,Special Vehicle,March,0,0,0,0,0,68,0,0,0,8,0,0
+Millitary,Special Vehicle,March,106,0,0,0,0,25,0,0,0,0,0,0
+Bus,Special Vehicle,March,0,0,0,0,0,0,0,0,0,0,0,0
+Bongo (CKD),Special Vehicle,March,0,0,0,0,0,0,0,0,0,27,0,0
+Millitary (CKD),Special Vehicle,March,0,0,0,0,0,0,0,0,0,0,0,0
+Bus (CKD),Special Vehicle,March,0,0,0,0,0,0,0,0,0,30,0,0
+Morning / Picanto,Korea Plants,April,1421,0,0,0,6350,283,1549,889,774,548,0,0
+Pride / Rio,Korea Plants,April,0,0,0,0,32,4,1,0,9,0,0,0
+Ray,Korea Plants,April,3244,0,0,0,0,0,0,0,0,0,0,0
+Ray EV,Korea Plants,April,1216,0,0,0,0,0,0,0,0,0,0,0
+K3,Korea Plants,April,1336,0,56,37,0,134,14,730,4,1468,0,0
+K5 / Optima,Korea Plants,April,3168,0,0,0,0,512,14,711,4,0,0,0
+Stinger,Korea Plants,April,0,0,4,0,3,1,0,15,0,0,0,0
+"K7,8 / Cadenza",Korea Plants,April,1988,0,0,0,0,21,0,73,0,0,0,0
+K9,Korea Plants,April,253,0,0,0,0,10,0,0,0,0,0,0
+Stonic,Korea Plants,April,0,0,0,0,5588,577,236,160,255,627,0,0
+Seltos,Korea Plants,April,5025,5672,1872,0,0,440,630,243,0,823,0,0
+Soul,Korea Plants,April,0,5708,82,163,0,1,198,0,0,3,0,0
+Soul EV,Korea Plants,April,0,0,0,0,90,0,4,0,1,0,0,0
+Niro,Korea Plants,April,1597,1609,203,109,4009,11,184,12,51,305,0,0
+Niro EV,Korea Plants,April,218,1422,447,0,2381,48,15,54,6,78,0,0
+Niro Plus,Korea Plants,April,0,0,0,0,0,0,0,131,1,47,0,0
+Niro Plus EV,Korea Plants,April,123,0,0,0,0,0,0,435,0,0,0,0
+EV3,Korea Plants,April,0,0,0,0,0,0,0,0,0,0,0,0
+EV4,Korea Plants,April,0,0,0,0,0,0,0,0,0,0,0,0
+EV6,Korea Plants,April,1036,2051,437,11,2369,21,16,96,12,212,35,27
+EV9,Korea Plants,April,174,1572,451,0,765,20,6,6,1,106,0,0
+Sportage,Korea Plants,April,7179,5760,1718,484,0,401,730,0,0,2239,0,0
+Sorento,Korea Plants,April,7865,846,0,0,1502,591,228,2167,161,1135,0,0
+Mohave / Borrego,Korea Plants,April,257,0,0,0,0,17,0,0,0,0,0,0
+Carnival / Sedona,Korea Plants,April,6879,3588,478,0,0,30,90,178,15,935,0,0
+Bongo / Frontier,Korea Plants,April,3854,0,0,0,0,683,1301,1728,160,332,0,0
+Bongo EV,Korea Plants,April,550,0,0,0,0,0,0,0,0,0,0,0
+Bus,Korea Plants,April,122,0,0,0,0,0,0,0,0,0,0,0
+Cee'd,Slovakia Plant,April,0,0,0,0,7011,164,8,55,7,2,0,0
+Cee'd CUV,Slovakia Plant,April,0,0,0,0,2633,25,6,0,180,0,0,0
+Sportage,Slovakia Plant,April,0,0,0,0,12025,635,554,2080,744,0,0,0
+Pride / Rio (SC),Mexico Plant,April,0,83,2,4472,0,0,914,286,18,2,0,0
+K3,Mexico Plant,April,0,12360,814,695,0,0,243,0,0,0,0,0
+Pride / Rio (FB),*Russia Plant(HMMR),April,,,,,,1,,,,,,
+Optima / K5,US Plant,April,0,333,5,0,0,,5,0,0,0,0,0
+Sportage,US Plant,April,0,7979,0,0,0,,34,0,0,0,0,0
+Sorento,US Plant,April,0,7822,869,218,0,,57,0,0,0,0,0
+Telluride,US Plant,April,0,8949,287,13,0,,16,46,0,1,0,0
+EV9,US Plant,April,0,0,0,0,0,0,0,0,0,0,0,0
+Pegas,China Plants,April,0,0,0,0,0,,2030,2086,327,122,0,40
+Forte,China Plants,April,0,0,0,0,0,,0,0,0,0,0,1615
+K3,China Plants,April,0,0,0,0,0,,0,0,0,0,0,1363
+K4,China Plants,April,0,0,0,0,0,,0,0,0,0,0,0
+K5 / Optima,China Plants,April,0,0,0,0,0,,0,0,0,0,0,93
+KX1,China Plants,April,0,0,0,0,0,,0,0,0,198,0,576
+Sonet,China Plants,April,0,0,0,988,0,,126,0,0,0,0,87
+KX3 / Seltos,China Plants,April,0,0,0,1266,0,,832,1326,45,52,0,911
+Zhipao,China Plants,April,0,0,0,0,0,,0,0,0,0,0,125
+KX5 / Sportage,China Plants,April,0,0,0,0,0,,0,0,0,0,0,922
+Carnival,China Plants,April,0,0,0,0,0,,0,0,0,0,0,132
+EV5,China Plants,April,0,0,0,0,0,,1,0,0,0,0,627
+Sonet,India Plant,April,0,0,0,0,0,,538,201,174,161,8151,0
+Seltos,India Plant,April,0,0,0,0,0,,231,0,430,72,6376,0
+Carens MPV,India Plant,April,0,0,0,0,0,,189,408,25,58,4779,0
+Carnival (CKD),India Plant,April,0,0,0,0,0,,0,0,0,0,0,0
+Morning / Picanto,CKD,April,0,0,0,0,0,0,0,144,0,99,0,0
+Pegas,CKD,April,0,0,0,0,0,0,0,0,0,40,0,0
+K3,CKD,April,0,0,0,0,0,267,0,0,0,277,0,0
+K4,CKD,April,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,CKD,April,0,0,0,0,0,0,0,0,0,18,0,0
+"K7, K8 / Cadenza",CKD,April,0,0,0,0,0,0,0,0,0,0,0,0
+Sonet,CKD,April,0,0,0,0,0,0,320,0,0,767,0,0
+Stonic,CKD,April,0,0,0,0,0,0,0,82,0,0,0,0
+Seltos,CKD,April,0,0,0,0,0,615,0,0,0,364,0,0
+Soul,CKD,April,,,,,,354,,,,,,
+EV5,CKD,April,0,0,0,0,0,0,0,0,0,0,0,0
+EV9,CKD,April,0,0,0,0,0,0,0,0,0,0,0,0
+Sportage,CKD,April,0,0,0,0,0,433,0,274,0,206,0,0
+Sorento,CKD,April,0,0,0,0,0,0,0,80,0,92,0,0
+New Carens,CKD,April,0,0,0,0,0,0,0,0,0,0,0,0
+Carens MPV,CKD,April,0,0,0,0,0,0,0,0,0,303,0,0
+Carnival / Sedona,CKD,April,0,0,0,0,0,0,0,0,0,758,0,0
+Bongo / Frontier,CKD,April,0,0,0,0,0,0,187,0,0,590,0,0
+Bongo,Special Vehicle,April,0,0,0,0,0,83,2,0,0,10,0,0
+Millitary,Special Vehicle,April,126,0,0,0,0,0,0,0,52,0,0,0
+Bus,Special Vehicle,April,0,0,0,0,0,0,0,0,0,0,0,0
+Bongo (CKD),Special Vehicle,April,0,0,0,0,0,10,0,0,0,56,0,0
+Millitary (CKD),Special Vehicle,April,0,0,0,0,0,0,0,25,0,0,0,0
+Bus (CKD),Special Vehicle,April,0,0,0,0,0,0,0,0,0,82,0,0
+Morning / Picanto,Korea Plants,May,907,0,0,0,6266,162,1405,612,343,869,0,0
+Pride / Rio,Korea Plants,May,0,0,0,0,7,0,0,0,2,0,0,0
+Ray,Korea Plants,May,3178,0,0,0,0,0,0,0,0,0,0,0
+Ray EV,Korea Plants,May,1278,0,0,0,0,0,0,0,0,0,0,0
+K3,Korea Plants,May,995,0,45,25,0,77,14,889,6,1544,0,0
+K5 / Optima,Korea Plants,May,2405,1843,0,0,0,531,20,1180,0,1,0,0
+Stinger,Korea Plants,May,0,0,1,0,3,0,0,24,0,0,0,0
+"K7,8 / Cadenza",Korea Plants,May,1873,0,0,0,0,26,0,92,0,0,0,0
+K9,Korea Plants,May,282,0,0,0,0,7,0,0,0,0,0,0
+Stonic,Korea Plants,May,0,0,0,0,4822,444,125,242,39,620,0,0
+Seltos,Korea Plants,May,6120,6460,1756,0,0,297,658,610,0,893,0,0
+Soul,Korea Plants,May,0,5740,158,105,0,0,226,0,0,2,0,0
+Soul EV,Korea Plants,May,0,0,0,0,98,0,4,0,0,0,0,0
+Niro,Korea Plants,May,1596,1865,204,149,3614,12,170,142,39,246,0,0
+Niro EV,Korea Plants,May,113,2350,497,0,2390,46,10,20,10,68,0,0
+Niro Plus,Korea Plants,May,0,0,0,0,0,0,0,74,2,14,0,0
+Niro Plus EV,Korea Plants,May,67,0,0,0,0,0,0,99,0,0,0,0
+EV3,Korea Plants,May,0,0,0,0,0,0,0,0,0,0,0,0
+EV4,Korea Plants,May,0,0,0,0,0,0,0,0,0,0,0,0
+EV6,Korea Plants,May,1380,2660,887,15,2240,16,46,95,21,226,26,6
+EV9,Korea Plants,May,182,2187,515,0,885,23,12,13,3,101,0,0
+Sportage,Korea Plants,May,6644,6290,1648,545,0,682,721,0,0,2402,0,0
+Sorento,Korea Plants,May,7487,979,0,0,1102,624,155,1921,78,1108,0,0
+Mohave / Borrego,Korea Plants,May,224,0,0,0,0,9,0,0,0,0,0,0
+Carnival / Sedona,Korea Plants,May,7211,4151,405,0,0,28,133,275,5,1279,0,0
+Bongo / Frontier,Korea Plants,May,3588,0,0,0,0,789,1200,1422,161,399,0,0
+Bongo EV,Korea Plants,May,462,0,0,0,0,0,0,0,0,0,0,0
+Bus,Korea Plants,May,118,0,0,0,0,0,0,0,0,0,0,0
+Cee'd,Slovakia Plant,May,0,0,0,0,6593,244,0,69,14,103,0,0
+Cee'd CUV,Slovakia Plant,May,0,0,0,0,2456,188,10,0,148,0,0,0
+Sportage,Slovakia Plant,May,0,0,0,0,15032,604,484,1857,780,0,0,0
+Pride / Rio (SC),Mexico Plant,May,0,8,1,4345,0,0,1285,500,45,0,0,0
+K3,Mexico Plant,May,0,13132,817,802,0,0,304,0,0,0,0,0
+Pride / Rio (FB),*Russia Plant(HMMR),May,0,0,0,0,0,0,0,0,0,0,0,0
+Optima / K5,US Plant,May,0,107,2,0,0,0,10,0,0,0,0,0
+Sportage,US Plant,May,0,9222,0,0,0,0,24,0,0,0,0,0
+Sorento,US Plant,May,0,7847,922,252,0,0,44,0,0,0,0,0
+Telluride,US Plant,May,0,10315,351,65,0,0,18,104,0,4,0,0
+EV9,US Plant,May,0,0,0,0,0,0,0,0,0,0,0,0
+Pegas,China Plants,May,0,0,0,0,0,0,2145,1578,80,174,0,21
+Forte,China Plants,May,0,0,0,0,0,0,0,0,0,0,0,1011
+K3,China Plants,May,0,0,0,0,0,0,0,0,0,0,0,1515
+K4,China Plants,May,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,China Plants,May,0,0,0,0,0,3,0,0,0,0,0,129
+KX1,China Plants,May,0,0,0,0,0,0,0,0,0,64,0,340
+Sonet,China Plants,May,0,0,0,1349,0,0,556,68,0,35,0,13
+KX3 / Seltos,China Plants,May,0,0,0,1150,0,0,984,1330,35,75,0,939
+Zhipao,China Plants,May,0,0,0,0,0,0,0,0,0,0,0,161
+KX5 / Sportage,China Plants,May,0,0,0,0,0,0,0,0,0,0,0,870
+Carnival,China Plants,May,0,0,0,0,0,0,0,0,0,0,0,145
+EV5,China Plants,May,0,0,0,0,0,0,2,0,1,0,0,353
+Sonet,India Plant,May,0,0,,,0,26,325,1161,256,187,7948,0
+Seltos,India Plant,May,0,0,0,0,0,0,200,2,629,55,6008,0
+Carens MPV,India Plant,May,0,0,0,0,0,0,183,473,18,27,5015,0
+Carnival (CKD),India Plant,May,0,0,0,0,0,0,0,0,0,0,0,0
+Morning / Picanto,CKD,May,0,0,0,0,0,0,0,191,0,38,0,0
+Pegas,CKD,May,0,0,0,0,0,0,0,0,0,21,0,0
+K3,CKD,May,0,0,0,0,0,103,0,0,0,273,0,0
+K4,CKD,May,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,CKD,May,0,0,0,0,0,0,0,0,0,19,0,0
+"K7, K8 / Cadenza",CKD,May,0,0,0,0,0,0,0,0,0,0,0,0
+Sonet,CKD,May,0,0,0,0,0,118,350,0,0,604,0,0
+Stonic,CKD,May,0,0,0,0,0,0,0,156,0,0,0,0
+Seltos,CKD,May,0,0,0,0,0,155,0,0,0,395,0,0
+Soul,CKD,May,0,0,0,0,0,110,0,0,0,0,0,0
+EV5,CKD,May,0,0,0,0,0,0,0,0,0,0,0,0
+EV9,CKD,May,0,0,0,0,0,0,0,0,0,0,0,0
+Sportage,CKD,May,0,0,0,0,0,416,0,176,0,192,0,0
+Sorento,CKD,May,0,0,0,0,0,0,0,109,0,157,0,0
+New Carens,CKD,May,0,0,0,0,0,0,0,0,0,0,0,0
+Carens MPV,CKD,May,0,0,0,0,0,0,0,0,0,312,0,0
+Carnival / Sedona,CKD,May,0,0,0,0,0,0,0,0,0,633,0,0
+Bongo / Frontier,CKD,May,0,0,0,0,0,0,190,0,0,628,0,0
+Bongo,Special Vehicle,May,0,0,0,0,0,59,0,0,1,4,0,0
+Millitary,Special Vehicle,May,125,0,0,0,14,0,0,0,0,0,0,0
+Bus,Special Vehicle,May,0,0,0,0,0,0,0,0,0,0,0,0
+Bongo (CKD),Special Vehicle,May,0,0,0,0,0,12,0,0,0,69,0,0
+Millitary (CKD),Special Vehicle,May,0,0,0,0,0,0,0,72,0,0,0,0
+Bus (CKD),Special Vehicle,May,0,0,0,0,0,0,0,0,0,27,0,0
+Morning / Picanto,Korea Plants,June,985,0,0,0,5330,132,1712,651,325,764,0,0
+Pride / Rio,Korea Plants,June,0,0,0,0,9,0,0,0,4,0,0,0
+Ray,Korea Plants,June,2285,0,0,0,0,0,0,0,0,0,0,0
+Ray EV,Korea Plants,June,1289,0,0,0,0,0,0,0,0,0,0,0
+K3,Korea Plants,June,1341,0,24,20,0,109,21,895,238,1905,0,0
+K5 / Optima,Korea Plants,June,2932,3738,0,0,0,209,16,921,0,0,0,0
+Stinger,Korea Plants,June,0,0,2,0,4,0,0,34,1,0,0,0
+"K7,8 / Cadenza",Korea Plants,June,1519,0,0,0,0,33,0,96,3,0,0,0
+K9,Korea Plants,June,160,0,0,0,0,3,0,0,0,0,0,0
+Stonic,Korea Plants,June,0,0,0,0,5319,207,339,488,62,433,0,0
+Seltos,Korea Plants,June,5399,5871,1868,0,0,324,617,213,0,1097,0,0
+Soul,Korea Plants,June,0,4565,64,68,0,28,324,0,0,3,0,0
+Soul EV,Korea Plants,June,0,0,0,0,76,0,0,2,0,0,0,0
+Niro,Korea Plants,June,1210,1719,207,100,4704,6,176,339,24,199,0,0
+Niro EV,Korea Plants,June,123,1662,461,0,1964,51,9,33,4,70,0,0
+Niro Plus,Korea Plants,June,0,0,0,0,0,0,0,80,3,5,0,0
+Niro Plus EV,Korea Plants,June,65,0,0,0,0,0,0,1,0,0,0,0
+EV3,Korea Plants,June,0,0,0,0,0,0,0,0,0,0,0,0
+EV4,Korea Plants,June,0,0,0,0,0,0,0,0,0,0,0,0
+EV6,Korea Plants,June,1430,2171,693,13,2065,4,77,230,19,209,13,9
+EV9,Korea Plants,June,113,1905,481,0,1012,30,3,6,10,81,0,0
+Sportage,Korea Plants,June,5815,5268,1471,544,0,566,828,0,0,2467,0,0
+Sorento,Korea Plants,June,7307,1214,54,0,1501,923,161,1572,94,1062,0,0
+Mohave / Borrego,Korea Plants,June,288,0,0,0,0,0,0,0,0,0,0,0
+Carnival / Sedona,Korea Plants,June,8097,3806,560,0,0,24,122,249,23,1585,0,0
+Bongo / Frontier,Korea Plants,June,3084,0,0,0,0,899,978,1385,231,232,0,0
+Bongo EV,Korea Plants,June,439,0,0,0,0,0,0,0,0,0,0,0
+Bus,Korea Plants,June,122,0,0,0,0,0,0,0,0,0,0,0
+Cee'd,Slovakia Plant,June,0,0,0,0,7260,344,3,29,16,32,0,0
+Cee'd CUV,Slovakia Plant,June,0,0,0,0,3664,77,20,0,144,0,0,0
+Sportage,Slovakia Plant,June,0,0,0,0,16057,529,496,2566,1104,0,0,0
+Pride / Rio (SC),Mexico Plant,June,0,2,0,4060,0,0,1052,398,95,1,0,0
+K3,Mexico Plant,June,0,11358,941,1451,0,0,139,0,0,0,0,0
+Pride / Rio (FB),*Russia Plant(HMMR),June,0,0,0,0,0,0,0,0,0,0,0,0
+Optima / K5,US Plant,June,0,33,1,0,0,0,6,0,0,0,0,0
+Sportage,US Plant,June,0,8048,0,0,0,0,26,0,0,0,0,0
+Sorento,US Plant,June,0,5711,864,230,0,0,19,0,0,0,0,0
+Telluride,US Plant,June,0,8858,301,62,0,0,15,52,0,3,0,0
+EV9,US Plant,June,0,0,0,0,0,0,0,0,0,0,0,0
+Pegas,China Plants,June,0,0,0,0,0,0,1948,783,246,134,0,15
+Forte,China Plants,June,0,0,0,0,0,0,0,0,0,0,0,1047
+K3,China Plants,June,0,0,0,0,0,0,0,0,0,0,0,1265
+K4,China Plants,June,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,China Plants,June,0,0,0,0,0,0,0,0,0,0,0,184
+KX1,China Plants,June,0,0,0,0,0,0,0,0,0,0,0,397
+Sonet,China Plants,June,0,0,0,1001,0,0,856,157,1,447,0,13
+KX3 / Seltos,China Plants,June,0,0,0,1354,0,0,908,1395,134,61,0,1346
+Zhipao,China Plants,June,0,0,0,0,0,0,0,0,0,0,0,170
+KX5 / Sportage,China Plants,June,0,0,0,0,0,0,0,0,0,0,0,1093
+Carnival,China Plants,June,0,0,0,0,0,0,0,0,0,0,0,175
+EV5,China Plants,June,0,0,0,0,0,0,23,0,0,163,0,594
+Sonet,India Plant,June,0,0,,,0,0,151,769,604,110,7949,0
+Seltos,India Plant,June,0,0,0,0,0,0,217,4,162,54,6230,0
+Carens MPV,India Plant,June,0,0,0,0,0,69,147,418,65,33,5040,0
+Carnival (CKD),India Plant,June,0,0,0,0,0,0,0,0,0,0,0,0
+Morning / Picanto,CKD,June,0,0,0,0,0,0,0,76,0,74,0,0
+Pegas,CKD,June,0,0,0,0,0,0,0,0,0,50,0,0
+K3,CKD,June,0,0,0,0,0,228,0,0,0,244,0,0
+K4,CKD,June,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,CKD,June,0,0,0,0,0,0,0,0,0,25,0,0
+"K7, K8 / Cadenza",CKD,June,0,0,0,0,0,0,0,0,0,0,0,0
+Sonet,CKD,June,0,0,0,0,0,696,256,0,0,321,0,0
+Stonic,CKD,June,0,0,0,0,0,0,0,193,0,0,0,0
+Seltos,CKD,June,0,0,0,0,0,48,0,0,0,609,0,0
+Soul,CKD,June,0,0,0,0,0,61,0,0,0,0,0,0
+EV5,CKD,June,0,0,0,0,0,0,0,0,0,0,0,0
+EV9,CKD,June,0,0,0,0,0,0,0,0,0,0,0,0
+Sportage,CKD,June,0,0,0,0,0,610,0,335,0,173,0,0
+Sorento,CKD,June,0,0,0,0,0,0,0,86,0,123,0,0
+New Carens,CKD,June,0,0,0,0,0,0,0,0,0,0,0,0
+Carens MPV,CKD,June,0,0,0,0,0,0,0,0,0,372,0,0
+Carnival / Sedona,CKD,June,0,0,0,0,0,0,0,0,0,653,0,0
+Bongo / Frontier,CKD,June,0,0,0,0,0,0,243,0,0,787,0,0
+Bongo,Special Vehicle,June,0,0,0,0,0,53,0,0,0,5,0,0
+Millitary,Special Vehicle,June,281,0,0,0,0,0,0,0,50,0,0,0
+Bus,Special Vehicle,June,0,0,0,0,0,0,0,0,0,0,0,0
+Bongo (CKD),Special Vehicle,June,0,0,0,0,0,8,0,0,0,53,0,0
+Millitary (CKD),Special Vehicle,June,0,0,0,0,0,2,0,0,0,0,0,0
+Bus (CKD),Special Vehicle,June,0,0,0,0,0,0,0,0,0,49,0,0
+Morning / Picanto,Korea Plants,July,1335,0,0,0,5481,131,1516,792,1087,542,0,0
+Pride / Rio,Korea Plants,July,0,0,0,0,1,1,0,0,0,0,0,0
+Ray,Korea Plants,July,2977,0,0,0,0,0,0,0,0,0,0,0
+Ray EV,Korea Plants,July,1407,0,0,0,0,0,0,0,0,0,0,0
+K3,Korea Plants,July,1373,0,51,12,0,145,25,1057,36,1603,0,0
+K5 / Optima,Korea Plants,July,2702,4704,0,0,0,8,7,985,1,0,0,0
+Stinger,Korea Plants,July,0,0,1,0,2,1,0,5,0,0,0,0
+"K7,8 / Cadenza",Korea Plants,July,1154,0,0,0,0,154,0,124,0,0,0,0
+K9,Korea Plants,July,202,0,0,0,0,11,0,0,0,0,0,0
+Stonic,Korea Plants,July,0,0,0,0,5068,440,249,433,308,428,0,0
+Seltos,Korea Plants,July,5489,5481,1610,0,0,21,682,299,0,926,0,0
+Soul,Korea Plants,July,0,3428,183,72,0,117,289,0,0,3,0,0
+Soul EV,Korea Plants,July,0,0,0,0,135,0,1,0,0,0,0,0
+Niro,Korea Plants,July,1049,1662,333,103,4782,6,198,326,25,216,0,0
+Niro EV,Korea Plants,July,150,1012,292,0,2868,160,0,38,12,69,0,0
+Niro Plus,Korea Plants,July,0,0,0,0,0,0,0,0,1,0,0,0
+Niro Plus EV,Korea Plants,July,14,0,0,0,0,0,0,0,0,2,0,0
+EV3,Korea Plants,July,1975,0,0,0,0,0,0,0,0,0,0,0
+EV4,Korea Plants,July,0,0,0,0,0,0,0,0,0,0,0,0
+EV6,Korea Plants,July,1344,1547,607,5,2163,14,12,3,14,208,19,7
+EV9,Korea Plants,July,161,1815,237,0,1003,17,17,13,6,227,0,0
+Sportage,Korea Plants,July,6235,4639,1536,655,0,414,666,0,0,2232,0,0
+Sorento,Korea Plants,July,7596,1737,258,0,1523,926,239,1474,178,910,0,0
+Mohave / Borrego,Korea Plants,July,197,0,0,0,0,30,0,0,0,0,0,0
+Carnival / Sedona,Korea Plants,July,7050,4557,450,0,0,100,226,283,20,1300,0,0
+Bongo / Frontier,Korea Plants,July,2920,0,0,0,0,592,1055,1236,75,321,0,0
+Bongo EV,Korea Plants,July,567,0,0,0,0,0,0,0,0,0,0,0
+Bus,Korea Plants,July,113,0,0,0,0,0,0,0,0,0,0,0
+Cee'd,Slovakia Plant,July,0,0,0,0,6596,653,0,38,30,60,0,0
+Cee'd CUV,Slovakia Plant,July,0,0,0,0,2590,155,11,0,165,0,0,0
+Sportage,Slovakia Plant,July,0,0,0,0,14439,777,509,1702,791,0,0,0
+Pride / Rio (SC),Mexico Plant,July,0,1,0,3945,0,0,1075,220,18,0,0,0
+K3,Mexico Plant,July,0,10448,931,1254,0,0,135,0,0,1,0,0
+Pride / Rio (FB),*Russia Plant(HMMR),July,,,,,,,,,,,,
+Optima / K5,US Plant,July,0,9,0,0,0,0,4,0,0,0,0,0
+Sportage,US Plant,July,0,7989,0,0,0,0,34,0,0,0,0,0
+Sorento,US Plant,July,0,5469,799,201,0,0,32,0,0,0,0,0
+Telluride,US Plant,July,0,9082,313,50,0,0,13,47,0,4,0,0
+EV9,US Plant,July,0,0,0,0,0,0,0,0,0,0,0,0
+Pegas,China Plants,July,0,0,0,0,0,0,2048,1190,507,124,0,14
+Forte,China Plants,July,0,0,0,0,0,0,0,0,0,0,0,1208
+K3,China Plants,July,0,0,0,0,0,0,0,0,0,0,0,707
+K4,China Plants,July,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,China Plants,July,0,0,0,0,0,76,0,0,0,0,0,173
+KX1,China Plants,July,0,0,0,0,0,0,0,0,0,0,0,264
+Sonet,China Plants,July,0,0,0,1134,0,0,995,218,12,383,0,15
+KX3 / Seltos,China Plants,July,0,0,0,1432,0,0,943,1666,121,66,0,2190
+Zhipao,China Plants,July,0,0,0,0,0,0,0,0,0,0,0,175
+KX5 / Sportage,China Plants,July,0,0,0,0,0,0,0,0,0,0,0,913
+Carnival,China Plants,July,0,0,0,0,0,0,0,0,0,0,0,145
+EV5,China Plants,July,0,0,0,0,0,0,76,0,0,191,0,606
+Sonet,India Plant,July,0,0,,,0,0,71,596,924,162,7838,0
+Seltos,India Plant,July,0,0,0,0,0,0,162,2,100,71,6147,0
+Carens MPV,India Plant,July,0,0,0,0,0,20,228,489,16,26,5299,0
+Carnival (CKD),India Plant,July,,,,,,,,,,,,
+Morning / Picanto,CKD,July,0,0,0,0,0,0,0,51,0,87,0,0
+Pegas,CKD,July,0,0,0,0,0,0,0,0,0,30,0,0
+K3,CKD,July,0,0,0,0,0,169,0,0,0,388,0,0
+K4,CKD,July,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,CKD,July,0,0,0,0,0,0,0,0,0,21,0,0
+"K7, K8 / Cadenza",CKD,July,0,0,0,0,0,0,0,0,0,0,0,0
+Sonet,CKD,July,0,0,0,0,0,1120,344,0,0,576,0,0
+Stonic,CKD,July,0,0,0,0,0,0,0,4,0,0,0,0
+Seltos,CKD,July,0,0,0,0,0,122,0,0,0,466,0,0
+Soul,CKD,July,0,0,0,0,0,61,0,0,0,0,0,0
+EV5,CKD,July,0,0,0,0,0,0,0,0,0,0,0,0
+EV9,CKD,July,0,0,0,0,0,0,0,0,0,0,0,0
+Sportage,CKD,July,0,0,0,0,0,700,0,467,0,300,0,0
+Sorento,CKD,July,0,0,0,0,0,0,0,25,0,87,0,0
+New Carens,CKD,July,0,0,0,0,0,0,0,0,0,1,0,0
+Carens MPV,CKD,July,0,0,0,0,0,0,0,0,0,353,0,0
+Carnival / Sedona,CKD,July,0,0,0,0,0,0,0,0,0,571,0,0
+Bongo / Frontier,CKD,July,0,0,0,0,0,0,241,0,0,769,0,0
+Bongo,Special Vehicle,July,0,0,0,0,0,71,0,0,0,2,0,0
+Millitary,Special Vehicle,July,228,0,0,0,1,0,0,0,50,0,0,0
+Bus,Special Vehicle,July,0,0,0,0,0,0,0,0,0,0,0,0
+Bongo (CKD),Special Vehicle,July,0,0,0,0,0,20,0,24,0,148,0,0
+Millitary (CKD),Special Vehicle,July,0,0,0,0,0,2,0,72,0,0,0,0
+Bus (CKD),Special Vehicle,July,0,0,0,0,0,0,0,0,0,35,0,0
+Morning / Picanto,Korea Plants,August,910,0,0,0,4442,236,1344,239,1288,578,0,0
+Pride / Rio,Korea Plants,August,0,0,0,0,22,0,0,1,0,2,0,0
+Ray,Korea Plants,August,2787,0,0,0,0,0,0,0,0,0,0,0
+Ray EV,Korea Plants,August,923,0,0,0,0,0,0,0,0,0,0,0
+K3,Korea Plants,August,588,0,43,16,0,95,23,617,217,1417,0,0
+K5 / Optima,Korea Plants,August,2690,6047,0,0,0,7,7,445,0,0,0,0
+Stinger,Korea Plants,August,0,0,2,0,0,0,0,5,0,0,0,0
+"K7,8 / Cadenza",Korea Plants,August,2711,0,0,0,0,31,0,145,0,0,0,0
+K9,Korea Plants,August,177,0,0,0,0,2,0,0,0,0,0,0
+Stonic,Korea Plants,August,0,0,0,0,3795,726,239,253,440,575,0,0
+Seltos,Korea Plants,August,5551,6033,1533,0,0,198,891,152,0,858,0,0
+Soul,Korea Plants,August,0,4185,223,53,0,26,254,0,0,2,0,0
+Soul EV,Korea Plants,August,0,0,0,0,143,0,4,0,0,0,0,0
+Niro,Korea Plants,August,1048,1763,212,88,2849,6,196,128,34,186,0,0
+Niro EV,Korea Plants,August,61,906,223,0,1541,152,2,126,2,50,0,0
+Niro Plus,Korea Plants,August,0,0,0,0,0,0,0,0,0,5,0,0
+Niro Plus EV,Korea Plants,August,43,0,0,0,0,0,0,0,0,2,0,0
+EV3,Korea Plants,August,4002,0,0,0,5,0,0,0,0,0,0,0
+EV4,Korea Plants,August,0,0,0,0,0,0,0,0,0,0,0,0
+EV6,Korea Plants,August,599,1885,515,9,1923,9,8,6,25,148,26,2
+EV9,Korea Plants,August,92,2388,436,0,736,16,9,5,1,168,0,0
+Sportage,Korea Plants,August,5988,5805,1480,614,0,253,711,0,0,2459,0,0
+Sorento,Korea Plants,August,3502,2169,195,0,1087,237,195,1544,77,808,0,0
+Mohave / Borrego,Korea Plants,August,204,0,0,0,0,4,0,0,0,0,0,0
+Carnival / Sedona,Korea Plants,August,5534,5060,271,0,0,15,67,186,13,1189,0,0
+Bongo / Frontier,Korea Plants,August,2608,0,0,0,0,32,921,1173,147,247,0,0
+Bongo EV,Korea Plants,August,382,0,0,0,0,0,0,0,0,0,0,0
+Bus,Korea Plants,August,110,0,0,0,0,0,0,0,0,0,0,0
+Cee'd,Slovakia Plant,August,0,0,0,0,5329,300,3,7,23,25,0,0
+Cee'd CUV,Slovakia Plant,August,0,0,0,0,1949,275,27,0,195,0,0,0
+Sportage,Slovakia Plant,August,0,0,0,0,10056,700,567,1894,743,0,0,0
+Pride / Rio (SC),Mexico Plant,August,0,0,1,4354,0,0,1293,467,4,0,0,0
+K3,Mexico Plant,August,0,12817,1055,1039,0,0,66,0,0,3,0,0
+Pride / Rio (FB),*Russia Plant(HMMR),August,0,0,0,0,0,0,0,0,0,0,0,0
+Optima / K5,US Plant,August,0,11,1,0,0,0,3,0,0,0,0,0
+Sportage,US Plant,August,0,9309,0,0,0,0,29,0,0,0,0,0
+Sorento,US Plant,August,0,6566,914,191,0,0,45,0,0,0,0,0
+Telluride,US Plant,August,0,10273,308,58,0,0,18,49,0,2,0,0
+EV9,US Plant,August,0,0,0,0,0,0,0,0,0,0,0,0
+Pegas,China Plants,August,0,0,0,0,0,0,2377,1727,353,105,0,27
+Forte,China Plants,August,0,0,0,0,0,0,0,0,0,0,0,780
+K3,China Plants,August,0,0,0,0,0,0,0,0,0,0,0,988
+K4,China Plants,August,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,China Plants,August,0,0,0,0,0,446,0,0,0,0,0,211
+KX1,China Plants,August,0,0,0,0,0,0,0,0,0,1,0,520
+Sonet,China Plants,August,0,0,0,1052,0,0,1085,922,43,599,0,14
+KX3 / Seltos,China Plants,August,0,0,0,1273,0,0,1036,1747,206,42,0,1996
+Zhipao,China Plants,August,0,0,0,0,0,0,0,0,0,0,0,262
+KX5 / Sportage,China Plants,August,0,0,0,0,0,0,0,0,0,0,0,949
+Carnival,China Plants,August,0,0,0,0,0,0,0,0,0,0,0,153
+EV5,China Plants,August,0,0,0,0,0,0,51,1,19,138,0,436
+Sonet,India Plant,August,0,0,,,0,0,88,16,841,169,8905,0
+Seltos,India Plant,August,0,0,0,0,0,0,158,0,168,79,7155,0
+Carens MPV,India Plant,August,0,0,0,0,0,65,251,659,33,31,5496,0
+Carnival (CKD),India Plant,August,0,0,0,0,0,0,0,0,0,0,0,0
+Morning / Picanto,CKD,August,0,0,0,0,0,0,0,89,0,40,0,0
+Pegas,CKD,August,0,0,0,0,0,0,0,0,0,21,0,0
+K3,CKD,August,0,0,0,0,0,168,0,0,0,275,0,0
+K4,CKD,August,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,CKD,August,0,0,0,0,0,0,0,0,0,14,0,0
+"K7, K8 / Cadenza",CKD,August,0,0,0,0,0,0,0,0,0,0,0,0
+Sonet,CKD,August,0,0,0,0,0,1000,238,0,0,401,0,0
+Stonic,CKD,August,0,0,0,0,0,0,0,0,0,0,0,0
+Seltos,CKD,August,0,0,0,0,0,72,0,0,0,359,0,0
+Soul,CKD,August,0,0,0,0,0,13,0,0,0,0,0,0
+EV5,CKD,August,0,0,0,0,0,0,0,0,0,0,0,0
+EV9,CKD,August,0,0,0,0,0,0,0,0,0,0,0,0
+Sportage,CKD,August,0,0,0,0,0,844,0,491,0,170,0,0
+Sorento,CKD,August,0,0,0,0,0,0,0,37,0,78,0,0
+New Carens,CKD,August,0,0,0,0,0,0,0,0,0,0,0,0
+Carens MPV,CKD,August,0,0,0,0,0,0,0,0,0,371,0,0
+Carnival / Sedona,CKD,August,0,0,0,0,0,0,0,0,0,511,0,0
+Bongo / Frontier,CKD,August,0,0,0,0,0,0,305,0,0,401,0,0
+Bongo,Special Vehicle,August,0,0,0,0,0,173,2,0,4,9,0,0
+Millitary,Special Vehicle,August,174,0,0,0,0,0,0,0,0,0,0,0
+Bus,Special Vehicle,August,0,0,0,0,0,0,0,0,0,0,0,0
+Bongo (CKD),Special Vehicle,August,0,0,0,0,0,21,0,12,0,120,0,0
+Millitary (CKD),Special Vehicle,August,0,0,0,0,0,0,0,72,0,0,0,0
+Bus (CKD),Special Vehicle,August,0,0,0,0,0,0,0,0,0,35,0,0
+Morning / Picanto,Korea Plants,September,968,0,0,0,6947,298,1484,649,685,723,0,0
+Pride / Rio,Korea Plants,September,0,0,0,0,1,0,0,0,2,0,0,0
+Ray,Korea Plants,September,2589,0,0,0,0,0,0,0,0,0,0,0
+Ray EV,Korea Plants,September,774,0,0,0,0,0,0,0,0,0,0,0
+K3,Korea Plants,September,4,0,30,5,0,25,7,722,29,1599,0,0
+K5 / Optima,Korea Plants,September,2277,4897,0,0,0,2,3,727,0,0,0,0
+Stinger,Korea Plants,September,0,0,2,0,0,0,0,11,1,0,0,0
+"K7,8 / Cadenza",Korea Plants,September,4724,0,0,0,0,15,0,198,0,0,0,0
+K9,Korea Plants,September,163,0,0,0,0,30,0,0,0,0,0,0
+Stonic,Korea Plants,September,0,0,0,0,4738,1197,177,244,124,675,0,0
+Seltos,Korea Plants,September,4433,3877,1242,0,0,228,678,219,0,1015,0,0
+Soul,Korea Plants,September,0,4016,193,43,0,39,474,0,0,2,0,0
+Soul EV,Korea Plants,September,0,0,0,0,86,0,3,0,0,0,0,0
+Niro,Korea Plants,September,866,1289,196,34,4442,3,175,673,35,237,0,0
+Niro EV,Korea Plants,September,4,398,281,0,2503,122,0,0,1,43,0,0
+Niro Plus,Korea Plants,September,0,0,0,0,0,0,0,0,1,10,0,0
+Niro Plus EV,Korea Plants,September,3,0,0,0,0,0,0,0,0,2,0,0
+EV3,Korea Plants,September,2022,0,0,0,2,0,0,0,0,0,0,0
+EV4,Korea Plants,September,0,0,0,0,0,0,0,0,0,0,0,0
+EV6,Korea Plants,September,324,1612,529,7,2366,7,8,13,14,178,25,5
+EV9,Korea Plants,September,122,2095,613,0,1156,26,2,11,5,161,0,0
+Sportage,Korea Plants,September,4541,4264,1113,602,0,445,596,0,0,2689,0,0
+Sorento,Korea Plants,September,6628,1664,215,0,1376,488,241,1380,156,818,0,0
+Mohave / Borrego,Korea Plants,September,118,0,0,0,0,13,0,0,0,0,0,0
+Carnival / Sedona,Korea Plants,September,4900,4027,378,0,0,18,173,213,15,1287,0,0
+Bongo / Frontier,Korea Plants,September,2143,0,0,0,0,47,1169,1388,145,339,0,0
+Bongo EV,Korea Plants,September,443,0,0,0,0,0,0,0,0,0,0,0
+Bus,Korea Plants,September,94,0,0,0,0,0,0,0,0,0,0,0
+Cee'd,Slovakia Plant,September,0,0,0,0,6844,382,0,28,11,20,0,0
+Cee'd CUV,Slovakia Plant,September,0,0,0,0,2933,296,1,0,7,0,0,0
+Sportage,Slovakia Plant,September,0,0,0,0,17119,771,431,1729,733,0,0,0
+Pride / Rio (SC),Mexico Plant,September,0,0,0,3738,0,0,1417,427,0,0,0,0
+K3,Mexico Plant,September,0,10266,789,1215,0,0,16,0,0,2,0,0
+Pride / Rio (FB),*Russia Plant(HMMR),September,,,,,,,,,,,,
+Optima / K5,US Plant,September,0,1,1,0,0,0,0,0,0,0,0,0
+Sportage,US Plant,September,0,6899,0,0,0,0,23,0,0,0,0,0
+Sorento,US Plant,September,0,4908,868,145,0,0,51,0,0,0,0,0
+Telluride,US Plant,September,0,8699,302,44,0,0,11,69,0,2,0,0
+EV9,US Plant,September,0,1,0,0,0,0,0,0,0,0,0,0
+Pegas,China Plants,September,0,0,0,0,0,0,1978,2416,203,131,0,17
+Forte,China Plants,September,0,0,0,0,0,0,0,0,0,0,0,953
+K3,China Plants,September,0,0,0,0,0,0,0,0,0,0,0,605
+K4,China Plants,September,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,China Plants,September,0,0,0,0,0,503,0,0,0,0,0,46
+KX1,China Plants,September,0,0,0,0,0,0,0,0,0,0,0,446
+Sonet,China Plants,September,0,0,0,978,0,0,1130,894,50,484,0,11
+KX3 / Seltos,China Plants,September,0,0,0,1191,0,0,915,1640,66,69,0,1938
+Zhipao,China Plants,September,0,0,0,0,0,0,0,0,0,0,0,283
+KX5 / Sportage,China Plants,September,0,0,0,0,0,0,0,393,0,0,0,996
+Carnival,China Plants,September,0,0,0,0,0,0,0,0,0,0,0,131
+EV5,China Plants,September,0,0,0,0,0,0,105,0,9,50,0,408
+Sonet,India Plant,September,0,0,,,0,0,90,7,1022,119,8885,0
+Seltos,India Plant,September,0,0,0,0,0,0,161,0,84,89,6061,0
+Carens MPV,India Plant,September,0,0,0,0,0,60,195,454,47,33,5444,0
+Carnival (CKD),India Plant,September,0,0,0,0,0,0,0,0,0,0,0,0
+Morning / Picanto,CKD,September,0,0,0,0,0,0,0,136,0,69,0,0
+Pegas,CKD,September,0,0,0,0,0,0,0,0,0,34,0,0
+K3,CKD,September,0,0,0,0,0,110,0,0,0,495,0,0
+K4,CKD,September,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,CKD,September,0,0,0,0,0,0,0,0,0,21,0,0
+"K7, K8 / Cadenza",CKD,September,0,0,0,0,0,0,0,0,0,0,0,0
+Sonet,CKD,September,0,0,0,0,0,1150,248,0,0,720,0,0
+Stonic,CKD,September,0,0,0,0,0,0,0,80,0,0,0,0
+Seltos,CKD,September,0,0,0,0,0,25,0,0,0,733,0,0
+Soul,CKD,September,0,0,0,0,0,61,0,0,0,0,0,0
+EV5,CKD,September,0,0,0,0,0,0,0,0,0,0,0,0
+EV9,CKD,September,0,0,0,0,0,0,0,0,0,0,0,0
+Sportage,CKD,September,0,0,0,0,0,101,0,404,0,365,0,0
+Sorento,CKD,September,0,0,0,0,0,0,0,30,0,127,0,0
+New Carens,CKD,September,0,0,0,0,0,0,0,0,0,0,0,0
+Carens MPV,CKD,September,0,0,0,0,0,0,0,0,0,455,0,0
+Carnival / Sedona,CKD,September,0,0,0,0,0,0,0,0,0,672,0,0
+Bongo / Frontier,CKD,September,0,0,0,0,0,0,241,0,0,559,0,0
+Bongo,Special Vehicle,September,0,0,0,0,0,123,0,0,45,3,0,0
+Millitary,Special Vehicle,September,129,0,0,0,0,0,0,0,0,0,0,0
+Bus,Special Vehicle,September,0,0,0,0,0,0,0,0,0,0,0,0
+Bongo (CKD),Special Vehicle,September,0,0,0,0,0,0,0,0,0,317,0,0
+Millitary (CKD),Special Vehicle,September,0,0,0,0,0,0,0,72,1,0,0,0
+Bus (CKD),Special Vehicle,September,0,0,0,0,0,0,0,0,0,62,0,0
+Morning / Picanto,Korea Plants,October,1464,0,0,0,5364,181,1368,779,321,573,0,0
+Pride / Rio,Korea Plants,October,0,0,0,0,0,0,0,0,0,0,0,0
+Ray,Korea Plants,October,3036,0,0,0,0,0,0,0,0,0,0,0
+Ray EV,Korea Plants,October,242,0,0,0,0,0,0,0,0,0,0,0
+K3,Korea Plants,October,0,0,10,7,0,25,15,700,323,1013,0,0
+K5 / Optima,Korea Plants,October,3030,5816,0,0,0,4,17,493,3,0,0,0
+Stinger,Korea Plants,October,0,0,0,0,0,0,0,11,0,0,0,0
+"K7,8 / Cadenza",Korea Plants,October,4977,0,0,0,0,12,0,120,0,0,0,0
+K9,Korea Plants,October,127,0,0,0,0,4,0,0,0,0,0,0
+Stonic,Korea Plants,October,0,0,0,0,4790,372,149,224,101,712,0,0
+Seltos,Korea Plants,October,6822,4266,1518,0,0,146,505,179,0,1091,0,0
+Soul,Korea Plants,October,0,4622,199,53,0,34,311,0,0,4,0,0
+Soul EV,Korea Plants,October,0,0,0,0,6,0,2,0,0,0,0,0
+Niro,Korea Plants,October,941,1262,169,54,2888,6,199,407,70,183,0,0
+Niro EV,Korea Plants,October,17,284,433,0,1230,79,15,0,4,25,0,0
+Niro Plus,Korea Plants,October,0,0,0,0,0,0,0,2,6,0,0,0
+Niro Plus EV,Korea Plants,October,3,0,0,0,0,0,0,0,0,0,0,0
+EV3,Korea Plants,October,2107,0,0,0,553,0,0,0,0,0,0,0
+EV4,Korea Plants,October,0,0,0,0,0,0,0,0,0,0,0,0
+EV6,Korea Plants,October,557,1732,664,15,1545,122,5,5,22,158,66,0
+EV9,Korea Plants,October,159,1940,541,0,734,12,4,8,5,101,0,0
+Sportage,Korea Plants,October,5531,5122,1778,565,0,434,756,0,0,2762,0,0
+Sorento,Korea Plants,October,7962,1924,143,0,832,725,211,1433,135,772,0,0
+Mohave / Borrego,Korea Plants,October,98,0,0,0,0,85,0,0,0,0,0,0
+Carnival / Sedona,Korea Plants,October,5645,4909,429,0,0,30,134,195,25,1062,0,0
+Bongo / Frontier,Korea Plants,October,2569,0,0,0,0,35,1052,903,201,290,0,0
+Bongo EV,Korea Plants,October,614,0,0,0,0,0,0,0,0,0,0,0
+Bus,Korea Plants,October,124,0,0,0,0,0,0,0,0,0,0,0
+Cee'd,Slovakia Plant,October,0,0,0,0,6350,380,0,52,13,9,0,0
+Cee'd CUV,Slovakia Plant,October,0,0,0,0,2241,815,4,0,58,0,0,0
+Sportage,Slovakia Plant,October,0,0,0,0,14729,512,538,1696,515,0,0,0
+Pride / Rio (SC),Mexico Plant,October,0,0,2,3985,0,0,1327,115,42,0,0,0
+K3,Mexico Plant,October,0,12858,613,1160,0,0,72,0,0,0,0,0
+Pride / Rio (FB),*Russia Plant(HMMR),October,0,0,0,0,0,0,0,0,0,0,0,0
+Optima / K5,US Plant,October,0,2,1,0,0,0,1,0,0,0,0,0
+Sportage,US Plant,October,0,8559,0,0,0,0,18,0,0,0,0,0
+Sorento,US Plant,October,0,5917,954,226,0,0,54,0,0,0,0,0
+Telluride,US Plant,October,0,9694,303,56,0,0,16,51,0,4,0,0
+EV9,US Plant,October,0,1,0,0,0,0,4,0,0,0,0,0
+Pegas,China Plants,October,0,0,0,0,0,0,2121,2457,94,130,0,21
+Forte,China Plants,October,0,0,0,0,0,0,0,0,0,0,0,850
+K3,China Plants,October,0,0,0,0,0,0,0,0,0,0,0,510
+K4,China Plants,October,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,China Plants,October,0,0,0,0,0,333,0,0,0,0,0,114
+KX1,China Plants,October,0,0,0,0,0,0,0,0,0,1,0,1000
+Sonet,China Plants,October,0,0,0,1031,0,0,1365,1266,121,676,0,22
+KX3 / Seltos,China Plants,October,0,0,0,1153,0,0,1034,1843,176,75,0,1533
+Zhipao,China Plants,October,0,0,0,0,0,0,0,0,0,0,0,313
+KX5 / Sportage,China Plants,October,0,0,0,0,0,0,0,1410,0,0,0,1248
+Carnival,China Plants,October,0,0,0,0,0,0,0,0,0,0,0,175
+EV5,China Plants,October,0,0,0,0,0,0,147,2,10,177,0,734
+Sonet,India Plant,October,0,0,,,0,0,91,7,934,121,10292,0
+Seltos,India Plant,October,0,0,0,0,0,0,161,0,189,107,7755,0
+Carens MPV,India Plant,October,0,0,0,0,0,48,194,477,44,30,6553,0
+Carnival (CKD),India Plant,October,0,0,0,0,0,0,0,0,0,0,70,0
+Morning / Picanto,CKD,October,0,0,0,0,0,0,0,54,0,83,0,0
+Pegas,CKD,October,0,0,0,0,0,0,0,0,0,80,0,0
+K3,CKD,October,0,0,0,0,0,131,0,0,0,525,0,0
+K4,CKD,October,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,CKD,October,0,0,0,0,0,0,0,0,0,31,0,0
+"K7, K8 / Cadenza",CKD,October,0,0,0,0,0,0,0,0,0,0,0,0
+Sonet,CKD,October,0,0,0,0,0,1350,236,0,0,833,0,0
+Stonic,CKD,October,0,0,0,0,0,0,0,81,0,0,0,0
+Seltos,CKD,October,0,0,0,0,0,82,0,0,0,911,0,0
+Soul,CKD,October,0,0,0,0,0,2,0,0,0,0,0,0
+EV5,CKD,October,0,0,0,0,0,0,0,0,0,0,0,0
+EV9,CKD,October,0,0,0,0,0,0,0,0,0,0,0,0
+Sportage,CKD,October,0,0,0,0,0,275,0,477,0,426,0,0
+Sorento,CKD,October,0,0,0,0,0,0,0,51,0,153,0,0
+New Carens,CKD,October,0,0,0,0,0,0,0,0,0,1,0,0
+Carens MPV,CKD,October,0,0,0,0,0,0,0,0,0,570,0,0
+Carnival / Sedona,CKD,October,0,0,0,0,0,0,0,0,0,1098,0,0
+Bongo / Frontier,CKD,October,0,0,0,0,0,0,277,0,0,518,0,0
+Bongo,Special Vehicle,October,0,0,0,0,0,21,0,0,0,3,0,0
+Millitary,Special Vehicle,October,385,0,0,0,0,0,0,0,0,0,0,0
+Bus,Special Vehicle,October,0,0,0,0,0,0,0,0,0,0,0,0
+Bongo (CKD),Special Vehicle,October,0,0,0,0,0,33,0,0,0,424,0,0
+Millitary (CKD),Special Vehicle,October,0,0,0,0,0,0,0,24,0,0,0,0
+Bus (CKD),Special Vehicle,October,0,0,0,0,0,0,0,0,0,83,0,0
+Morning / Picanto,Korea Plants,November,1467,0,0,0,5549,373,1323,467,703,403,0,0
+Pride / Rio,Korea Plants,November,0,0,0,0,0,0,0,0,0,0,0,0
+Ray,Korea Plants,November,4417,0,0,0,0,0,0,0,0,0,0,0
+Ray EV,Korea Plants,November,336,0,0,0,0,0,0,0,0,0,0,0
+K3,Korea Plants,November,0,0,5,0,0,9,11,391,31,1043,0,0
+K5 / Optima,Korea Plants,November,2645,6377,0,0,0,4,16,538,0,0,0,0
+Stinger,Korea Plants,November,0,0,0,0,0,0,0,11,1,1,0,0
+"K7,8 / Cadenza",Korea Plants,November,4336,0,0,0,0,13,0,82,0,0,0,0
+K9,Korea Plants,November,99,0,0,0,0,8,0,0,0,0,0,0
+Stonic,Korea Plants,November,0,0,0,0,3680,324,158,144,99,934,0,0
+Seltos,Korea Plants,November,4887,3778,1086,0,0,121,643,359,0,665,0,0
+Soul,Korea Plants,November,0,4031,157,31,0,27,292,0,0,3,0,0
+Soul EV,Korea Plants,November,0,0,0,0,7,0,0,0,0,0,0,0
+Niro,Korea Plants,November,1034,1305,306,62,3064,3,232,571,65,141,0,0
+Niro EV,Korea Plants,November,128,319,431,0,1073,18,2,4,0,39,0,0
+Niro Plus,Korea Plants,November,0,0,0,0,0,0,0,0,0,0,0,0
+Niro Plus EV,Korea Plants,November,1,0,0,0,0,0,0,0,0,0,0,0
+EV3,Korea Plants,November,2284,0,0,0,2522,236,0,0,0,0,0,0
+EV4,Korea Plants,November,0,0,0,0,0,0,0,0,0,0,0,0
+EV6,Korea Plants,November,770,1887,494,6,1627,138,3,12,22,162,87,45
+EV9,Korea Plants,November,144,2033,463,0,715,39,11,4,4,104,0,0
+Sportage,Korea Plants,November,4233,5034,1180,636,0,314,842,0,0,2428,0,0
+Sorento,Korea Plants,November,10434,2179,158,0,829,381,188,972,115,848,0,0
+Mohave / Borrego,Korea Plants,November,78,0,0,0,0,0,0,0,0,0,0,0
+Carnival / Sedona,Korea Plants,November,7516,4925,351,0,0,16,189,85,15,1181,0,0
+Bongo / Frontier,Korea Plants,November,2158,0,0,0,0,40,1001,1715,142,290,0,0
+Bongo EV,Korea Plants,November,925,0,0,0,0,0,0,0,0,0,0,0
+Bus,Korea Plants,November,123,0,0,0,0,0,0,0,0,0,0,0
+Cee'd,Slovakia Plant,November,0,0,0,0,5486,477,1,97,9,20,0,0
+Cee'd CUV,Slovakia Plant,November,0,0,0,0,2607,386,6,0,81,0,0,0
+Sportage,Slovakia Plant,November,0,0,0,0,13013,520,402,1561,553,0,0,0
+Pride / Rio (SC),Mexico Plant,November,0,0,0,5139,0,0,1445,209,0,0,0,0
+K3,Mexico Plant,November,0,11005,853,1227,0,0,112,0,0,10,0,0
+Pride / Rio (FB),*Russia Plant(HMMR),November,,,,,,,,,,,,
+Optima / K5,US Plant,November,0,1,1,0,0,0,2,0,0,0,0,0
+Sportage,US Plant,November,0,9017,0,0,0,0,22,0,0,0,0,0
+Sorento,US Plant,November,0,6526,991,162,0,0,60,0,0,0,0,0
+Telluride,US Plant,November,0,11568,352,38,0,0,24,82,0,2,0,0
+EV9,US Plant,November,0,122,0,0,0,0,1,0,0,0,0,0
+Pegas,China Plants,November,0,0,0,0,0,0,2009,2644,345,113,0,27
+Forte,China Plants,November,0,0,0,0,0,0,0,0,0,0,0,1849
+K3,China Plants,November,0,0,0,0,0,0,0,0,0,0,0,979
+K4,China Plants,November,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,China Plants,November,0,0,0,0,0,261,0,0,0,0,0,98
+KX1,China Plants,November,0,0,0,0,0,0,0,0,0,0,0,971
+Sonet,China Plants,November,0,0,0,1146,0,0,1389,783,134,555,0,30
+KX3 / Seltos,China Plants,November,0,0,0,1554,0,0,804,1654,164,70,0,940
+Zhipao,China Plants,November,0,0,0,0,0,0,0,0,0,0,0,369
+KX5 / Sportage,China Plants,November,0,0,0,0,0,0,0,1991,0,0,0,1450
+Carnival,China Plants,November,0,0,0,0,0,0,0,0,0,0,0,207
+EV5,China Plants,November,0,0,0,0,0,0,181,13,8,276,0,241
+Sonet,India Plant,November,0,0,,,0,0,61,3,761,136,9567,0
+Seltos,India Plant,November,0,0,0,0,0,0,200,0,113,114,5810,0
+Carens MPV,India Plant,November,0,0,0,0,0,73,178,453,38,30,5722,0
+Carnival (CKD),India Plant,November,0,0,0,0,0,0,0,0,0,0,314,0
+Morning / Picanto,CKD,November,0,0,0,0,0,0,0,231,0,101,0,0
+Pegas,CKD,November,0,0,0,0,0,0,0,0,0,99,0,0
+K3,CKD,November,0,0,0,0,0,229,0,0,0,483,0,0
+K4,CKD,November,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,CKD,November,0,0,0,0,0,0,0,0,0,27,0,0
+"K7, K8 / Cadenza",CKD,November,0,0,0,0,0,0,0,0,0,0,0,0
+Sonet,CKD,November,0,0,0,0,0,1350,106,0,0,958,0,0
+Stonic,CKD,November,0,0,0,0,0,0,0,135,0,0,0,0
+Seltos,CKD,November,0,0,0,0,0,27,0,0,0,1187,0,0
+Soul,CKD,November,0,0,0,0,0,0,0,0,0,0,0,0
+EV5,CKD,November,0,0,0,0,0,0,0,0,0,0,0,0
+EV9,CKD,November,0,0,0,0,0,0,0,0,0,0,0,0
+Sportage,CKD,November,0,0,0,0,0,404,0,314,0,556,0,0
+Sorento,CKD,November,0,0,0,0,0,0,0,28,0,160,0,0
+New Carens,CKD,November,0,0,0,0,0,0,0,0,0,1,0,0
+Carens MPV,CKD,November,0,0,0,0,0,0,0,0,0,730,0,0
+Carnival / Sedona,CKD,November,0,0,0,0,0,0,0,0,0,1058,0,0
+Bongo / Frontier,CKD,November,0,0,0,0,0,0,296,0,0,534,0,0
+Bongo,Special Vehicle,November,0,0,0,0,0,7,7,0,0,4,0,0
+Millitary,Special Vehicle,November,177,0,0,0,0,0,0,0,57,0,0,0
+Bus,Special Vehicle,November,0,0,0,0,0,0,0,0,0,4,0,0
+Bongo (CKD),Special Vehicle,November,0,0,0,0,0,19,0,0,0,180,0,0
+Millitary (CKD),Special Vehicle,November,0,0,0,0,0,2,0,0,0,2,0,0
+Bus (CKD),Special Vehicle,November,0,0,0,0,0,0,0,0,0,23,0,0
+Morning / Picanto,Korea Plants,December,2608,0,0,0,4486,67,1690,156,680,578,0,0
+Pride / Rio,Korea Plants,December,0,0,0,0,0,0,0,0,0,0,0,0
+Ray,Korea Plants,December,4046,0,0,0,0,0,0,0,0,0,0,0
+Ray EV,Korea Plants,December,173,0,0,0,0,0,0,0,0,0,0,0
+K3,Korea Plants,December,0,0,1,5,0,10,7,241,115,714,0,0
+K5 / Optima,Korea Plants,December,2105,5638,0,0,0,6,22,407,0,7,0,0
+Stinger,Korea Plants,December,0,0,0,0,1,0,0,12,1,0,0,0
+"K7,8 / Cadenza",Korea Plants,December,2354,0,0,0,0,14,0,139,0,2,0,0
+K9,Korea Plants,December,240,0,0,0,0,6,0,0,0,0,0,0
+Stonic,Korea Plants,December,0,0,0,0,3739,746,114,89,164,896,0,0
+Seltos,Korea Plants,December,5512,3737,621,0,0,113,492,68,0,493,0,0
+Soul,Korea Plants,December,0,3650,105,79,0,52,274,0,0,10,0,0
+Soul EV,Korea Plants,December,0,0,0,0,16,0,1,0,0,0,0,0
+Niro,Korea Plants,December,1174,1398,174,78,2081,9,303,325,106,145,0,0
+Niro EV,Korea Plants,December,11,394,298,0,1047,93,2,2,5,43,0,0
+Niro Plus,Korea Plants,December,0,0,0,0,0,0,0,0,2,5,0,0
+Niro Plus EV,Korea Plants,December,1,0,0,0,0,0,0,0,2,0,0,0
+EV3,Korea Plants,December,461,0,0,0,3978,539,0,0,0,0,0,0
+EV4,Korea Plants,December,0,0,0,0,0,0,0,0,0,0,0,0
+EV6,Korea Plants,December,155,2111,417,18,1207,8,6,5,10,170,88,31
+EV9,Korea Plants,December,109,1450,384,0,726,32,7,6,5,100,0,0
+Sportage,Korea Plants,December,8428,5711,1030,529,0,183,830,0,0,2920,0,0
+Sorento,Korea Plants,December,8828,2403,70,0,808,429,246,1143,129,1032,0,0
+Mohave / Borrego,Korea Plants,December,0,0,0,0,0,94,0,0,0,0,0,0
+Carnival / Sedona,Korea Plants,December,7235,5165,199,0,0,8,271,318,23,885,0,0
+Bongo / Frontier,Korea Plants,December,2243,0,0,0,0,17,806,1801,99,266,0,0
+Bongo EV,Korea Plants,December,255,0,0,0,0,0,0,0,0,0,0,0
+Bus,Korea Plants,December,132,0,0,0,0,0,0,0,0,0,0,0
+Cee'd,Slovakia Plant,December,0,0,0,0,4640,423,5,0,19,1,0,0
+Cee'd CUV,Slovakia Plant,December,0,0,0,0,1802,224,22,1,33,0,0,0
+Sportage,Slovakia Plant,December,0,0,0,0,9917,930,504,856,533,0,0,0
+Pride / Rio (SC),Mexico Plant,December,0,0,1,4510,0,0,1391,323,10,1,0,0
+K3,Mexico Plant,December,0,11911,714,1336,0,0,145,0,0,6,0,0
+Pride / Rio (FB),*Russia Plant(HMMR),December,,,,,,,,,,,,
+Optima / K5,US Plant,December,0,1,0,0,0,0,0,0,0,0,0,0
+Sportage,US Plant,December,0,9716,0,0,0,0,32,0,0,0,0,0
+Sorento,US Plant,December,0,7029,876,206,0,0,55,0,0,0,0,0
+Telluride,US Plant,December,0,12488,270,41,0,0,13,42,0,8,0,0
+EV9,US Plant,December,0,501,0,0,0,0,0,0,0,0,0,0
+Pegas,China Plants,December,0,0,0,0,0,0,2187,2781,201,97,0,87
+Forte,China Plants,December,0,0,0,0,0,0,0,0,0,0,0,1480
+K3,China Plants,December,0,0,0,0,0,0,0,0,0,0,0,189
+K4,China Plants,December,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,China Plants,December,0,0,0,0,0,252,0,0,0,0,0,176
+KX1,China Plants,December,0,0,0,0,0,0,0,0,0,0,0,1447
+Sonet,China Plants,December,0,0,0,1205,0,0,1344,833,279,681,0,434
+KX3 / Seltos,China Plants,December,0,0,0,1494,0,0,939,1304,111,83,0,1139
+Zhipao,China Plants,December,0,0,0,0,0,0,0,0,0,0,0,327
+KX5 / Sportage,China Plants,December,0,0,0,0,0,0,0,2330,0,0,0,1832
+Carnival,China Plants,December,0,0,0,0,0,0,0,0,0,0,0,195
+EV5,China Plants,December,0,0,0,0,0,0,119,0,17,372,0,305
+Sonet,India Plant,December,0,0,,,0,0,76,0,969,117,8195,0
+Seltos,India Plant,December,0,0,0,0,0,0,249,1,158,112,6973,0
+Carens MPV,India Plant,December,0,0,0,0,0,38,214,410,40,43,6225,0
+Carnival (CKD),India Plant,December,0,0,0,0,0,0,0,0,0,0,179,0
+Morning / Picanto,CKD,December,0,0,0,0,0,0,0,136,0,50,0,0
+Pegas,CKD,December,0,0,0,0,0,0,0,0,0,67,0,0
+K3,CKD,December,0,0,0,0,0,89,0,0,0,222,0,0
+K4,CKD,December,0,0,0,0,0,0,0,0,0,0,0,0
+K5 / Optima,CKD,December,0,0,0,0,0,0,0,0,0,27,0,0
+"K7, K8 / Cadenza",CKD,December,0,0,0,0,0,0,0,0,0,0,0,0
+Sonet,CKD,December,0,0,0,0,0,1778,199,0,0,787,0,0
+Stonic,CKD,December,0,0,0,0,0,0,0,201,0,0,0,0
+Seltos,CKD,December,0,0,0,0,0,15,0,0,0,909,0,0
+Soul,CKD,December,0,0,0,0,0,0,0,0,0,0,0,0
+EV5,CKD,December,0,0,0,0,0,0,0,0,0,0,0,0
+EV9,CKD,December,0,0,0,0,0,0,0,0,0,0,0,0
+Sportage,CKD,December,0,0,0,0,0,458,0,342,0,366,0,0
+Sorento,CKD,December,0,0,0,0,0,0,0,40,0,130,0,0
+New Carens,CKD,December,0,0,0,0,0,0,0,0,0,0,0,0
+Carens MPV,CKD,December,0,0,0,0,0,0,0,0,0,453,0,0
+Carnival / Sedona,CKD,December,0,0,0,0,0,0,0,0,0,918,0,0
+Bongo / Frontier,CKD,December,0,0,0,0,0,0,175,0,0,562,0,0
+Bongo,Special Vehicle,December,0,0,0,0,0,0,44,0,0,43,0,0
+Millitary,Special Vehicle,December,262,0,0,0,10,0,0,0,58,0,0,0
+Bus,Special Vehicle,December,0,0,0,0,0,0,0,0,0,0,0,0
+Bongo (CKD),Special Vehicle,December,0,0,0,0,0,0,0,46,0,0,0,0
+Millitary (CKD),Special Vehicle,December,0,0,0,0,0,0,0,74,0,0,0,0
+Bus (CKD),Special Vehicle,December,0,0,0,0,0,0,0,0,0,62,0,0
