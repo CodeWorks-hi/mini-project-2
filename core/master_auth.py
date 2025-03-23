@@ -5,8 +5,8 @@ MASTER_PW = "admin123"
 
 def master_login():
     st.sidebar.subheader("🔐 관리자 로그인")
-    user = st.sidebar.text_input("아이디", key="master_id")
-    pw = st.sidebar.text_input("비밀번호", type="password", key="master_pw")
+    user = st.sidebar.text_input("아이디 : admin ", key="master_id")
+    pw = st.sidebar.text_input("비밀번호 :  admin123", type="password", key="master_pw")
 
     if st.sidebar.button("로그인"):
         if user == MASTER_ID and pw == MASTER_PW:
