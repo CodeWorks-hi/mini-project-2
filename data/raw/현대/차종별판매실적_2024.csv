@@ -1,0 +1,51 @@
+Model,Vehicle Type,Trade,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec
+Morning,Ordinary Vehicle,Domestic,"1,214","1,140","1,416","1,421",907,985,"1,335",910,968,"1,464","1,467","2,608"
+Ray,Ordinary Vehicle,Domestic,"4,130","3,972","4,692","4,460","4,456","3,574","4,384","3,710","3,363","3,278","4,753","4,219"
+K3,Ordinary Vehicle,Domestic,"1,419","1,315","1,460","1,336",995,"1,341","1,373",588,4,,,
+K5,Ordinary Vehicle,Domestic,"3,336","2,970","3,577","3,168","2,405","2,932","2,702","2,690","2,277","3,030","2,645","2,105"
+EV4,Ordinary Vehicle,Domestic,,,,,,,,,,,,0
+K7 / K8,Ordinary Vehicle,Domestic,"2,917","2,165","2,016","1,988","1,873","1,519","1,154","2,711","4,724","4,977","4,336","2,354"
+K9,Ordinary Vehicle,Domestic,175,191,140,253,282,160,202,177,163,127,99,240
+Seltos,Ordinary Vehicle,Domestic,"3,944","3,967","4,748","5,025","6,120","5,399","5,489","5,551","4,433","6,822","4,887","5,512"
+EV3,Ordinary Vehicle,Domestic,,,,,,,"1,975","4,002","2,022","2,107","2,284",461
+Niro,Ordinary Vehicle,Domestic,"1,239",940,"1,051","1,815","1,709","1,333","1,199","1,109",870,958,"1,162","1,185"
+Niro Plus,Ordinary Vehicle,Domestic,2,0,86,123,67,65,14,43,3,3,1,1
+EV6,Ordinary Vehicle,Domestic,29,155,"1,275","1,036","1,380","1,430","1,344",599,324,557,770,155
+Sportage,Ordinary Vehicle,Domestic,"5,934","6,991","6,736","7,179","6,644","5,815","6,235","5,988","4,541","5,531","4,233","8,428"
+Sorento,Ordinary Vehicle,Domestic,"9,284","8,671","8,974","7,865","7,487","7,307","7,596","3,502","6,628","7,962","10,434","8,828"
+Mohave,Ordinary Vehicle,Domestic,291,241,298,257,224,288,197,204,118,98,78,
+EV9,Ordinary Vehicle,Domestic,449,124,183,174,182,113,161,92,122,159,144,109
+Carnival,Ordinary Vehicle,Domestic,"7,049","7,989","7,643","6,879","7,211","8,097","7,050","5,534","4,900","5,645","7,516","7,235"
+Bongo,Ordinary Vehicle,Domestic,"3,074","3,077","4,584","4,404","4,050","3,523","3,487","2,990","2,586","3,183","3,083","2,498"
+Bus,Ordinary Vehicle,Domestic,122,100,127,122,118,122,113,110,94,124,123,132
+Military,Special Vehicle,Domestic,75,68,106,126,125,281,228,174,129,385,177,262
+Bongo,Special Vehicle,Domestic,0,,,,,,,,,,,
+Bus,Special Vehicle,Domestic,0,,,,,,,,,,,
+Morning / Picanto,Ordinary Vehicle,Export(excl CKD),"9,795","8,361","9,050","9,243","10,810","10,122","9,786","8,852","7,989","11,172","10,298","8,975"
+Pride / Rio,Ordinary Vehicle,Export(excl CKD),,,,,,,,,,,,
+K3,Ordinary Vehicle,Export(excl CKD),"2,387","2,483","2,368","3,760","3,541","3,162","2,862","1,324",40,136,100,100
+K5 / Optima,Ordinary Vehicle,Export(excl CKD),"1,139",835,"4,058","7,410","9,023","8,467","8,720","7,801","7,125","5,934","2,053","8,328"
+EV4,Ordinary Vehicle,Export(excl CKD),,,,,,,,,,,,2
+Stinger,Ordinary Vehicle,Export(excl CKD),,,,,,,,,,,,
+K7 / K8 / Cadenza,Ordinary Vehicle,Export(excl CKD),288,144,115,309,321,103,10,,,49,5,115
+K9,Ordinary Vehicle,Export(excl CKD),,,8,,6,65,,,,,,
+Stonic,Ordinary Vehicle,Export(excl CKD),"6,703","6,191","8,218","6,326","7,850","7,061","6,751","6,879","6,252","7,473","6,159","6,917"
+EV3,Ordinary Vehicle,Export(excl CKD),,2,,3,4,20,2,"1,424","6,158","7,993","9,098","8,500"
+Seltos,Ordinary Vehicle,Export(excl CKD),"10,285","9,445","9,129","10,435","7,970","8,683","8,261","7,561","5,641","6,032","4,060","9,534"
+Soul,Ordinary Vehicle,Export(excl CKD),"6,594","5,008","6,049","5,712","5,361","5,312","5,240","4,814","3,167","4,551","2,402","5,810"
+Niro,Ordinary Vehicle,Export(excl CKD),"12,662","9,797","11,168","11,179","9,074","10,854","8,502","6,710","9,245","9,235","8,671","7,333"
+Niro Plus,Ordinary Vehicle,Export(excl CKD),200,0,14,,,3,,1,,,,152
+EV5,Ordinary Vehicle,Export(excl CKD),,,,,,,,,,,,
+EV6,Ordinary Vehicle,Export(excl CKD),"8,137","6,545","7,166","4,692","4,701","2,051","2,679","1,426",897,"1,415","1,461","1,318"
+Sportage,Ordinary Vehicle,Export(excl CKD),"14,744","10,842","11,500","12,798","12,165","12,553","11,618","12,049","8,153","10,279","8,303","11,529"
+Sorento,Ordinary Vehicle,Export(excl CKD),"5,417","6,470","5,904","8,810","7,834","7,844","7,509","3,670","5,746","6,789","5,816","6,733"
+Mohave / Borrego,Ordinary Vehicle,Export(excl CKD),0,54,33,90,0,3,,114,,,,
+EV9,Ordinary Vehicle,Export(excl CKD),"4,496","2,527","3,371","1,817","2,578","1,484","1,702","1,322","1,178",925,740,553
+New Carens,Ordinary Vehicle,Export(excl CKD),,,,,,,,,,,,
+Carnival / Sedona,Ordinary Vehicle,Export(excl CKD),"6,291","4,627","5,423","9,705","7,521","7,831","8,373","9,224","6,673","8,977","5,040","8,285"
+Bongo,Ordinary Vehicle,Export(excl CKD),"4,491","3,247","4,445","2,920","2,918","3,067","3,057","2,897","2,704","3,111","3,104","2,961"
+Tasman,Ordinary Vehicle,Export(excl CKD),,,,,,,,,3,1,9,3
+Bus,Ordinary Vehicle,Export(excl CKD),,,,,,,,,,,,
+Military,Special Vehicle,Export(excl CKD),10,3,25,52,14,50,51,,,,57,68
+Bongo,Special Vehicle,Export(excl CKD),1,51,23,24,3,5,4,117,119,10,21,104
+Bus,Special Vehicle,Export(excl CKD),,,,,,,,,,4,,

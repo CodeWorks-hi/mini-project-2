@@ -1,0 +1,47 @@
+Model,Vehicle Type,Trade,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec
+ Morning,Ordinary Vehicle,Domestic,1813,2049,2127,2164,2502,2245,2033,2910,1892,2225,2111,1808
+ Ray,Ordinary Vehicle,Domestic,3585,4268,4155,4158,4576,4372,4285,4402,3464,4824,4587,4254
+ K3,Ordinary Vehicle,Domestic,950,1024,1197,670,975,1540,976,1123,1036,939,1428,1346
+ K5,Ordinary Vehicle,Domestic,2560,2653,3421,2739,3166,2963,2246,2613,2280,2592,3783,3563
+ Stinger,Ordinary Vehicle,Domestic,113,120,143,61,45,1,0,0,0,0,0,0
+ K7 / K8,Ordinary Vehicle,Domestic,3451,4168,4569,4011,4487,4469,3513,2457,2406,2248,2799,1859
+ K9,Ordinary Vehicle,Domestic,431,301,432,422,310,366,372,347,232,226,236,223
+ Seltos,Ordinary Vehicle,Domestic,3366,5552,3891,4119,4792,5224,4770,3512,4399,3008,4446,3758
+ Niro,Ordinary Vehicle,Domestic,1269,1588,2219,2120,1990,1992,1614,1694,1681,1595,1541,1256
+ Niro Plus,Ordinary Vehicle,Domestic,0,292,460,475,462,298,303,115,103,218,120,70
+ EV6,Ordinary Vehicle,Domestic,0,1951,3009,2694,1894,1379,1398,948,601,1564,1096,693
+ Sportage,Ordinary Vehicle,Domestic,5492,5689,6018,6282,6185,6418,6625,5210,5402,4707,5982,5739
+ Sorento,Ordinary Vehicle,Domestic,4611,4745,6890,6835,6499,6978,5678,7176,10190,8777,9364,8068
+ Mohave,Ordinary Vehicle,Domestic,482,504,710,483,318,510,459,379,317,293,313,252
+ EV9,Ordinary Vehicle,Domestic,0,0,0,0,,1334,1251,408,1163,833,375,2688
+ Carnival,Ordinary Vehicle,Domestic,6904,6039,6873,6481,6695,6358,6109,4937,4366,3933,5857,5305
+ Bongo,Ordinary Vehicle,Domestic,3580,8977,6806,5258,5269,4435,5665,3892,4480,4887,5855,3815
+ Bus,Ordinary Vehicle,Domestic,71,96,126,114,110,120,127,102,111,91,129,106
+ Millitary,Special Vehicle,Domestic,75,89,112,228,89,136,83,109,287,294,300,364
+ Bongo,Special Vehicle,Domestic,0,0,0,0,0,0,0,0,0,0,0,0
+ Bus,Special Vehicle,Domestic,0,0,0,0,0,0,0,0,0,0,0,0
+ Morning / Picanto,Ordinary Vehicle,Export,11149,13902,14822,12906,13604,12442,8568,6352,6053,6589,7520,7756
+ Pride / Rio,Ordinary Vehicle,Export,5243,5451,6127,5022,4514,427,,,,,,
+ K3,Ordinary Vehicle,Export,1410,1619,2259,1453,1097,1039,1315,1570,2149,1787,3528,2200
+ K5 / Optima,Ordinary Vehicle,Export,1526,1710,1407,1195,1366,1135,1797,2168,1433,2780,1158,492
+ Stinger,Ordinary Vehicle,Export,1618,1192,1219,933,56,12,,,,6,,
+ K7 / K8 / Cadenza,Ordinary Vehicle,Export,220,191,311,108,193,164,195,131,55,53,141,184
+ K9,Ordinary Vehicle,Export,36,0,24,1,,36,36,35,2,,1,1
+ Stonic,Ordinary Vehicle,Export,7499,7685,8760,8186,7766,3285,5031,7021,6344,8070,9052,7883
+ Seltos,Ordinary Vehicle,Export,11408,9238,11414,10348,9390,9030,9444,8691,8332,8786,10674,10338
+ Soul,Ordinary Vehicle,Export,7826,6637,6533,6596,6898,6394,5469,4075,4330,4089,4767,4921
+ Niro,Ordinary Vehicle,Export,10557,11993,12919,11563,12937,12825,11997,9315,9541,9307,13793,11824
+ Niro Plus,Ordinary Vehicle,Export,841,818,762,464,822,846,384,693,586,783,,47
+ EV5,Ordinary Vehicle,Export,0,0,0,0,0,0,0,0,0,0,0,0
+ EV6,Ordinary Vehicle,Export,6919,6873,8063,6727,7777,7838,7647,5968,3706,4291,7012,6044
+ Sportage,Ordinary Vehicle,Export,10929,11825,13444,11661,10756,10845,11815,10257,10531,10134,12159,11934
+ Sorento,Ordinary Vehicle,Export,7368,7605,8434,8180,8215,9114,8826,4995,1926,2488,8416,6335
+ Mohave / Borrego,Ordinary Vehicle,Export,0,1,0,0,0,0,0,0,198,0,0,0
+ EV9,Ordinary Vehicle,Export,0,0,7,19,11,3,30,2254,4852,3957,8081,7884
+ New Carens,Ordinary Vehicle,Export,0,0,0,0,0,0,0,0,0,0,0,0
+ Carnival / Sedona,Ordinary Vehicle,Export,6371,5376,6162,7306,8862,7593,6969,5871,4724,5850,5407,3780
+ Bongo,Ordinary Vehicle,Export,3014,3134,3003,2919,2775,2635,3987,2437,3636,3010,3097,3285
+ Bus,Ordinary Vehicle,Export,0,0,0,0,0,0,0,0,0,0,0,0
+ Millitary,Special Vehicle,Export,0,0,21,100,110,30,0,0,0,0,63,30
+ Bongo,Special Vehicle,Export,141,36,15,35,107,277,192,180,213,186,94,81
+ Bus,Special Vehicle,Export,,,,,,,,,,,,

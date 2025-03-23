@@ -1,0 +1,61 @@
+Car,Region,Jan
+Passenger Car,US,4518
+Recreational Vehicle,US,23997
+Commercial Vehicle,US,
+Special Vehicle,US,
+"CKD(excl, Special Vehicle)",US,
+CKD(Special Vehicle),US,
+Passenger Car,Canada,0
+Recreational Vehicle,Canada,5180
+Commercial Vehicle,Canada,
+Special Vehicle,Canada,
+"CKD(excl, Special Vehicle)",Canada,
+CKD(Special Vehicle),Canada,
+Passenger Car,Mexico,0
+Recreational Vehicle,Mexico,502
+Commercial Vehicle,Mexico,
+Special Vehicle,Mexico,
+"CKD(excl, Special Vehicle)",Mexico,
+CKD(Special Vehicle),Mexico,
+Passenger Car,EU+EFTA,4542
+Recreational Vehicle,EU+EFTA,16934
+Commercial Vehicle,EU+EFTA,
+Special Vehicle,EU+EFTA,
+"CKD(excl, Special Vehicle)",EU+EFTA,
+CKD(Special Vehicle),EU+EFTA,
+Passenger Car,E.Europe/CIS,82
+Recreational Vehicle,E.Europe/CIS,2321
+Commercial Vehicle,E.Europe/CIS,
+Special Vehicle,E.Europe/CIS,
+"CKD(excl, Special Vehicle)",E.Europe/CIS,2320
+CKD(Special Vehicle),E.Europe/CIS,
+Passenger Car,Latin America,1389
+Recreational Vehicle,Latin America,1316
+Commercial Vehicle,Latin America,726
+Special Vehicle,Latin America,14
+"CKD(excl, Special Vehicle)",Latin America,600
+CKD(Special Vehicle),Latin America,
+Passenger Car,Middle East/Africa,2475
+Recreational Vehicle,Middle East/Africa,3466
+Commercial Vehicle,Middle East/Africa,1809
+Special Vehicle,Middle East/Africa,0
+"CKD(excl, Special Vehicle)",Middle East/Africa,680
+CKD(Special Vehicle),Middle East/Africa,101
+Passenger Car,Asia / Pacific,409
+Recreational Vehicle,Asia / Pacific,7119
+Commercial Vehicle,Asia / Pacific,225
+Special Vehicle,Asia / Pacific,3
+"CKD(excl, Special Vehicle)",Asia / Pacific,3040
+CKD(Special Vehicle),Asia / Pacific,60
+Passenger Car,India,0
+Recreational Vehicle,India,0
+Commercial Vehicle,India,0
+Special Vehicle,India,0
+"CKD(excl, Special Vehicle)",India,0
+CKD(Special Vehicle),India,0
+Passenger Car,China,0
+Recreational Vehicle,China,0
+Commercial Vehicle,China,0
+Special Vehicle,China,0
+"CKD(excl, Special Vehicle)",China,0
+CKD(Special Vehicle),China,0
