@@ -119,21 +119,6 @@ def sales_ui():
         show_sales_log_table(sales_df)
         show_sales_charts(sales_df)
 
-    # 삭제 UI: 삭제할 판매 기록 정보를 입력받고 삭제 버튼 클릭 시 자동 새로고침
-    with st.expander("판매 기록 삭제"):
-        st.info("삭제할 판매 기록의 정보를 입력하세요.")
-        del_판매일 = st.date_input("삭제할 판매일")
-        del_모델명 = st.text_input("삭제할 모델명")
-        del_지역 = st.text_input("삭제할 지역")
-        del_담당자 = st.text_input("삭제할 담당자")
-        if st.button("삭제"):
-            delete_sale_record({
-                "판매일": str(del_판매일),
-                "모델명": del_모델명,
-                "지역": del_지역,
-                "담당자": del_담당자
-            })
-
     st.download_button("📥 차량정보 포함 샘플 다운로드",
         data=open(SAMPLE_PATH, "rb").read(),
         file_name="판매기록_샘플_차정보포함.xlsx")
