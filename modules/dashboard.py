@@ -27,13 +27,12 @@ def remove_html_tags(text: str) -> str:
 ############################
 # 3) 네이버 뉴스 검색 함수
 ############################
-def fetch_naver_news(query: str, display: int = 5, sort: str = "date"):
+def fetch_naver_news(query: str, display: int = 3, sort: str = "date"):
     """
     네이버 검색 API(뉴스)에서 'query'에 해당하는 뉴스를 가져옵니다.
     display: 가져올 기사 개수 (최대 100).
     sort: 'date' (최신순) 또는 'sim' (정확도/유사도순)
     """
-    # secrets.toml에서 키를 불러오기
     try:
         client_id = st.secrets["naver"]["client_id"]
         client_secret = st.secrets["naver"]["client_secret"]
@@ -106,7 +105,7 @@ def dashboard_ui():
     }
     
     # --------------------------
-    # 상단 필터 바 구성
+    # 상단 필터 바 구성 (콜 1~6번)
     # --------------------------
     col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 1, 1, 1, 1])
     with col1:
@@ -150,51 +149,18 @@ def dashboard_ui():
         st.error(f"위치 정보 병합 중 오류: {e}")
         st.stop()
 
-    # --------------------------
-    # 상단 요약 섹션 (2개 컬럼)
-    # --------------------------
-    colA, colB = st.columns(2)
-
-    # 좌측 컬럼 A: 핵심 지표
-    with colA:
-        st.subheader("핵심 지표")
-        total_export = int(df_filtered["총수출"].sum())
-        st.write(f"총수출량: {total_export:,} 대")
-
-        if len(merged) > 0:
-            top_countries = merged.sort_values("총수출", ascending=False)["국가명_한글"].unique()[:2]
-            st.write("상위 국가: " + ", ".join(top_countries))
-        else:
-            st.write("상위 국가: 없음")
-
-    # 우측 컬럼 B: 네이버 뉴스
-    with colB:
-        st.subheader("자동차 관련 최신 뉴스")
-        # 예시 쿼리: "국내차량 해외 반응"
-        # sort="date" (최신순), display=5
-        articles = fetch_naver_news(query="국내차량 해외 반응", display=5, sort="date")
-
-        if not articles:
-            st.write("관련 뉴스를 찾을 수 없습니다.")
-        else:
-            for article in articles:
-                title = remove_html_tags(article.get("title", ""))
-                description = remove_html_tags(article.get("description", ""))
-                link = article.get("link", "#")
-
-                st.markdown(f"**[{title}]({link})**")
-                st.markdown(f"{description}")
-                st.markdown("---")
-
-    # 구분선
-    st.markdown("<hr>", unsafe_allow_html=True)
+    # =========================================================
+    # 상단 추가 행: 3개 컬럼 (콜 에이, 콜 비, 콜 씨)
+    #   - 콜 에이: 여백 (나중에 내용 추가 예정)
+    #   - 콜 비: 지도
+    #   - 콜 씨: 수출 요약 표
+    # =========================================================
+    colA, colB, colC = st.columns(3)
     
-    # --------------------------
-    # 지도 & 표 Layout
-    # --------------------------
-    left_col, right_col = st.columns([2, 1])
+    with colA:
+        st.write("")  # placeholder (여백)
 
-    with left_col:
+    with colB:
         st.subheader("🗺️ 국가별 수출 지도")
         if len(merged) == 0:
             st.warning("표시할 지도 데이터가 없습니다. 필터를 바꿔보세요.")
@@ -216,27 +182,27 @@ def dashboard_ui():
                 tooltip={"text": "{국가명_한글}\n차량: {차량 구분}\n수출량: {총수출} 대"}
             ))
 
-    # 표 스타일 (테두리, 라운드 효과)
-    st.markdown("""
-        <style>
-        table {
-            width: 100% !important;
-            table-layout: fixed;
-            border: 2px solid #000 !important;
-            border-radius: 10px !important;
-            border-collapse: separate;
-            overflow: hidden;
-        }
-        </style>
-        """, unsafe_allow_html=True)
+    with colC:
+        st.subheader("📦 국가별 수출 요약")
+        # 표 스타일 (테두리, 라운드 효과)
+        st.markdown("""
+            <style>
+            table {
+                width: 100% !important;
+                table-layout: fixed;
+                border: 2px solid #000 !important;
+                border-radius: 10px !important;
+                border-collapse: separate;
+                overflow: hidden;
+            }
+            </style>
+            """, unsafe_allow_html=True)
 
-    with right_col:
-        # 상위 3개국 / 하위 3개국
-        top = merged.sort_values("총수출", ascending=False).head(3)
-        bottom = merged.sort_values("총수출").head(3)
+        top_table = merged.sort_values("총수출", ascending=False).head(3)
+        bottom_table = merged.sort_values("총수출").head(3)
 
         # 상위 수출국 표
-        top_display = top[['국가명_한글', '차량 구분', '총수출']].reset_index(drop=True)
+        top_display = top_table[['국가명_한글', '차량 구분', '총수출']].reset_index(drop=True)
         top_styled = (
             top_display.style
             .set_caption("상위 수출국")
@@ -273,7 +239,7 @@ def dashboard_ui():
         html_top = top_styled.to_html()
 
         # 하위 수출국 표
-        bottom_display = bottom[['국가명_한글', '차량 구분', '총수출']].reset_index(drop=True)
+        bottom_display = bottom_table[['국가명_한글', '차량 구분', '총수출']].reset_index(drop=True)
         bottom_styled = (
             bottom_display.style
             .set_caption("하위 수출국")
@@ -313,4 +279,33 @@ def dashboard_ui():
         st.markdown("<div style='margin-top:20px;'></div>", unsafe_allow_html=True)
         st.markdown(html_bottom, unsafe_allow_html=True)
 
+    # =========================================================
+    # 하단 추가 행: 2개 컬럼 (콜 레프트, 콜 라이트)
+    #   - 콜 레프트: 여백 (나중에 내용 추가 예정)
+    #   - 콜 라이트: 뉴스 기사 (총 3개, 최신순, 타이틀+본문 요약)
+    # =========================================================
+    colLeft, colRight = st.columns([1, 1])
+    
+    with colLeft:
+        st.write("")  # placeholder (여백)
+    
+    with colRight:
+        st.subheader("자동차 관련 최신 뉴스")
+        # 예시 쿼리: "국내차량 해외 반응"
+        articles = fetch_naver_news(query="국내차량 해외 반응", display=3, sort="date")
+        if not articles:
+            st.write("관련 뉴스를 찾을 수 없습니다.")
+        else:
+            for article in articles:
+                title = remove_html_tags(article.get("title", ""))
+                description = remove_html_tags(article.get("description", ""))
+                link = article.get("link", "#")
+                # 본문은 70자까지만 표시
+                if len(description) > 70:
+                    description = description[:70] + "..."
+                st.markdown(f"**[{title}]({link})**")
+                st.markdown(description)
+                st.markdown("---")
+    
     st.markdown("---")
+
