@@ -2,7 +2,6 @@
 # ----------------------------
 # 수출 관리 모듈
 # - 국가별/지역별 수출 실적 관리
-# - 수출 일정 및 국가 정책 분석 기반 확장 가능
 # ----------------------------
 
 import streamlit as st
@@ -32,12 +31,12 @@ def export_ui():
     with tab1:
         col1, col2, col3 = st.columns(3)
         with col1:
-            brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique())
+            brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_1")
         with col2:
-            year = st.selectbox("연도 선택", sorted(df["연도"].dropna().unique(), reverse=True))
+            year = st.selectbox("연도 선택", sorted(df["연도"].dropna().unique(), reverse=True), key="export_year_1")
         with col3:
             country_list = df[df["브랜드"] == brand]["국가명"].dropna().unique()
-            country = st.selectbox("국가 선택", country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"])
+            country = st.selectbox("국가 선택", country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"], key="export_country_1")
 
         filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["국가명"] == country)]
 
@@ -72,8 +71,8 @@ def export_ui():
 
     # --- 국가별 비교 ---
     with tab2:
-        brand = st.selectbox("브랜드 선택 (국가 비교)", df["브랜드"].dropna().unique())
-        year = st.selectbox("연도 선택 (국가 비교)", sorted(df["연도"].dropna().unique(), reverse=True))
+        brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_2")
+        year = st.selectbox("연도 선택 (국가 비교)", sorted(df["연도"].dropna().unique(), reverse=True), key="export_year_2")
         grouped = df[(df["브랜드"] == brand) & (df["연도"] == year)]
         compare_df = grouped.groupby("국가명")[month_cols].sum(numeric_only=True)
         compare_df["총수출"] = compare_df.sum(axis=1)
@@ -88,8 +87,8 @@ def export_ui():
 
     # --- 연도별 추이 ---
     with tab3:
-        brand = st.selectbox("브랜드 선택 (연도별 추이)", df["브랜드"].dropna().unique())
-        country = st.selectbox("국가 선택 (연도별 추이)", df[df["브랜드"] == brand]["국가명"].dropna().unique())
+        brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_3")
+        country = st.selectbox("국가 선택 (연도별 추이)", df[df["브랜드"] == brand]["국가명"].dropna().unique(), key="export_country_2")
         yearly = df[(df["브랜드"] == brand) & (df["국가명"] == country)]
         yearly_sum = yearly.groupby("연도")[month_cols].sum(numeric_only=True)
         yearly_sum["총수출"] = yearly_sum.sum(axis=1)
@@ -103,9 +102,9 @@ def export_ui():
 
     # --- 목표 달성률 ---
     with tab4:
-        brand = st.selectbox("브랜드 선택 (목표)", df["브랜드"].dropna().unique())
-        year = st.selectbox("연도 선택 (목표)", sorted(df["연도"].dropna().unique(), reverse=True))
-        country = st.selectbox("국가 선택 (목표)", df[df["브랜드"] == brand]["국가명"].dropna().unique())
+        brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_4")
+        year = st.selectbox("연도 선택 (목표)", sorted(df["연도"].dropna().unique(), reverse=True), key="export_year_3")
+        country = st.selectbox("국가 선택 (목표)", df[df["브랜드"] == brand]["국가명"].dropna().unique(), key="export_country_3")
         goal = st.number_input("🎯 수출 목표 (대)", min_value=0, step=1000)
 
         filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["국가명"] == country)]
@@ -148,16 +147,17 @@ def export_ui():
             ))
         except Exception as e:
             st.error(f"지도 시각화 로딩 중 오류 발생: {e}")
+
     # --- 성장률 분석 ---
     with tab6:
         st.subheader("📊 국가별 수출 성장률 분석")
-        brand = st.selectbox("브랜드 선택 (성장률)", df["브랜드"].dropna().unique())
+        brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_5")
         year_list = sorted(df["연도"].dropna().unique())
 
         if len(year_list) < 2:
             st.warning("성장률 분석을 위해 최소 2개 연도의 데이터가 필요합니다.")
         else:
-            year = st.selectbox("기준 연도 선택", year_list[1:])  # 두 번째 연도부터 선택 가능 (이전 해 있어야 계산 가능)
+            year = st.selectbox("기준 연도 선택", year_list[1:], key="export_year_4")
             prev_year = year_list[year_list.index(year) - 1]
 
             current = df[(df["브랜드"] == brand) & (df["연도"] == year)]
@@ -189,5 +189,3 @@ def export_ui():
                 height=400
             )
             st.altair_chart(chart, use_container_width=True)
-
-

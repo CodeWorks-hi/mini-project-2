@@ -81,7 +81,7 @@ def sales_ui():
         with col1:
             판매일 = st.date_input("판매일")
         with col2:
-            지역 = st.selectbox("판매 지역", ["서울", "부산", "대구", "해외"])
+            지역 = st.selectbox("판매 지역", ["서울", "부산", "대구", "해외"], key="sales_region")
 
         col3, col4 = st.columns(2)
         with col3:
