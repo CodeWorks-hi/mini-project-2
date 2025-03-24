@@ -8,59 +8,57 @@
 # - 마스터 로그인, 네비게이션, 페이지 라우팅
 # ----------------------------
 
-import streamlit as st
-st.set_page_config(page_title="ERP 차량 관리 시스템", layout="wide")
-from components.navbar import navbar
-from core.master_auth import master_login, is_master_logged_in, logout
+# Home.py
+# ----------------------------
+# 첫 진입 시 로그인 화면 → 로그인 성공 시 탭 UI로 전환
+# ----------------------------
 
-# 모듈 및 페이지 import
-import modules.sales as sales
-import modules.production as production
-import modules.inventory as inventory
-import modules.export as export
-import modules.dashboard as dashboard
-import modules.analytics as analytics
-import modules.recommendations as recommendations
-import modules.settings as settings
+import streamlit as st
+from core.master_auth import master_login, is_master_logged_in
+
 
 # ✅ 페이지 설정
+st.set_page_config(page_title="ERP 차량 관리 시스템", layout="wide")
 
 
-# ✅ 관리자 로그인
-master_login()
+# ✅ 로그인 후에는 탭 UI로 구성
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9 = st.tabs([
+    "📊 대시보드", "🛒 판매 관리", "🏭 생산 관리", "📦 재고 관리",
+    "🚢 수출 관리", "🤖 추천 시스템", "📈 분석 리포트", "📘 인트로", "⚙️ 설정"
+])
 
-if is_master_logged_in():
-    logout()
+with tab1:
+    import modules.dashboard as dashboard
+    dashboard.dashboard_ui()
 
-    selected_page = navbar()
+with tab2:
+    import modules.sales as sales
+    sales.sales_ui()
 
-    if selected_page == "홈":
-        st.title("🚗 ERP 차량 관리 시스템 - 관리자")
-        st.write("판매, 생산, 재고, 수출 등 전체 업무를 통합 관리합니다.")
+with tab3:
+    import modules.production as production
+    production.production_ui()
 
-    elif selected_page == "대시보드":
-        dashboard.dashboard_ui()
+with tab4:
+    import modules.inventory as inventory
+    inventory.inventory_ui()
 
-    elif selected_page == "판매 관리":
-        sales.sales_ui()
+with tab5:
+    import modules.export as export
+    export.export_ui()
 
-    elif selected_page == "생산 관리":
-        production.production_ui()
+with tab6:
+    import modules.recommendations as recommendations
+    recommendations.recommendations_ui()
 
-    elif selected_page == "재고 관리":
-        inventory.inventory_ui()
+with tab7:
+    import modules.analytics as analytics
+    analytics.analytics_ui()
 
-    elif selected_page == "수출 관리":
-        export.export_ui()
+with tab8:
+    import modules.intro as intro
+    intro.intro_ui()
 
-    elif selected_page == "추천 시스템":
-        recommendations.recommendations_ui()
-
-    elif selected_page == "분석 리포트":
-        analytics.analytics_ui()
-
-    elif selected_page == "설정":
-        settings.settings_ui()
-else:
-    st.warning("🔐 관리자 로그인 후 사용 가능합니다.")
-
+with tab9:
+    import modules.settings as settings
+    settings.settings_ui()

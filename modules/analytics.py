@@ -1,20 +1,18 @@
-# pages/analytics.py
+# modules/analytics.py
 # ----------------------------
 # 분석 리포트 페이지
 # - 다양한 시각화 기반 비교 분석, 추이 분석
 # - 차종, 지역, 기간별 분석 중심
 # ----------------------------
 
-# pages/analytics.py
 import streamlit as st
 import pandas as pd
 import altair as alt
-import base64
 from io import BytesIO
-from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
-from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 def analytics_ui():
     st.title("📊 분석 리포트")
@@ -47,9 +45,9 @@ def analytics_ui():
 
     col1, col2 = st.columns(2)
     with col1:
-        brand = st.selectbox("브랜드 선택", ["전체"] + sorted(prod_df["브랜드"].unique()))
+        brand = st.selectbox("브랜드 선택", ["전체"] + sorted(prod_df["브랜드"].unique()), key="analytics_brand")
     with col2:
-        year = st.selectbox("연도 선택", sorted(prod_df["연도"].dropna().unique(), reverse=True), index=0)
+        year = st.selectbox("연도 선택", sorted(prod_df["연도"].dropna().unique(), reverse=True), key="analytics_year")
 
     def apply_filters(df):
         df = df[df["연도"] == year]
@@ -116,13 +114,11 @@ def analytics_ui():
     csv = inventory_df.to_csv(index=False).encode("utf-8-sig")
     st.download_button("📥 재고 리포트 다운로드", data=csv, file_name="재고리포트.csv", mime="text/csv")
 
-    # ✅ PDF 생성 함수 (한글 지원 포함)
     def create_pdf():
         buffer = BytesIO()
         c = canvas.Canvas(buffer, pagesize=A4)
         width, height = A4
 
-        # ✅ 한글 폰트 등록
         pdfmetrics.registerFont(TTFont("NanumGothic", "fonts/NanumGothic.ttf"))
         c.setFont("NanumGothic", 14)
         c.drawString(30, height - 50, f"ERP 분석 리포트 - {brand} {year}년")
