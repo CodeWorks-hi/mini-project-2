@@ -137,16 +137,12 @@ def dashboard_ui():
     with colA:
         st.subheader("🏭 공장별 총 생산량 (브랜드 통합 비교)")
 
+        # --------------------------
+        # 생산 데이터 로드 및 전처리
+        # --------------------------
         def load_data():
             hyundai = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
             kia = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
-
-            # '차종' 누락 대비
-            if "차종" not in hyundai.columns:
-                hyundai["차종"] = "기타"
-            if "차종" not in kia.columns:
-                kia["차종"] = "기타"
-
             hyundai["브랜드"] = "현대"
             kia["브랜드"] = "기아"
             return pd.concat([hyundai, kia], ignore_index=True)
@@ -155,30 +151,28 @@ def dashboard_ui():
         prod_df = load_data()
         prod_df[month_cols] = prod_df[month_cols].apply(pd.to_numeric, errors="coerce")
 
-        # (1) 전체 공장 목록 (브랜드+공장명(국가)) 만들기
-        factory_master = (
-            prod_df[["브랜드", "공장명(국가)"]]
-            .drop_duplicates()
-            .reset_index(drop=True)
-        )
+        # --------------------------
+        # 연도 필터만 적용 (전체 공장 포함)
+        # --------------------------
+        prod_df = prod_df[prod_df["연도"] == year]
 
-        # (2) 연도 필터 후 groupby로 생산량 집계
-        filtered = prod_df[prod_df["연도"] == year].copy()
-        grouped = filtered.groupby(["브랜드", "공장명(국가)"])[month_cols].sum(numeric_only=True)
-        grouped["총생산"] = grouped.sum(axis=1)
-        grouped = grouped.reset_index()
+        # --------------------------
+        # 공장별 총생산 계산 (브랜드와 공장명(국가) 기준)
+        # --------------------------
+        factory_grouped = prod_df.groupby(["브랜드", "공장명(국가)"])[month_cols].sum(numeric_only=True)
+        factory_grouped["총생산"] = factory_grouped.sum(axis=1)
+        factory_grouped = factory_grouped.reset_index()
 
-        # (3) 공장 목록과 left join → 없는 공장은 0으로 채움
-        merged = pd.merge(factory_master, grouped, on=["브랜드", "공장명(국가)"], how="left")
-        merged["총생산"] = merged["총생산"].fillna(0)  # NaN → 0
-        # (월별 컬럼도 0으로 채우고 싶다면 .fillna(0, inplace=True) 등으로 처리
-
-        # 이제 merged에는 "연도 데이터가 없어도" 공장명 전체가 들어있음
-        if merged["총생산"].sum() == 0:
-            st.warning("선택한 연도에 해당하는 생산 데이터가 없습니다 (모두 0).")
+        # --------------------------
+        # 현대와 기아를 비교하는 차트 생성
+        # Y축: 공장명(국가)의 유니크 값 (전체 공장)
+        # X축: 해당 공장에 대한 총생산 (모든 월 합계)
+        # 색상: 브랜드
+        # --------------------------
+        if factory_grouped.empty:
+            st.warning("선택한 연도에 해당하는 생산 데이터가 없습니다.")
         else:
-            import altair as alt
-            chart = alt.Chart(merged).mark_bar().encode(
+            chart = alt.Chart(factory_grouped).mark_bar().encode(
                 x=alt.X("총생산:Q", title="총 생산량"),
                 y=alt.Y("공장명(국가):N", sort="-x", title="공장"),
                 color="브랜드:N"
