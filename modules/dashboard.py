@@ -4,61 +4,57 @@ import pydeck as pdk
 import requests
 import re
 import altair as alt
+from datetime import datetime
+from modules.dashboard_kpi import calculate_kpis, render_kpi_cards
+from modules.dashboard_filter import get_filter_options, apply_filters
+from modules.dashboard_news import fetch_naver_news, render_news_results
 
-############################
-# 1) CSV 파일 로드 함수
-############################
+
 @st.cache_data
-def load_csv(file_path):
+def load_csv(path):
+    """CSV 파일 로드 함수"""
     try:
-        df = pd.read_csv(file_path)
-        return df
+        return pd.read_csv(path)
     except Exception as e:
-        st.error(f"파일 로드 오류 ({file_path}): {e}")
+        st.error(f"CSV 파일 로드 중 오류 발생: {str(e)}")
         return None
 
-############################
-# 2) HTML 태그 제거 함수
-############################
-def remove_html_tags(text: str) -> str:
-    return re.sub(r"<.*?>", "", text)
-
-############################
-# 3) 네이버 뉴스 검색 함수
-############################
-def fetch_naver_news(query: str, display: int = 3, sort: str = "date"):
-    try:
-        client_id = st.secrets["naver"]["client_id"]
-        client_secret = st.secrets["naver"]["client_secret"]
-    except Exception as e:
-        st.error("네이버 API 키가 제대로 설정되지 않았습니다. secrets.toml을 확인하세요.")
-        return []
-
-    url = "https://openapi.naver.com/v1/search/news.json"
-    params = {"query": query, "display": display, "sort": sort}
-    headers = {
-        "X-Naver-Client-Id": client_id,
-        "X-Naver-Client-Secret": client_secret
-    }
-
-    response = requests.get(url, params=params, headers=headers)
-    if response.status_code == 200:
-        return response.json().get("items", [])
-    else:
-        st.error(f"뉴스 검색 실패 (status code: {response.status_code})")
-        return []
-
-############################
-# 4) 메인 대시보드 함수
-############################
 def dashboard_ui():
-    # --------------------------
-    # 데이터 로드 (현대와 기아)
-    # --------------------------
+    """대시보드 메인 UI"""
+    
+    # 상단 제목 및 로고
+    st.markdown("""
+        <style>
+        .title-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .title-container img {
+            width: 100px;
+        }
+        .title-container h1 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        </style>
+        <div class="title-container">
+            <img src="assets/logo.png" alt="Logo">
+            <h1>📊 Hyundai-Kia ERP Dashboard</h1>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # 데이터 불러오기
     df_h = load_csv("data/processed/현대_지역별수출실적_전처리.CSV")
     df_k = load_csv("data/processed/기아_지역별수출실적_전처리.CSV")
     if df_h is None or df_k is None:
+        st.error("CSV 파일을 불러올 수 없습니다.")
         st.stop()
+
     
     df_h["브랜드"] = "현대"
     df_k["브랜드"] = "기아"
@@ -91,7 +87,7 @@ def dashboard_ui():
     # --------------------------
     col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 1, 1, 1, 1])
     with col1:
-        st.markdown("### Hyundai-Kia ERP")
+        st.write("")
     with col2:
         st.write("")
     with col3:
@@ -116,6 +112,22 @@ def dashboard_ui():
 
     df_filtered["총수출"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
 
+    # KPI 카드 섹션
+    kpi1 = int(df_filtered[month_cols].sum().sum())
+    kpi2 = df_filtered["브랜드"].nunique()
+    kpi3 = df_filtered["지역명"].nunique()
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric("총 수출량", f"{kpi1:,} 대")
+    
+    with col2:
+        st.metric("브랜드 수", kpi2)
+    
+    with col3:
+        st.metric("수출 국가 수", kpi3)
+
     # --------------------------
     # 위치정보 병합 (지역명 기준)
     # --------------------------
@@ -128,6 +140,8 @@ def dashboard_ui():
     except Exception as e:
         st.error(f"위치 정보 병합 중 오류: {e}")
         st.stop()
+
+
 
     # =========================================================
     # 상단: 지도 + 수출 요약 표
@@ -149,6 +163,7 @@ def dashboard_ui():
         month_cols = [f"{i}월" for i in range(1, 13)]
         prod_df = load_data()
         prod_df[month_cols] = prod_df[month_cols].apply(pd.to_numeric, errors="coerce")
+
 
         # --------------------------
         # 연도 필터만 적용 (전체 공장 포함)
@@ -243,28 +258,12 @@ def dashboard_ui():
     # =========================================================
     # 하단: 뉴스 섹션
     # =========================================================
-    colLeft, colCenter ,colRight = st.columns([1,1, 1])
+    # 하단 뉴스 섹션
+    st.subheader("📰 관련 뉴스")
     
-    with colLeft:
-        st.write("준비중")
-
-    with colCenter:
-        st.write("준비중")    
+    news_data = fetch_naver_news("현대차 수출", display=4)
     
-    with colRight:
-        st.subheader("자동차 관련 최신 뉴스")
-        articles = fetch_naver_news(query="국내차량 해외 반응", display=3, sort="date")
-        if not articles:
-            st.write("관련 뉴스를 찾을 수 없습니다.")
-        else:
-            for article in articles:
-                title = remove_html_tags(article.get("title", ""))
-                description = remove_html_tags(article.get("description", ""))
-                link = article.get("link", "#")
-                if len(description) > 70:
-                    description = description[:70] + "..."
-                st.markdown(f"**[{title}]({link})**")
-                st.markdown(description)
-                st.markdown("---")
+    if news_data:
+        render_news_results(news_data)
 
     st.markdown("---")
