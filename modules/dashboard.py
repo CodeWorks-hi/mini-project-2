@@ -135,7 +135,6 @@ def dashboard_ui():
     colA, colB, colC = st.columns([4,3,2])
     
     with colA:
-        st.subheader("🏭 공장별 총 생산량 (브랜드 통합 비교)")
 
         # --------------------------
         # 생산 데이터 로드 및 전처리
@@ -184,7 +183,6 @@ def dashboard_ui():
             st.altair_chart(chart, use_container_width=True)
 
     with colB:
-        st.subheader("🗺️ 국가별 수출 지도")
         if len(merged) == 0:
             st.warning("표시할 지도 데이터가 없습니다. 필터를 바꿔보세요.")
         else:
@@ -206,7 +204,6 @@ def dashboard_ui():
             ))
 
     with colC:
-        st.subheader("📦 국가별 수출 요약")
         st.markdown("""
             <style>
             table {
@@ -246,10 +243,13 @@ def dashboard_ui():
     # =========================================================
     # 하단: 뉴스 섹션
     # =========================================================
-    colLeft, colRight = st.columns([1, 1])
+    colLeft, colCenter ,colRight = st.columns([1,1, 1])
     
     with colLeft:
-        st.write("")
+        st.write("준비중")
+
+    with colCenter:
+        st.write("준비중")    
     
     with colRight:
         st.subheader("자동차 관련 최신 뉴스")
