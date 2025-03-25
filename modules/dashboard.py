@@ -3,13 +3,13 @@ import pandas as pd
 import pydeck as pdk
 import requests
 import re
+import altair as alt
 
 ############################
 # 1) CSV 파일 로드 함수
 ############################
 @st.cache_data
 def load_csv(file_path):
-    """CSV 파일을 로드하고, 오류 발생 시 None을 반환합니다."""
     try:
         df = pd.read_csv(file_path)
         return df
@@ -21,18 +21,12 @@ def load_csv(file_path):
 # 2) HTML 태그 제거 함수
 ############################
 def remove_html_tags(text: str) -> str:
-    """네이버 뉴스 검색 결과에 포함된 <b> 등 HTML 태그를 제거하기 위한 함수."""
     return re.sub(r"<.*?>", "", text)
 
 ############################
 # 3) 네이버 뉴스 검색 함수
 ############################
 def fetch_naver_news(query: str, display: int = 3, sort: str = "date"):
-    """
-    네이버 검색 API(뉴스)에서 'query'에 해당하는 뉴스를 가져옵니다.
-    display: 가져올 기사 개수 (최대 100).
-    sort: 'date' (최신순) 또는 'sim' (정확도/유사도순)
-    """
     try:
         client_id = st.secrets["naver"]["client_id"]
         client_secret = st.secrets["naver"]["client_secret"]
@@ -41,11 +35,7 @@ def fetch_naver_news(query: str, display: int = 3, sort: str = "date"):
         return []
 
     url = "https://openapi.naver.com/v1/search/news.json"
-    params = {
-        "query": query,      # 검색어
-        "display": display,  # 가져올 기사 개수
-        "sort": sort         # 'date' (최신순), 'sim' (정확도/유사도순)
-    }
+    params = {"query": query, "display": display, "sort": sort}
     headers = {
         "X-Naver-Client-Id": client_id,
         "X-Naver-Client-Secret": client_secret
@@ -53,8 +43,7 @@ def fetch_naver_news(query: str, display: int = 3, sort: str = "date"):
 
     response = requests.get(url, params=params, headers=headers)
     if response.status_code == 200:
-        data = response.json()
-        return data.get("items", [])
+        return response.json().get("items", [])
     else:
         st.error(f"뉴스 검색 실패 (status code: {response.status_code})")
         return []
@@ -71,27 +60,20 @@ def dashboard_ui():
     if df_h is None or df_k is None:
         st.stop()
     
-    # 브랜드 컬럼 추가 후 병합
     df_h["브랜드"] = "현대"
     df_k["브랜드"] = "기아"
+
+    # 🚨 현대에는 차량 구분이 없으므로 기본값 추가
+    if "차량 구분" not in df_h.columns:
+        df_h["차량 구분"] = "기타"
+
+    # 병합
     df = pd.concat([df_h, df_k], ignore_index=True)
 
     # 월별 컬럼 숫자형 변환
     month_cols = [f"{i}월" for i in range(1, 13)]
     for col in month_cols:
         df[col] = pd.to_numeric(df[col], errors="coerce")
-
-    # --------------------------
-    # 국가명 한글 매핑
-    # --------------------------
-    country_mapping = {
-        "US": "미국", "China": "중국", "Germany": "독일", "Australia": "호주", "Brazil": "브라질",
-        "India": "인도", "Canada": "캐나다", "Mexico": "멕시코", "Russia": "러시아", "UK": "영국",
-        "EU+EFTA": "유럽연합", "E.Europe/CIS": "동유럽", "Latin America": "중남미",
-        "Middle East/Africa": "중동/아프리카", "Asia / Pacific": "아시아/태평양"
-    }
-    df["국가명_한글"] = df["국가명"].map(country_mapping)
-    korean_to_english = {v: k for k, v in country_mapping.items()}
 
     # --------------------------
     # 차량 구분별 색상 정의
@@ -101,24 +83,24 @@ def dashboard_ui():
         "Recreational Vehicle": [255, 165, 0, 160],
         "Commercial Vehicle": [34, 139, 34, 160],
         "Special Vehicle": [220, 20, 60, 160],
-        "Total": [100, 100, 100, 100],
+        "기타": [173, 216, 230, 160]
     }
-    
+
     # --------------------------
-    # 상단 필터 바 구성 (콜 1~6번)
+    # 상단 필터 바
     # --------------------------
     col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 1, 1, 1, 1])
     with col1:
         st.markdown("### Hyundai-Kia ERP")
     with col2:
-        st.write("")  # 여백
+        st.write("")
     with col3:
-        st.write("")  # 여백
+        st.write("")
     with col4:
         year = st.selectbox("연도", sorted(df["연도"].dropna().unique()), key="export_year")
     with col5:
-        all_countries = sorted(df["국가명_한글"].dropna().unique())
-        country_kor = st.selectbox("국가 (한글)", ["전체"] + all_countries, key="export_country")
+        all_countries = sorted(df["지역명"].dropna().unique())
+        country_kor = st.selectbox("국가 (지역명)", ["전체"] + all_countries, key="export_country")
     with col6:
         all_vehicle_types = sorted(df["차량 구분"].dropna().unique())
         vehicle_type = st.selectbox("차량 구분", ["전체"] + all_vehicle_types, key="export_vehicle")
@@ -128,37 +110,84 @@ def dashboard_ui():
     # --------------------------
     df_filtered = df[df["연도"] == year].copy()
     if country_kor != "전체":
-        eng_country = korean_to_english.get(country_kor)
-        df_filtered = df_filtered[df_filtered["국가명"] == eng_country]
+        df_filtered = df_filtered[df_filtered["지역명"] == country_kor]
     if vehicle_type != "전체":
         df_filtered = df_filtered[df_filtered["차량 구분"] == vehicle_type]
 
-    # 월별 합계 → 총수출량 계산
     df_filtered["총수출"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
 
     # --------------------------
-    # 위치정보 로드 및 병합
+    # 위치정보 병합 (지역명 기준)
     # --------------------------
-    loc_df = load_csv("data/세일즈파일/국가_위치정보_수출.csv")
+    loc_df = load_csv("data/세일즈파일/지역별_위치정보.csv")
     if loc_df is None:
         st.stop()
     try:
-        merged = pd.merge(df_filtered, loc_df, on="국가명", how="left")
+        merged = pd.merge(df_filtered, loc_df, on="지역명", how="left")
         merged = merged.dropna(subset=["위도", "경도", "총수출"])
     except Exception as e:
         st.error(f"위치 정보 병합 중 오류: {e}")
         st.stop()
 
     # =========================================================
-    # 상단 추가 행: 3개 컬럼 (콜 에이, 콜 비, 콜 씨)
-    #   - 콜 에이: 여백 (나중에 내용 추가 예정)
-    #   - 콜 비: 지도
-    #   - 콜 씨: 수출 요약 표
+    # 상단: 지도 + 수출 요약 표
     # =========================================================
-    colA, colB, colC = st.columns(3)
+    colA, colB, colC = st.columns([4,3,2])
     
     with colA:
-        st.write("")  # placeholder (여백)
+        st.subheader("🏭 공장별 총 생산량 (브랜드 통합 비교)")
+
+        def load_data():
+            hyundai = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
+            kia = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
+
+            # '차종' 누락 대비
+            if "차종" not in hyundai.columns:
+                hyundai["차종"] = "기타"
+            if "차종" not in kia.columns:
+                kia["차종"] = "기타"
+
+            hyundai["브랜드"] = "현대"
+            kia["브랜드"] = "기아"
+            return pd.concat([hyundai, kia], ignore_index=True)
+
+        month_cols = [f"{i}월" for i in range(1, 13)]
+        prod_df = load_data()
+        prod_df[month_cols] = prod_df[month_cols].apply(pd.to_numeric, errors="coerce")
+
+        # (1) 전체 공장 목록 (브랜드+공장명(국가)) 만들기
+        factory_master = (
+            prod_df[["브랜드", "공장명(국가)"]]
+            .drop_duplicates()
+            .reset_index(drop=True)
+        )
+
+        # (2) 연도 필터 후 groupby로 생산량 집계
+        filtered = prod_df[prod_df["연도"] == year].copy()
+        grouped = filtered.groupby(["브랜드", "공장명(국가)"])[month_cols].sum(numeric_only=True)
+        grouped["총생산"] = grouped.sum(axis=1)
+        grouped = grouped.reset_index()
+
+        # (3) 공장 목록과 left join → 없는 공장은 0으로 채움
+        merged = pd.merge(factory_master, grouped, on=["브랜드", "공장명(국가)"], how="left")
+        merged["총생산"] = merged["총생산"].fillna(0)  # NaN → 0
+        # (월별 컬럼도 0으로 채우고 싶다면 .fillna(0, inplace=True) 등으로 처리
+
+        # 이제 merged에는 "연도 데이터가 없어도" 공장명 전체가 들어있음
+        if merged["총생산"].sum() == 0:
+            st.warning("선택한 연도에 해당하는 생산 데이터가 없습니다 (모두 0).")
+        else:
+            import altair as alt
+            chart = alt.Chart(merged).mark_bar().encode(
+                x=alt.X("총생산:Q", title="총 생산량"),
+                y=alt.Y("공장명(국가):N", sort="-x", title="공장"),
+                color="브랜드:N"
+            ).properties(
+                width=420,
+                height=420,
+                title="공장별 총 생산량 비교 (현대 + 기아)"
+            )
+            st.altair_chart(chart, use_container_width=True)
 
     with colB:
         st.subheader("🗺️ 국가별 수출 지도")
@@ -179,12 +208,11 @@ def dashboard_ui():
                         pickable=True
                     )
                 ],
-                tooltip={"text": "{국가명_한글}\n차량: {차량 구분}\n수출량: {총수출} 대"}
+                tooltip={"text": "{지역명}\n차량: {차량 구분}\n수출량: {총수출} 대"}
             ))
 
     with colC:
         st.subheader("📦 국가별 수출 요약")
-        # 표 스타일 (테두리, 라운드 효과)
         st.markdown("""
             <style>
             table {
@@ -201,97 +229,36 @@ def dashboard_ui():
         top_table = merged.sort_values("총수출", ascending=False).head(3)
         bottom_table = merged.sort_values("총수출").head(3)
 
-        # 상위 수출국 표
-        top_display = top_table[['국가명_한글', '차량 구분', '총수출']].reset_index(drop=True)
+        top_display = top_table[['지역명', '차량 구분', '총수출']].reset_index(drop=True)
+        bottom_display = bottom_table[['지역명', '차량 구분', '총수출']].reset_index(drop=True)
+
         top_styled = (
             top_display.style
             .set_caption("상위 수출국")
-            .set_table_styles([
-                {
-                    'selector': 'caption',
-                    'props': [
-                        ('font-size', '24px'),
-                        ('font-weight', 'bold'),
-                        ('text-align', 'center'),
-                        ('margin-bottom', '10px')
-                    ]
-                },
-                {
-                    'selector': 'thead th',
-                    'props': [
-                        ('background-color', '#FAF2D0'),
-                        ('text-align', 'center'),
-                        ('padding', '8px')
-                    ]
-                },
-                {
-                    'selector': 'tbody td',
-                    'props': [
-                        ('background-color', 'transparent'),
-                        ('text-align', 'center'),
-                        ('padding', '8px')
-                    ]
-                }
-            ])
             .format({'총수출': '{:,}'})
             .hide(axis="index")
         )
-        html_top = top_styled.to_html()
-
-        # 하위 수출국 표
-        bottom_display = bottom_table[['국가명_한글', '차량 구분', '총수출']].reset_index(drop=True)
         bottom_styled = (
             bottom_display.style
             .set_caption("하위 수출국")
-            .set_table_styles([
-                {
-                    'selector': 'caption',
-                    'props': [
-                        ('font-size', '24px'),
-                        ('font-weight', 'bold'),
-                        ('text-align', 'center'),
-                        ('margin-bottom', '10px')
-                    ]
-                },
-                {
-                    'selector': 'thead th',
-                    'props': [
-                        ('background-color', '#FAF2D0'),
-                        ('text-align', 'center'),
-                        ('padding', '8px')
-                    ]
-                },
-                {
-                    'selector': 'tbody td',
-                    'props': [
-                        ('background-color', 'transparent'),
-                        ('text-align', 'center'),
-                        ('padding', '8px')
-                    ]
-                }
-            ])
             .format({'총수출': '{:,}'})
             .hide(axis="index")
         )
-        html_bottom = bottom_styled.to_html()
 
-        st.markdown(html_top, unsafe_allow_html=True)
+        st.markdown(top_styled.to_html(), unsafe_allow_html=True)
         st.markdown("<div style='margin-top:20px;'></div>", unsafe_allow_html=True)
-        st.markdown(html_bottom, unsafe_allow_html=True)
+        st.markdown(bottom_styled.to_html(), unsafe_allow_html=True)
 
     # =========================================================
-    # 하단 추가 행: 2개 컬럼 (콜 레프트, 콜 라이트)
-    #   - 콜 레프트: 여백 (나중에 내용 추가 예정)
-    #   - 콜 라이트: 뉴스 기사 (총 3개, 최신순, 타이틀+본문 요약)
+    # 하단: 뉴스 섹션
     # =========================================================
     colLeft, colRight = st.columns([1, 1])
     
     with colLeft:
-        st.write("")  # placeholder (여백)
+        st.write("")
     
     with colRight:
         st.subheader("자동차 관련 최신 뉴스")
-        # 예시 쿼리: "국내차량 해외 반응"
         articles = fetch_naver_news(query="국내차량 해외 반응", display=3, sort="date")
         if not articles:
             st.write("관련 뉴스를 찾을 수 없습니다.")
@@ -300,12 +267,10 @@ def dashboard_ui():
                 title = remove_html_tags(article.get("title", ""))
                 description = remove_html_tags(article.get("description", ""))
                 link = article.get("link", "#")
-                # 본문은 70자까지만 표시
                 if len(description) > 70:
                     description = description[:70] + "..."
                 st.markdown(f"**[{title}]({link})**")
                 st.markdown(description)
                 st.markdown("---")
-    
-    st.markdown("---")
 
+    st.markdown("---")

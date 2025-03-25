@@ -115,29 +115,24 @@ def production_ui():
             merged = merged.dropna(subset=["위도", "경도", "총생산"])
 
             st.pydeck_chart(pdk.Deck(
-            map_style="mapbox://styles/mapbox/light-v9",
-            initial_view_state=pdk.ViewState(
-                latitude=20,
-                longitude=0,
-                zoom=1.5,
-                pitch=30
-            ),
-            layers=[
-                pdk.Layer(
-                    "ScatterplotLayer",
-                    data=merged,
-                    get_position='[경도, 위도]',
-                    get_radius='총생산 / 3',
-                    get_fill_color='[220, 30, 90, 160]',
-                    pickable=True
-                )
-            ],
-            tooltip={"text": "{공장명(국가)}\n총생산: {총생산} 대"}
-        ))
+                map_style="mapbox://styles/mapbox/light-v9",
+                initial_view_state=pdk.ViewState(latitude=20, longitude=0, zoom=1.5, pitch=30),
+                layers=[
+                    pdk.Layer(
+                        "ScatterplotLayer",
+                        data=merged,
+                        get_position='[경도, 위도]',
+                        get_radius='총생산 / 3',
+                        get_fill_color='[220, 30, 90, 160]',
+                        pickable=True
+                    )
+                ],
+                tooltip={"text": "{공장명(국가)}\n총생산: {총생산} 대"}
+            ))
         except Exception as e:
             st.error(f"지도 시각화 로딩 중 오류 발생: {e}")
 
-# --- 생산 성장률 분석 ---
+    # --- 생산 성장률 분석 ---
     with tab6:
         st.subheader("📊 공장별 생산 성장률 분석")
         brand = st.selectbox("브랜드 선택 (성장률)", df["브랜드"].dropna().unique())
@@ -179,9 +174,19 @@ def production_ui():
             )
             st.altair_chart(chart, use_container_width=True)
 
+# =============================
+# 데이터 로드 함수
+# =============================
 def load_data():
     hyundai = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
     kia = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
+
+    # 보완: 차종 누락 대비
+    if "차종" not in hyundai.columns:
+        hyundai["차종"] = "기타"
+    if "차종" not in kia.columns:
+        kia["차종"] = "기타"
+
     hyundai["브랜드"] = "현대"
     kia["브랜드"] = "기아"
     return pd.concat([hyundai, kia], ignore_index=True)

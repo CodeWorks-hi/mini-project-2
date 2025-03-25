@@ -35,10 +35,10 @@ def export_ui():
         with col2:
             year = st.selectbox("연도 선택", sorted(df["연도"].dropna().unique(), reverse=True), key="export_year_1")
         with col3:
-            country_list = df[df["브랜드"] == brand]["국가명"].dropna().unique()
+            country_list = df[df["브랜드"] == brand]["지역명"].dropna().unique()
             country = st.selectbox("국가 선택", country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"], key="export_country_1")
 
-        filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["국가명"] == country)]
+        filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["지역명"] == country)]
 
         if not filtered.empty:
             total_export = int(filtered[month_cols].sum(numeric_only=True).sum(skipna=True))
@@ -74,22 +74,22 @@ def export_ui():
         brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_2")
         year = st.selectbox("연도 선택 (국가 비교)", sorted(df["연도"].dropna().unique(), reverse=True), key="export_year_2")
         grouped = df[(df["브랜드"] == brand) & (df["연도"] == year)]
-        compare_df = grouped.groupby("국가명")[month_cols].sum(numeric_only=True)
+        compare_df = grouped.groupby("지역명")[month_cols].sum(numeric_only=True)
         compare_df["총수출"] = compare_df.sum(axis=1)
         compare_df = compare_df.reset_index()
 
         chart = alt.Chart(compare_df).mark_bar().encode(
             x=alt.X("총수출:Q", title="총 수출량"),
-            y=alt.Y("국가명:N", sort="-x", title="국가명"),
-            color="국가명:N"
+            y=alt.Y("지역명:N", sort="-x", title="지역명"),
+            color="지역명:N"
         ).properties(width=800, height=500, title="🌍 국가별 총 수출량 비교")
         st.altair_chart(chart, use_container_width=True)
 
     # --- 연도별 추이 ---
     with tab3:
         brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_3")
-        country = st.selectbox("국가 선택 (연도별 추이)", df[df["브랜드"] == brand]["국가명"].dropna().unique(), key="export_country_2")
-        yearly = df[(df["브랜드"] == brand) & (df["국가명"] == country)]
+        country = st.selectbox("국가 선택 (연도별 추이)", df[df["브랜드"] == brand]["지역명"].dropna().unique(), key="export_country_2")
+        yearly = df[(df["브랜드"] == brand) & (df["지역명"] == country)]
         yearly_sum = yearly.groupby("연도")[month_cols].sum(numeric_only=True)
         yearly_sum["총수출"] = yearly_sum.sum(axis=1)
         yearly_sum = yearly_sum.reset_index()
@@ -104,10 +104,10 @@ def export_ui():
     with tab4:
         brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_4")
         year = st.selectbox("연도 선택 (목표)", sorted(df["연도"].dropna().unique(), reverse=True), key="export_year_3")
-        country = st.selectbox("국가 선택 (목표)", df[df["브랜드"] == brand]["국가명"].dropna().unique(), key="export_country_3")
+        country = st.selectbox("국가 선택 (목표)", df[df["브랜드"] == brand]["지역명"].dropna().unique(), key="export_country_3")
         goal = st.number_input("🎯 수출 목표 (대)", min_value=0, step=1000)
 
-        filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["국가명"] == country)]
+        filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["지역명"] == country)]
         actual = int(filtered[month_cols].sum(numeric_only=True).sum(skipna=True)) if not filtered.empty else 0
         rate = (actual / goal * 100) if goal > 0 else 0
 
@@ -119,10 +119,10 @@ def export_ui():
         st.subheader("🗺️ 국가별 수출량 지도 시각화")
         try:
             location_df = pd.read_csv("data/세일즈파일/국가_위치정보_수출.csv")
-            export_sum = df.groupby("국가명")[month_cols].sum(numeric_only=True)
+            export_sum = df.groupby("지역명")[month_cols].sum(numeric_only=True)
             export_sum["총수출"] = export_sum.sum(axis=1)
             export_sum = export_sum.reset_index()
-            merged = pd.merge(location_df, export_sum, on="국가명", how="left")
+            merged = pd.merge(location_df, export_sum, on="지역명", how="left")
             merged = merged.dropna(subset=["위도", "경도", "총수출"])
 
             st.pydeck_chart(pdk.Deck(
@@ -143,7 +143,7 @@ def export_ui():
                         pickable=True
                     )
                 ],
-                tooltip={"text": "{국가명}\n총수출: {총수출} 대"}
+                tooltip={"text": "{지역명}\n총수출: {총수출} 대"}
             ))
         except Exception as e:
             st.error(f"지도 시각화 로딩 중 오류 발생: {e}")
@@ -163,8 +163,8 @@ def export_ui():
             current = df[(df["브랜드"] == brand) & (df["연도"] == year)]
             previous = df[(df["브랜드"] == brand) & (df["연도"] == prev_year)]
 
-            cur_sum = current.groupby("국가명")[month_cols].sum(numeric_only=True).sum(axis=1).rename("current")
-            prev_sum = previous.groupby("국가명")[month_cols].sum(numeric_only=True).sum(axis=1).rename("previous")
+            cur_sum = current.groupby("지역명")[month_cols].sum(numeric_only=True).sum(axis=1).rename("current")
+            prev_sum = previous.groupby("지역명")[month_cols].sum(numeric_only=True).sum(axis=1).rename("previous")
 
             merged = pd.concat([cur_sum, prev_sum], axis=1).dropna()
             merged["성장률"] = ((merged["current"] - merged["previous"]) / merged["previous"] * 100).round(2)
@@ -181,7 +181,7 @@ def export_ui():
 
             chart = alt.Chart(merged).mark_bar().encode(
                 x=alt.X("성장률:Q", title="성장률 (%)"),
-                y=alt.Y("국가명:N", sort="-x"),
+                y=alt.Y("지역명:N", sort="-x"),
                 color=alt.condition("datum.성장률 > 0", alt.value("#2E8B57"), alt.value("#DC143C"))
             ).properties(
                 title=f"📊 {prev_year} → {year} 국가별 수출 성장률",
