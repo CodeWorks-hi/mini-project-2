@@ -28,10 +28,27 @@ def generate_text_via_api(prompt: str, model_name: str = "google/gemma-2-9b-it")
     if not token:
         st.error("Hugging Face API 토큰이 설정되지 않았습니다. secrets.toml 확인 필요.")
         return ""
+    
+    prompt_additions = [
+        "한국어로 번역해서 작성해줘",
+        "현재 뉴스를 참고해서 분석해줘",
+        "시장 데이터를 기반으로 구체적인 근거를 포함해줘",
+        "표 형식으로 정리해줘",
+        "긍정적/부정적 요인을 나눠서 정리해줘",
+        "3가지 시나리오(낙관/중립/비관)로 예측해줘",
+        "간결하게 핵심 위주로 요약해줘 (500자 이내)",
+        "전문가처럼 객관적인 톤으로 설명해줘",
+        "주요 리스크 요인을 우선적으로 언급해줘",
+        "최근 1년간 변화된 흐름을 반영해서 설명해줘",
+        "예상 수치를 포함해 구체적으로 설명해줘"
+    ]
+    
+    enhanced_prompt = f"{prompt}\n\n추가 지시사항:\n" + "\n".join(prompt_additions)
+
     try:
         client = InferenceClient(model=model_name, api_key=token)
         response = client.text_generation(
-            prompt=f"다음 요청에 맞는 분석 및 예측 정보를 전문가의 시각으로 500자 내외로 작성해줘:\n{prompt}",
+            prompt=f"다음 요청에 맞는 분석 및 예측 정보를 전문가의 시각으로 500자 내외로 작성해줘:\n{enhanced_prompt}",
             max_new_tokens=512,
             temperature=0.7
         )
