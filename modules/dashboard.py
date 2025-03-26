@@ -92,7 +92,8 @@ def dashboard_ui():
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
-        year = st.selectbox("연도", sorted(df["연도"].dropna().unique()), key="export_year")
+        years = sorted(df["연도"].dropna().unique())
+        year = st.selectbox("연도", [int(y) for y in years], index=[int(y) for y in years].index(2023), key="export_year")
     with col2:
         all_countries = sorted(df["지역명"].dropna().unique())
         country_kor = st.selectbox("국가 (지역명)", ["전체"] + all_countries, key="export_country")
@@ -136,45 +137,95 @@ def dashboard_ui():
         st.stop()
 
     # 지도 + 차트 + 요약 카드
-    colA, colB, colC = st.columns([4, 3, 2])
+    colA, colB, colC, colD = st.columns([2, 2, 3, 2])
 
     with colA:
         st.markdown("""
         <div style='background-color:#f3f4f6;padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.05);'>
-        <h4>🏭 공장별 생산량 차트</h4>
+        <h4>🏭 현대 공장별 생산 비중 (도넛 차트)</h4>
         """, unsafe_allow_html=True)
 
-        def load_data():
-            hyundai = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
-            kia = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
-            hyundai["브랜드"] = "현대"
-            kia["브랜드"] = "기아"
-            return pd.concat([hyundai, kia], ignore_index=True)
+        @st.cache_data
+        def load_hyundai_data():
+            df = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
+            df["브랜드"] = "현대"
+            return df
 
-        prod_df = load_data()
-        prod_df[month_cols] = prod_df[month_cols].apply(pd.to_numeric, errors="coerce")
-        prod_df = prod_df[prod_df["연도"] == year]
-        factory_grouped = prod_df.groupby(["브랜드", "공장명(국가)"])[month_cols].sum(numeric_only=True)
-        factory_grouped["총생산"] = factory_grouped.sum(axis=1)
-        factory_grouped = factory_grouped.reset_index()
+        hyundai_df = load_hyundai_data()
 
-        if factory_grouped.empty:
-            st.warning("선택한 연도에 해당하는 생산 데이터가 없습니다.")
+        # 연도별 월 컬럼 추출
+        month_cols = [col for col in hyundai_df.columns if str(year) in col and "-" in col]
+        hyundai_df[month_cols] = hyundai_df[month_cols].apply(pd.to_numeric, errors="coerce")
+
+        # 공장별 총합 계산
+        hyundai_grouped = (
+            hyundai_df.groupby("공장명(국가)")[month_cols]
+            .sum(numeric_only=True)
+            .reset_index()
+        )
+        hyundai_grouped["총생산"] = hyundai_grouped[month_cols].sum(axis=1)
+
+        # 도넛형 파이차트
+        if hyundai_grouped.empty:
+            st.warning(f"{year}년 현대 생산 데이터가 없습니다.")
         else:
-            chart = alt.Chart(factory_grouped).mark_bar().encode(
-                x=alt.X("총생산:Q", title="총 생산량"),
-                y=alt.Y("공장명(국가):N", sort="-x", title="공장"),
-                color="브랜드:N"
+            donut_chart = alt.Chart(hyundai_grouped).mark_arc(innerRadius=60).encode(
+                theta=alt.Theta(field="총생산", type="quantitative"),
+                color=alt.Color(field="공장명(국가)", type="nominal", legend=alt.Legend(title="공장")),
+                tooltip=["공장명(국가)", "총생산"]
             ).properties(
-                width=420,
-                height=420,
-                title="공장별 총 생산량 비교 (현대 + 기아)"
+                width=400,
+                height=400,
+                title=f"{year}년 현대 공장별 생산 비중"
             )
-            st.altair_chart(chart, use_container_width=True)
+            st.altair_chart(donut_chart, use_container_width=True)
 
         st.markdown("</div>", unsafe_allow_html=True)
 
     with colB:
+        st.markdown("""
+        <div style='background-color:#fff8e1;padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.05);'>
+        <h4>🏭 기아 공장별 생산 비중 (도넛 차트)</h4>
+        """, unsafe_allow_html=True)
+
+        @st.cache_data
+        def load_kia_data():
+            df = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
+            df["브랜드"] = "기아"
+            return df
+
+        kia_df = load_kia_data()
+        kia_df = kia_df[kia_df["연도"] == year]
+
+        month_cols = [f"{i}월" for i in range(1, 13)]
+        kia_df[month_cols] = kia_df[month_cols].apply(pd.to_numeric, errors="coerce")
+
+        kia_grouped = (
+            kia_df.groupby("공장명(국가)")[month_cols]
+            .sum(numeric_only=True)
+            .reset_index()
+        )
+        kia_grouped["총생산"] = kia_grouped[month_cols].sum(axis=1)
+
+        if kia_grouped.empty:
+            st.warning(f"{year}년 기아 생산 데이터가 없습니다.")
+        else:
+            donut_chart = alt.Chart(kia_grouped).mark_arc(innerRadius=60).encode(
+                theta=alt.Theta(field="총생산", type="quantitative"),
+                color=alt.Color(field="공장명(국가)", type="nominal", legend=alt.Legend(title="공장")),
+                tooltip=["공장명(국가)", "총생산"]
+            ).properties(
+                width=400,
+                height=400,
+                title=f"{year}년 기아 공장별 생산 비중"
+            )
+            st.altair_chart(donut_chart, use_container_width=True)
+
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+
+
+    with colC:
         st.markdown("""
             <div style='background-color:#f9fbe7;padding:15px;border-radius:12px;margin-bottom:20px;'>
             <h4>🗺️ 수출 국가별 지도</h4>
@@ -200,7 +251,7 @@ def dashboard_ui():
             ))
         st.markdown("</div>", unsafe_allow_html=True)
 
-    with colC:
+    with colD:
         st.markdown("""
         <div style='background-color:#ede7f6;padding:15px;border-radius:12px;margin-bottom:20px;'>
         <h5>📦 수출 상하위 국가 요약</h4>
