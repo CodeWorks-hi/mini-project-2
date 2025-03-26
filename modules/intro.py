@@ -5,9 +5,12 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
+import os
 
 def intro_ui():
     st.title("📘 ERP 차량 관리 시스템 - 프로젝트 기획서")
+
+    
 
     # ✅ 화면 표시용 요약 (Streamlit UI)
     st.markdown("""
