@@ -19,7 +19,7 @@ from core.master_auth import master_login, is_master_logged_in
 
 
 # ✅ 페이지 설정
-st.set_page_config(page_title="ERP 차량 관리 시스템", layout="wide")
+st.set_page_config(page_title="ERP 차량 관리 시스템", layout="wide",  page_icon="🚗")
 
 
 # ✅ 로그인 후에는 탭 UI로 구성

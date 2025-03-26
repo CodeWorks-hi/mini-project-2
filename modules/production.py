@@ -2,14 +2,83 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 import pydeck as pdk
+import plotly.graph_objects as go
+def load_data():
+    hyundai = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
+    kia = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
 
+    if "차종" not in hyundai.columns:
+        hyundai["차종"] = "기타"
+    if "차종" not in kia.columns:
+        kia["차종"] = "기타"
 
+    hyundai["브랜드"] = "현대"
+    kia["브랜드"] = "기아"
+    return pd.concat([hyundai, kia], ignore_index=True)
+
+def goal_achievement_section(df, month_cols):
+    st.title("🎯 목표 달성률")
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique())
+    with col2:
+        year = st.selectbox("연도 선택", sorted(df["연도"].dropna().unique(), reverse=True))
+    with col3:
+        factory = st.selectbox("공장 선택", df[df["브랜드"] == brand]["공장명(국가)"].dropna().unique())
+    with col4:
+        goal = st.number_input("🎯 생산 목표 (대)", min_value=0, step=1000)
+
+    filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["공장명(국가)"] == factory)]
+    actual = int(filtered[month_cols].sum(numeric_only=True).sum(skipna=True)) if not filtered.empty else 0
+    rate = (actual / goal * 100) if goal > 0 else 0
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("총 생산량", f"{actual:,} 대")
+    with col2:
+        st.metric("목표 달성률", f"{rate:.2f}%")
+
+    fig_gauge = go.Figure(go.Indicator(
+        mode="gauge+number",
+        value=rate,
+        domain={'x': [0, 1], 'y': [0, 1]},
+        title={'text': "목표 달성률"},
+        gauge={
+            'axis': {'range': [0, 100]},
+            'bar': {'color': "purple"},
+            'steps': [
+                {'range': [0, 50], 'color': "lightgray"},
+                {'range': [50, 100], 'color': "lightblue"}
+            ],
+            'threshold': {
+                'line': {'color': "red", 'width': 4},
+                'thickness': 0.75,
+                'value': goal if goal > 0 else 100
+            }
+        }
+    ))
+
+    fig_bar = go.Figure(data=[
+        go.Bar(name="목표", x=["목표"], y=[goal], marker_color="lightblue"),
+        go.Bar(name="실제 생산량", x=["목표"], y=[actual], marker_color="purple")
+    ])
+    
+    fig_bar.update_layout(
+        barmode="group",
+        title="목표 vs 실제 생산량",
+        xaxis_title="데이터 유형",
+        yaxis_title="수량 (대)",
+        legend_title="데이터"
+    )
+
+    st.plotly_chart(fig_gauge, use_container_width=True)
+    st.plotly_chart(fig_bar, use_container_width=True)
 
 def production_ui():
     st.title("📦 생산 관리 대시보드")
     st.button("+ 생산 등록")
 
-    # 데이터 로딩
     df = load_data()
     month_cols = [f"{i}월" for i in range(1, 13)]
     df[month_cols] = df[month_cols].apply(pd.to_numeric, errors='coerce')
@@ -17,7 +86,7 @@ def production_ui():
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
         "📊 기본 현황", "🏭 공장별 비교", "📈 연도별 추이", "🎯 목표 달성률", "🗺️ 공장 위치 지도", "📊 생산 성장률 분석"
     ])
-
+    
     # --- 기본 현황 ---
     with tab1:
         col1, col2, col3 = st.columns(3)
@@ -93,17 +162,68 @@ def production_ui():
 
     # --- 목표 달성률 ---
     with tab4:
-        brand = st.selectbox("브랜드 선택 (목표)", df["브랜드"].dropna().unique())
-        year = st.selectbox("연도 선택 (목표)", sorted(df["연도"].dropna().unique(), reverse=True))
-        factory = st.selectbox("공장 선택 (목표)", df[df["브랜드"] == brand]["공장명(국가)"].dropna().unique())
-        goal = st.number_input("🎯 생산 목표 (대)", min_value=0, step=1000)
 
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="brand_select_goal")
+        with col2:
+            year = st.selectbox("연도 선택", sorted(df["연도"].dropna().unique(), reverse=True), key="year_select_goal")
+        with col3:
+            factory = st.selectbox("공장 선택", df[df["브랜드"] == brand]["공장명(국가)"].dropna().unique(), key="factory_select_goal")
+        with col4:
+            goal = st.number_input("🎯 생산 목표 (대)", min_value=0, step=1000, key="goal_input")
+
+        # 데이터 필터링 및 계산
         filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["공장명(국가)"] == factory)]
         actual = int(filtered[month_cols].sum(numeric_only=True).sum(skipna=True)) if not filtered.empty else 0
         rate = (actual / goal * 100) if goal > 0 else 0
 
-        st.metric("총 생산량", f"{actual:,} 대")
-        st.metric("목표 달성률", f"{rate:.2f}%")
+        # KPI 카드 섹션
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("총 생산량", f"{actual:,} 대")
+        with col2:
+            st.metric("목표 달성률", f"{rate:.2f}%")
+
+        # 게이지 차트 생성 (Plotly 사용)
+        fig_gauge = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=rate,
+            domain={'x': [0, 1], 'y': [0, 1]},
+            title={'text': "목표 달성률"},
+            gauge={
+                'axis': {'range': [0, 100]},
+                'bar': {'color': "purple"},
+                'steps': [
+                    {'range': [0, 50], 'color': "lightgray"},
+                    {'range': [50, 100], 'color': "lightblue"}
+                ],
+                'threshold': {
+                    'line': {'color': "red", 'width': 4},
+                    'thickness': 0.75,
+                    'value': goal if goal > 0 else 100
+                }
+            }
+        ))
+
+        # 막대 차트 생성 (Plotly 사용)
+        fig_bar = go.Figure(data=[
+            go.Bar(name="목표", x=["목표"], y=[goal], marker_color="lightblue"),
+            go.Bar(name="실제 생산량", x=["목표"], y=[actual], marker_color="purple")
+        ])
+        
+        fig_bar.update_layout(
+            barmode="group",
+            title="목표 vs 실제 생산량",
+            xaxis_title="데이터 유형",
+            yaxis_title="수량 (대)",
+            legend_title="데이터"
+        )
+
+        # 시각화 표시
+        st.plotly_chart(fig_gauge, use_container_width=True)
+        st.plotly_chart(fig_bar, use_container_width=True)
+    
 
     # --- 공장 위치 지도 ---
     # 데이터 생성
