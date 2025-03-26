@@ -37,12 +37,42 @@ def get_previous_weekday(date):
 def load_data():
     hyundai = pd.read_csv("data/processed/현대_지역별수출실적_전처리.CSV")
     kia = pd.read_csv("data/processed/기아_지역별수출실적_전처리.CSV")
+
     hyundai["브랜드"] = "현대"
     kia["브랜드"] = "기아"
-    return pd.concat([hyundai, kia], ignore_index=True)
+
+    df = pd.concat([hyundai, kia], ignore_index=True)
+
+    # 월 컬럼 식별
+    month_cols = [col for col in df.columns if "-" in col and col[:4].isdigit()]
+
+    # 연도 컬럼이 없는 경우에만 생성
+    if "연도" not in df.columns:
+        def get_year(row):
+            # 행에서 값이 있는 월 컬럼들만 추출
+            valid_years = [
+                int(col.split("-")[0])
+                for col in month_cols
+                if pd.notnull(row[col])
+            ]
+            if valid_years:
+                # 여러 연도가 섞인 경우 → 가장 큰 연도로 결정
+                return max(valid_years)
+            else:
+                # 모두 NaN인 경우 → None 또는 원하는 기본값
+                return None
+
+        df["연도"] = df.apply(get_year, axis=1)
+
+    return df
 
 def extract_year_list(df):
-    return sorted({int(col.split("-")[0]) for col in df.columns if "-" in col and col[:4].isdigit()})
+    # 해당 df의 컬럼 중 'YYYY-MM' 형식에서 연도만 추출 → 정렬
+    return sorted({
+        int(col.split("-")[0])
+        for col in df.columns
+        if "-" in col and col[:4].isdigit()
+    })
 
 df = load_data()
 
