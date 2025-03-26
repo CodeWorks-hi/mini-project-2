@@ -155,7 +155,7 @@ def dashboard_ui():
     with colA:
         st.markdown("""
         <div style='background-color:#f3f4f6;padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.05);'>
-        <h4>🏭 현대 공장별 생산 비중 (도넛 차트)</h4>
+        <h4>현대 공장별 생산 비중</h4>
         """, unsafe_allow_html=True)
 
         @st.cache_data
@@ -198,7 +198,7 @@ def dashboard_ui():
     with colB:
         st.markdown("""
         <div style='background-color:#fff8e1;padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.05);'>
-        <h4>🏭 기아 공장별 생산 비중 (도넛 차트)</h4>
+        <h4>기아 공장별 생산 비중</h4>
         """, unsafe_allow_html=True)
 
         @st.cache_data
