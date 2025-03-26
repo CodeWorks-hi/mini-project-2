@@ -43,8 +43,7 @@ def dashboard_ui():
         }
         </style>
         <div class="title-container">
-            <img src="assets/logo.png" alt="Logo">
-            <h1>📊 Hyundai-Kia ERP Dashboard</h1>
+            <h1>📊  Dashboard</h1>
         </div>
     """, unsafe_allow_html=True)
 

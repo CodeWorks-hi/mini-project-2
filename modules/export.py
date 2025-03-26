@@ -4,111 +4,62 @@ import altair as alt
 import pydeck as pdk
 import requests
 from datetime import datetime, timedelta
+import certifi
+import urllib3
 
-# 환율 데이터 불러오기 함수
-def fetch_currency_data(date=None):
-    if date is None:
-        date = datetime.now().strftime("%Y-%m-%d")
-    try:
-        if "open_api" not in st.secrets or "apikey" not in st.secrets["open_api"]:
-            st.error("❌ API 키가 설정되지 않았습니다. secrets.toml 파일을 확인해주세요.")
-            return None
+# SSL 경고 메시지 비활성화
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-        api_key = st.secrets["open_api"]["apikey"]
-        url = "https://api.currencyapi.com/v3/historical"
-        headers = {"apikey": api_key}
+# 전날 평일 계산 함수
+def get_previous_weekday(date):
+    one_day = timedelta(days=1)
+    while True:
+        date -= one_day
+        if date.weekday() < 5:  # 0~4: 월~금
+            return date
+
+# 한국수출입은행 환율 API 호출 함수
+def fetch_exim_exchange(date: datetime, api_key: str):
+    attempt = 0
+    while attempt < 3:
+        date_str = date.strftime("%Y%m%d")
+        url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON"
         params = {
-            "currencies": "EUR,USD,CAD,JPY,GBP,CNY,AUD,CHF,HKD,SGD",
-            "date": date,
-            "base_currency": "KRW"
+            "authkey": api_key,
+            "searchdate": date_str,
+            "data": "AP01"
         }
+        try:
+            response = requests.get(url, params=params, verify=False)  # SSL 인증서 검증 비활성화
+            response.raise_for_status()
+            data = response.json()
 
-        response = requests.get(url, headers=headers, params=params)
-        response.raise_for_status()
-        data = response.json()
+            # 응답은 있으나 환율이 없는 경우 (비영업일 등)
+            if isinstance(data, list) and all(item.get("deal_bas_r") in [None, ""] for item in data):
+                st.warning(f"📭 {date_str}일자 환율 정보가 없습니다. 전날 평일 데이터로 대체합니다.")
+                date = get_previous_weekday(date)
+                attempt += 1
+                continue
 
-        if "data" not in data:
-            st.error("⚠️ 잘못된 데이터 형식입니다.")
-            return None
-        return data["data"]
+            return data, date
+        except requests.exceptions.RequestException as e:
+            st.error(f"❗ API 호출 오류: {e}")
+            return [], date
 
-    except requests.exceptions.HTTPError as e:
-        if e.response.status_code == 429:
-            st.error("🔒 요청 제한 초과: 하루 요청 수를 초과했습니다.")
-        else:
-            st.error(f"🔒 인증 오류: {e.response.status_code} - API 키를 확인해주세요.")
-        return None
-    except Exception as e:
-        st.error(f"❗ 오류 발생: {str(e)}")
-        return None
+    return [], date
 
+def export_ui():
+    st.title("📤 수출 실적 대시보드")
+    st.button("+ 수출 등록")
 
-# 🔹 실시간 환율 시각화 (함수로 분리)
-def render_exchange_tab():
-    st.subheader("💱 주요 통화 환율 시계열 추이")
+    # 데이터 로딩
+    df = load_data()
+    month_cols = [f"{i}월" for i in range(1, 13)]
+    df[month_cols] = df[month_cols].apply(pd.to_numeric, errors='coerce')
 
-    major_currencies = ['USD', 'EUR', 'JPY', 'GBP', 'CNY', 'CAD']
-    selected_currencies = st.multiselect("조회할 주요 통화 선택", major_currencies, default=major_currencies, key="currency_selector")
-
-    col1, col2 = st.columns(2)
-    with col1:
-        start_date = st.date_input("시작일", datetime(2024, 12, 1))
-    with col2:
-        end_date = st.date_input("종료일", datetime(2025, 3, 25))
-
-    if start_date > end_date:
-        st.warning("종료일은 시작일보다 이후여야 합니다.")
-        st.stop()
-
-    all_data = []
-    current = start_date
-    with st.spinner("📡 환율 데이터를 수집 중입니다..."):
-        while current <= end_date:
-            day_str = current.strftime("%Y-%m-%d")
-            data = fetch_currency_data(day_str)
-            if data:
-                for curr in selected_currencies:
-                    if curr in data:
-                        all_data.append({
-                            "date": day_str,
-                            "currency": curr,
-                            "rate": data[curr]["value"]
-                        })
-            current += timedelta(days=1)
-
-    if not all_data:
-        st.warning("⚠️ 선택한 기간 동안 환율 데이터를 불러오지 못했습니다.")
-        st.stop()
-
-    df_all = pd.DataFrame(all_data)
-    df_all["date"] = pd.to_datetime(df_all["date"])
-
-    st.markdown("### 📈 선택한 주요 통화의 환율 변화 추이")
-    line_chart = alt.Chart(df_all).mark_line(point=True).encode(
-        x=alt.X("date:T", title="날짜"),
-        y=alt.Y("rate:Q", title="환율 (1KRW 대비)", scale=alt.Scale(zero=False)),
-        color=alt.Color("currency:N", title="통화"),
-        tooltip=["date:T", "currency:N", alt.Tooltip("rate:Q", format=".4f")]
-    ).properties(
-        height=450,
-        width=700
-    )
-    st.altair_chart(line_chart, use_container_width=True)
-
-    st.markdown("### 📋 최신 환율 요약")
-    latest = df_all[df_all["date"] == df_all["date"].max()].copy()
-    latest.sort_values("currency", inplace=True)
-    st.dataframe(
-        latest,
-        column_config={
-            "currency": "통화",
-            "rate": st.column_config.NumberColumn("환율", format="%.4f"),
-            "date": st.column_config.DateColumn("날짜")
-        },
-        use_container_width=True,
-        hide_index=True
-    )
-
+    tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
+        "📊 기본 현황", "🌍 국가별 비교", "📈 연도별 추이", "🎯 목표 달성률", "🗺️ 수출 지도", "📊 성장률 분석", "💱 실시간 환율"
+    ])
 
 def export_ui():
     st.title("📤 수출 실적 대시보드")
@@ -291,75 +242,105 @@ def export_ui():
             )
             st.altair_chart(chart, use_container_width=True)
 
-    # 실시간 환율 탭
+    # --- 실시간 환율 탭 ---
     with tab7:
-        render_exchange_tab()
-        st.subheader("💱 주요 통화 환율 시계열 추이")
+        st.subheader("💱 한국수출입은행 실시간 환율 조회")
 
-        major_currencies = ['USD', 'EUR', 'JPY', 'GBP', 'CNY', 'CAD']
-        selected_currencies = st.multiselect(
-            "조회할 주요 통화 선택",
-            major_currencies,
-            default=major_currencies,
-            key="currency_selector_main"
-        )
-
-        col1, col2 = st.columns(2)
-        with col1:
-            start_date = st.date_input("시작일", datetime(2024, 12, 1))
-        with col2:
-            end_date = st.date_input("종료일", datetime(2025, 3, 25))
-
-        if start_date > end_date:
-            st.warning("종료일은 시작일보다 이후여야 합니다.")
+        # API 키 로드
+        try:
+            api_key = st.secrets["exim"]["apikey"]
+        except KeyError:
+            st.error("❌ API 키가 설정되지 않았습니다. `.streamlit/secrets.toml`을 확인해주세요.")
             st.stop()
 
-        all_data = []
-        current = start_date
-        with st.spinner("📡 환율 데이터를 수집 중입니다..."):
-            while current <= end_date:
-                day_str = current.strftime("%Y-%m-%d")
-                data = fetch_currency_data(day_str)
-                if data:
-                    for curr in selected_currencies:
-                        if curr in data:
-                            all_data.append({
-                                "date": day_str,
-                                "currency": curr,
-                                "rate": data[curr]["value"]
-                            })
-                current += timedelta(days=1)
+        # 환율 조회 날짜 자동 계산
+        now = datetime.now()
+        if now.weekday() >= 5 or now.hour < 11:
+            default_date = get_previous_weekday(now)
+        else:
+            default_date = now
 
-        if not all_data:
-            st.warning("⚠️ 선택한 기간 동안 환율 데이터를 불러오지 못했습니다.")
+        # 날짜 선택 UI
+        selected_date = st.date_input("📆 환율 조회 날짜", default_date.date(), max_value=datetime.today())
+        query_date = datetime.combine(selected_date, datetime.min.time())
+
+        # API 호출
+        data, final_date = fetch_exim_exchange(query_date, api_key)
+        if not data:
+            st.warning("⚠️ 해당 날짜의 환율 데이터를 가져올 수 없습니다.")
             st.stop()
 
-        df_all = pd.DataFrame(all_data)
-        df_all["date"] = pd.to_datetime(df_all["date"])
+        # 전체 데이터프레임 생성
+        all_rows = []
+        for row in data:
+            if row.get("result") == 1:
+                try:
+                    rate = float(row["deal_bas_r"].replace(",", ""))
+                    all_rows.append({
+                        "날짜": final_date.date(),
+                        "통화": row.get("cur_unit"),
+                        "통화명": row.get("cur_nm"),
+                        "환율": rate
+                    })
+                except:
+                    continue
 
-        # 📈 시계열 그래프
-        st.markdown("### 📈 선택한 주요 통화의 환율 변화 추이")
-        line_chart = alt.Chart(df_all).mark_line(point=True).encode(
-            x=alt.X("date:T", title="날짜"),
-            y=alt.Y("rate:Q", title="환율 (1KRW 대비)", scale=alt.Scale(zero=False)),
-            color=alt.Color("currency:N", title="통화"),
-            tooltip=["date:T", "currency:N", alt.Tooltip("rate:Q", format=".4f")]
-        ).properties(height=450, width=700)
-        st.altair_chart(line_chart, use_container_width=True)
+        if not all_rows:
+            st.info("❗ 환율 데이터가 비어있습니다.")
+            st.stop()
 
-        # 📋 최신 환율 테이블
-        st.markdown("### 📋 최신 환율 요약")
-        latest = df_all[df_all["date"] == df_all["date"].max()].copy()
-        latest.sort_values("currency", inplace=True)
-        st.dataframe(
-            latest,
-            column_config={
-                "currency": "통화",
-                "rate": st.column_config.NumberColumn("환율", format="%.4f"),
-                "date": st.column_config.DateColumn("날짜")
-            },
-            use_container_width=True,
-            hide_index=True
+        df_all = pd.DataFrame(all_rows).sort_values("통화")
+
+        # 전체 테이블 표시
+        st.markdown("### 📋 전체 환율 데이터 테이블")
+        st.dataframe(df_all, use_container_width=True, hide_index=True)
+
+        # 옵션 목록 정의
+        currency_options = ["USD", "EUR", "JPY", "CNY", "GBP", "CAD", "AUD", "CHF", "SGD"]
+
+        # 기본값 설정 (옵션 목록에 있는 값만 사용)
+        default_currencies = ["USD", "EUR", "JPY"]
+
+        # multiselect 위젯 생성
+        st.markdown("### 🔍 통화 선택 후 상세 조회")
+        currency_filter = st.multiselect(
+            "조회할 통화 선택",
+            options=currency_options,
+            default=default_currencies
         )
+
+        filtered_df = df_all[df_all["통화"].isin(currency_filter)]
+
+        if filtered_df.empty:
+            st.info("선택한 통화의 환율 정보가 없습니다.")
+        else:
+            # 차트 시각화
+            st.markdown("### 📈 선택한 통화 환율 차트")
+            chart = alt.Chart(filtered_df).mark_bar().encode(
+                x=alt.X("통화:N", title="통화"),
+                y=alt.Y("환율:Q", title="매매 기준율"),
+                color=alt.Color("통화:N", title="통화"),
+                tooltip=["통화명", "통화", "환율"]
+            ).properties(width=700, height=400)
+            st.altair_chart(chart, use_container_width=True)
+
+            # 상세 테이블 표시
+            st.markdown("### 📄 선택 통화 환율 테이블")
+            st.dataframe(filtered_df, use_container_width=True, hide_index=True)
+
+
+
+def load_data():
+    hyundai = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
+    kia = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
+
+    if "차종" not in hyundai.columns:
+        hyundai["차종"] = "기타"
+    if "차종" not in kia.columns:
+        kia["차종"] = "기타"
+
+    hyundai["브랜드"] = "현대"
+    kia["브랜드"] = "기아"
+    return pd.concat([hyundai, kia], ignore_index=True)
 
 
