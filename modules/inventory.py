@@ -2,9 +2,8 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 
+# 재고 관리
 def inventory_ui():
-    st.title("📦 재고 관리 시스템")
-
     # 생산 데이터 로드
     hyundai_prod = pd.read_csv("data/세일즈파일/00_해외공장판매실적.CSV")
     kia_prod = pd.read_csv("data/세일즈파일/00_해외공장판매실적.CSV")
