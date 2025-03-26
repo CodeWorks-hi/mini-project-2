@@ -5,11 +5,9 @@ import pydeck as pdk
 import requests
 from datetime import datetime, timedelta
 import urllib3
-import pydeck  
 
 # SSL 경고 메시지 비활성화
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 
 # 환율 데이터 조회 함수
 def fetch_exim_exchange(date, api_key):
@@ -25,7 +23,7 @@ def fetch_exim_exchange(date, api_key):
         data = response.json()
         return data
     except Exception as e:
-        st.error(f"❗ API 호출 오류: {e}")
+        st.error(f"\u2757 API 호출 오류: {e}")
         return None
 
 # 이전 평일 계산 함수
@@ -33,57 +31,49 @@ def get_previous_weekday(date):
     one_day = timedelta(days=1)
     while True:
         date -= one_day
-        if date.weekday() < 5:  # 월~금
+        if date.weekday() < 5:
             return date
 
-
-def export_ui():
-    st.title("📤 수출 실적 대시보드")
-    st.button("+ 수출 등록")
-
-    # 데이터 로딩
-    df = load_data()
-    month_cols = [f"{i}월" for i in range(1, 13)]
-    df[month_cols] = df[month_cols].apply(pd.to_numeric, errors='coerce')
-
-    tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
-        "📊 기본 현황", "🌍 국가별 비교", "📈 연도별 추이", "🎯 목표 달성률", "🗺️ 수출 지도", "📊 성장률 분석", "💱 실시간 환율"
-    ])
-
-def export_ui():
-    st.title("📤 수출 실적 대시보드")
-    st.button("+ 수출 등록")
-
-    # 🔽 데이터 로딩 (중복 정의 방지)
+def load_data():
     hyundai = pd.read_csv("data/processed/현대_지역별수출실적_전처리.CSV")
     kia = pd.read_csv("data/processed/기아_지역별수출실적_전처리.CSV")
     hyundai["브랜드"] = "현대"
     kia["브랜드"] = "기아"
-    df = pd.concat([hyundai, kia], ignore_index=True)
-    month_cols = [f"{i}월" for i in range(1, 13)]
-    df[month_cols] = df[month_cols].apply(pd.to_numeric, errors='coerce')
+    return pd.concat([hyundai, kia], ignore_index=True)
+
+def extract_year_list(df):
+    return sorted({int(col.split("-")[0]) for col in df.columns if "-" in col and col[:4].isdigit()})
+
+df = load_data()
+
+def export_ui():
+    st.title("📨 수출 실적 대시보드")
+    st.button("수출 등록")
+
+    month_cols = [col for col in df.columns if "-" in col and col[:4].isdigit()]
+
+    year_list = extract_year_list(df)
 
     tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
-        "📊 기본 현황", "🌍 국가별 비교", "📈 연도별 추이", "🎯 목표 달성률", "🗺️ 수출 지도", "📊 성장률 분석", "💱 실시간 환율"
+        "기본 현황", "국가별 비교", "연도별 추이", "목표 달성률", "수출 지도", "성장률 분석", "실시간 환율"
     ])
 
-
-    # --- 기본 현황 ---
     with tab1:
         col1, col2, col3 = st.columns(3)
         with col1:
             brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_1")
         with col2:
-            year = st.selectbox("연도 선택", sorted(df["연도"].dropna().unique(), reverse=True), key="export_year_1")
+            year = st.selectbox("연도 선택", year_list[::-1], key="export_year_1")
         with col3:
             country_list = df[df["브랜드"] == brand]["지역명"].dropna().unique()
             country = st.selectbox("국가 선택", country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"], key="export_country_1")
 
-        filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["지역명"] == country)]
+        month_filter_cols = [col for col in month_cols if col.startswith(str(year))]
+        filtered = df[(df["브랜드"] == brand) & (df["지역명"] == country)]
 
         if not filtered.empty:
-            total_export = int(filtered[month_cols].sum(numeric_only=True).sum(skipna=True))
-            avg_export = int(filtered[month_cols].mean(numeric_only=True).mean(skipna=True))
+            total_export = int(filtered[month_filter_cols].sum(numeric_only=True).sum(skipna=True))
+            avg_export = int(filtered[month_filter_cols].mean(numeric_only=True).mean(skipna=True))
             type_count = filtered["차량 구분"].nunique()
 
             kpi1, kpi2, kpi3 = st.columns(3)
@@ -91,7 +81,7 @@ def export_ui():
             kpi2.metric("평균 수출량", f"{avg_export:,} 대")
             kpi3.metric("차량 구분 수", f"{type_count} 종")
 
-            df_melted = filtered.melt(id_vars=["차량 구분"], value_vars=month_cols, var_name="월", value_name="수출량")
+            df_melted = filtered.melt(id_vars=["차량 구분"], value_vars=month_filter_cols, var_name="월", value_name="수출량")
             df_melted.dropna(subset=["수출량"], inplace=True)
 
             if not df_melted.empty:
@@ -109,6 +99,7 @@ def export_ui():
             st.download_button("📥 현재 데이터 다운로드", data=csv, file_name=f"{brand}_{country}_{year}_수출실적.csv", mime="text/csv")
         else:
             st.warning("선택한 조건에 해당하는 데이터가 없습니다.")
+
 
     # --- 국가별 비교 ---
     with tab2:

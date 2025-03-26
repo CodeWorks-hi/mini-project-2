@@ -49,9 +49,19 @@ def inventory_ui():
     sales_sum = sales_long.groupby(["브랜드", "차종", "연도"])["판매량"].sum().reset_index()
     sales_sum["누적판매"] = sales_sum.sum(axis=1, numeric_only=True)
 
+    # 병합 전, 인덱스 초기화
+    prod_sum = prod_sum.reset_index()
+    sales_sum = sales_sum.reset_index()
+
+    # 병합 수행
+    inventory_df = pd.merge(
+        prod_sum[["브랜드", "차종", "연도", "누적생산"]],
+        sales_sum[["브랜드", "차종", "연도", "누적판매"]],
+        on=["브랜드", "차종", "연도"],
+        how="outer"
+    ).fillna(0)
+
     # 재고 계산
-    inventory_df = pd.merge(prod_sum[["누적생산"]], sales_sum[["누적판매"]],
-                           left_index=True, right_index=True, how="outer").fillna(0)
     inventory_df["예상재고"] = inventory_df["누적생산"] - inventory_df["누적판매"]
     inventory_df = inventory_df.reset_index()
 
@@ -68,7 +78,7 @@ def inventory_ui():
         default_year = 2025 if 2025 in available_years else available_years[0]
 
         # 연도 선택 필터 UI
-        year_sel = st.selectbox("연도 선택", available_years, index=available_years.index(default_year))
+        year_sel = st.selectbox("연도 선택", available_years, index=available_years.index(default_year), key="year")
 
     filtered = inventory_df[inventory_df["연도"] == year_sel]
     if brand_sel != "전체":
