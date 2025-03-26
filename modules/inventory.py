@@ -22,15 +22,32 @@ def inventory_ui():
     # 공통 처리
     month_cols = [f"{i}월" for i in range(1, 13)]
     prod_df[month_cols] = prod_df[month_cols].apply(pd.to_numeric, errors='coerce')
+    # 연-월 형식으로 되어 있는 컬럼만 선택
+    month_cols = [col for col in sales_df.columns if "-" in col and col[:4].isdigit()]
     sales_df[month_cols] = sales_df[month_cols].apply(pd.to_numeric, errors='coerce')
 
-    # 생산량 집계 (차종 기준)
-    prod_sum = prod_df.groupby(["브랜드", "차종", "연도"])[month_cols].sum(numeric_only=True)
+    id_cols = [col for col in prod_df.columns if not "-" in col or not col[:4].isdigit()]
+    prod_long = prod_df.melt(
+        id_vars=id_cols,
+        var_name="연월",
+        value_name="생산량"
+    )
+
+    # 2. 연도 및 월 파생
+    prod_long["연도"] = prod_long["연월"].str[:4].astype(int)
+    prod_long["월"] = prod_long["연월"].str[5:].astype(int)
+
+    # 3. groupby 수행
+    prod_sum = prod_long.groupby(["브랜드", "차종", "연도"])["생산량"].sum().reset_index()
     prod_sum["누적생산"] = prod_sum.sum(axis=1)
 
-    # 판매량 집계 (차종 기준)
-    sales_sum = sales_df.groupby(["브랜드", "차종", "연도"])[month_cols].sum(numeric_only=True)
-    sales_sum["누적판매"] = sales_sum.sum(axis=1)
+    id_cols = [col for col in sales_df.columns if not "-" in col or not col[:4].isdigit()]
+    sales_long = sales_df.melt(id_vars=id_cols, var_name="연월", value_name="판매량")
+    sales_long["연도"] = sales_long["연월"].str[:4].astype(int)
+    sales_long["월"] = sales_long["연월"].str[5:].astype(int)
+
+    sales_sum = sales_long.groupby(["브랜드", "차종", "연도"])["판매량"].sum().reset_index()
+    sales_sum["누적판매"] = sales_sum.sum(axis=1, numeric_only=True)
 
     # 재고 계산
     inventory_df = pd.merge(prod_sum[["누적생산"]], sales_sum[["누적판매"]],
@@ -44,7 +61,14 @@ def inventory_ui():
     with col1:
         brand_sel = st.selectbox("브랜드 선택", ["전체"] + inventory_df["브랜드"].unique().tolist())
     with col2:
-        year_sel = st.selectbox("연도 선택", sorted(inventory_df["연도"].unique(), reverse=True), index=0 if 2025 not in inventory_df["연도"].unique() else inventory_df["연도"].unique().tolist().index(2025))
+        # 연도 리스트 (정수로 변환)
+        available_years = sorted(inventory_df["연도"].dropna().astype(int).unique(), reverse=True)
+
+        # 2025가 있으면 해당 연도를 기본 선택, 없으면 첫 번째 연도 선택
+        default_year = 2025 if 2025 in available_years else available_years[0]
+
+        # 연도 선택 필터 UI
+        year_sel = st.selectbox("연도 선택", available_years, index=available_years.index(default_year))
 
     filtered = inventory_df[inventory_df["연도"] == year_sel]
     if brand_sel != "전체":

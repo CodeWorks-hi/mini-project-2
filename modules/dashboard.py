@@ -72,9 +72,10 @@ def dashboard_ui():
         df_h["차량 구분"] = "기타"
     df = pd.concat([df_h, df_k], ignore_index=True)
 
-    month_cols = [f"{i}월" for i in range(1, 13)]
-    for col in month_cols:
-        df[col] = pd.to_numeric(df[col], errors="coerce")
+    month_cols = [col for col in df.columns if "-" in col and col[:4].isdigit()]
+    month_suffixes = [col.split("-")[1] for col in month_cols]
+    # for col in month_cols:
+    #     df[col] = pd.to_numeric(df[col], errors="coerce")
 
     color_map = {
         "Passenger Car": [152, 251, 152, 160],
@@ -92,7 +93,12 @@ def dashboard_ui():
 
     col1, col2, col3, col4, col5, col6 = st.columns(6)
     with col1:
-        years = sorted(df["연도"].dropna().unique())
+        years = sorted({
+            col.split("-")[0]
+            for col in df.columns
+            if "-" in col and col[:4].isdigit()
+        })
+        years = [int(y) for y in years]  # 문자열 → 정수 변환
         year = st.selectbox("연도", [int(y) for y in years], index=[int(y) for y in years].index(2023), key="export_year")
     with col2:
         all_countries = sorted(df["지역명"].dropna().unique())
@@ -101,7 +107,14 @@ def dashboard_ui():
         all_vehicle_types = sorted(df["차량 구분"].dropna().unique())
         vehicle_type = st.selectbox("차량 구분", ["전체"] + all_vehicle_types, key="export_vehicle")
 
-    df_filtered = df[df["연도"] == year].copy()
+    # 선택된 연도에 해당하는 컬럼만 추출
+    month_cols = [col for col in df.columns if str(year) in col and "-" in col]
+
+    # 수출 실적 데이터만으로 df_filtered 구성
+    df_filtered = df.copy()  # 혹은 필요한 조건이 있다면 적용
+
+    # KPI 계산용 컬럼 생성
+    df_filtered["총수출"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
     if country_kor != "전체":
         df_filtered = df_filtered[df_filtered["지역명"] == country_kor]
     if vehicle_type != "전체":
@@ -195,9 +208,7 @@ def dashboard_ui():
             return df
 
         kia_df = load_kia_data()
-        kia_df = kia_df[kia_df["연도"] == year]
-
-        month_cols = [f"{i}월" for i in range(1, 13)]
+        month_cols = [col for col in kia_df.columns if str(year) in col and "-" in col]
         kia_df[month_cols] = kia_df[month_cols].apply(pd.to_numeric, errors="coerce")
 
         kia_grouped = (
@@ -206,6 +217,8 @@ def dashboard_ui():
             .reset_index()
         )
         kia_grouped["총생산"] = kia_grouped[month_cols].sum(axis=1)
+
+        
 
         if kia_grouped.empty:
             st.warning(f"{year}년 기아 생산 데이터가 없습니다.")

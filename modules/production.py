@@ -80,8 +80,8 @@ def production_ui():
     st.button("+ 생산 등록")
 
     df = load_data()
-    month_cols = [f"{i}월" for i in range(1, 13)]
-    df[month_cols] = df[month_cols].apply(pd.to_numeric, errors='coerce')
+    month_cols = [col for col in df.columns if "-" in col and col[:4].isdigit()]
+    month_suffixes = [col.split("-")[1] for col in month_cols]
 
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
         "📊 기본 현황", "🏭 공장별 비교", "📈 연도별 추이", "🎯 목표 달성률", "🗺️ 공장 위치 지도", "📊 생산 성장률 분석"
@@ -93,12 +93,21 @@ def production_ui():
         with col1:
             brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique())
         with col2:
-            year = st.selectbox("연도 선택", sorted(df["연도"].dropna().unique(), reverse=True))
+            # 연도 추출: '2021-01', '2022-03' 등에서 '2021', '2022'만 추출
+            years = sorted({
+                col.split("-")[0]
+                for col in df.columns
+                if "-" in col and col[:4].isdigit()
+            }, reverse=True)
+
+            year = st.selectbox("연도 선택", years)
         with col3:
             factory_list = df[(df["브랜드"] == brand)]["공장명(국가)"].dropna().unique()
             factory = st.selectbox("공장 선택", factory_list if len(factory_list) > 0 else ["선택 가능한 공장 없음"])
 
-        filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["공장명(국가)"] == factory)]
+        month_cols = [col for col in df.columns if str(year) in col and "-" in col]
+        filtered = df[(df["브랜드"] == brand) & (df["공장명(국가)"] == factory)].copy()
+        filtered["총생산"] = filtered[month_cols].sum(axis=1)
 
         if not filtered.empty:
             total_prod = int(filtered[month_cols].sum(numeric_only=True).sum(skipna=True))
@@ -132,9 +141,44 @@ def production_ui():
     # --- 공장별 비교 ---
     with tab2:
         brand = st.selectbox("브랜드 선택 (공장 비교)", df["브랜드"].dropna().unique())
-        year = st.selectbox("연도 선택 (공장 비교)", sorted(df["연도"].dropna().unique(), reverse=True))
-        grouped = df[(df["브랜드"] == brand) & (df["연도"] == year)]
-        compare_df = grouped.groupby("공장명(국가)")[month_cols].sum(numeric_only=True)
+        years = sorted({
+                col.split("-")[0]
+                for col in df.columns
+                if "-" in col and col[:4].isdigit()
+        }, reverse=True)
+
+        year = st.selectbox("연도 선택", years, key="year_select_factory")
+        # 필요한 고정 컬럼 지정
+        id_columns = [col for col in df.columns if not "-" in col or not col[:4].isdigit()]
+
+        df_long = df.melt(
+            id_vars=id_columns,
+            var_name="연월",
+            value_name="생산량"
+        )
+
+        df_long["연도"] = df_long["연월"].str[:4].astype(int)
+        df_long["월"] = df_long["연월"].str[5:].astype(int)
+        filtered = df_long[
+            (df_long["브랜드"] == brand) &
+            (df_long["연도"] == year)
+        ]
+
+        grouped = filtered.groupby("공장명(국가)")["생산량"].sum().reset_index()
+        # 연도 선택
+        year = st.selectbox("연도 선택", years, index=0, key="year_select_fact")
+
+        # 월 컬럼 추출
+        month_cols = [col for col in df.columns if col.startswith(str(year)) and "-" in col]
+
+        # 유효성 검사
+        if not month_cols:
+            st.warning(f"{year}년 월별 생산 데이터가 없습니다.")
+            st.stop()
+
+        # 그룹화 및 집계
+        grouped = df.groupby("공장명(국가)")[month_cols].sum(numeric_only=True)
+        compare_df = df.groupby("공장명(국가)")[month_cols].sum(numeric_only=True)
         compare_df["총생산"] = compare_df.sum(axis=1)
         compare_df = compare_df.reset_index()
 
@@ -150,9 +194,18 @@ def production_ui():
         brand = st.selectbox("브랜드 선택 (연도별 추이)", df["브랜드"].dropna().unique())
         factory = st.selectbox("공장 선택 (연도별 추이)", df[df["브랜드"] == brand]["공장명(국가)"].dropna().unique())
         yearly = df[(df["브랜드"] == brand) & (df["공장명(국가)"] == factory)]
-        yearly_sum = yearly.groupby("연도")[month_cols].sum(numeric_only=True)
-        yearly_sum["총생산"] = yearly_sum.sum(axis=1)
-        yearly_sum = yearly_sum.reset_index()
+        id_cols = [col for col in yearly.columns if not "-" in col or not col[:4].isdigit()]
+        
+        yearly = yearly.melt(
+            id_vars=id_cols,
+            var_name="연월",
+            value_name="생산량"
+        )
+        yearly["연도"] = yearly["연월"].str[:4].astype(int)
+        yearly["월"] = yearly["연월"].str[5:].astype(int)
+
+        yearly_sum = yearly.groupby("연도")["생산량"].sum().reset_index()
+        yearly_sum["총생산"] = yearly_sum["생산량"]
 
         line_chart = alt.Chart(yearly_sum).mark_line(point=True).encode(
             x="연도:O",
@@ -167,15 +220,20 @@ def production_ui():
         with col1:
             brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="brand_select_goal")
         with col2:
-            year = st.selectbox("연도 선택", sorted(df["연도"].dropna().unique(), reverse=True), key="year_select_goal")
+            year = st.selectbox("연도 선택", years, index=0, key="year_select_goal")
         with col3:
             factory = st.selectbox("공장 선택", df[df["브랜드"] == brand]["공장명(국가)"].dropna().unique(), key="factory_select_goal")
         with col4:
             goal = st.number_input("🎯 생산 목표 (대)", min_value=0, step=1000, key="goal_input")
 
         # 데이터 필터링 및 계산
-        filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["공장명(국가)"] == factory)]
-        actual = int(filtered[month_cols].sum(numeric_only=True).sum(skipna=True)) if not filtered.empty else 0
+        filtered = df_long[
+            (df_long["브랜드"] == brand) &
+            (df_long["연도"] == year) &
+            (df_long["공장명(국가)"] == factory)
+        ]
+
+        actual = int(filtered["생산량"].sum(skipna=True)) if not filtered.empty else 0
         rate = (actual / goal * 100) if goal > 0 else 0
 
         # KPI 카드 섹션
@@ -314,19 +372,32 @@ def production_ui():
     with tab6:
         st.subheader("📊 공장별 생산 성장률 분석")
         brand = st.selectbox("브랜드 선택 (성장률)", df["브랜드"].dropna().unique())
-        year_list = sorted(df["연도"].dropna().unique())
+        year_list = sorted({
+            col.split("-")[0]
+            for col in df.columns
+            if "-" in col and col[:4].isdigit()
+        })
 
         if len(year_list) < 2:
             st.warning("성장률 분석을 위해 최소 2개 연도의 데이터가 필요합니다.")
         else:
-            year = st.selectbox("기준 연도 선택", year_list[1:])
+            # 연도 선택
+            year = st.selectbox("기준 연도 선택", year_list[1:])  # 최소 2개 이상 존재해야 함
             prev_year = year_list[year_list.index(year) - 1]
 
-            current = df[(df["브랜드"] == brand) & (df["연도"] == year)]
-            previous = df[(df["브랜드"] == brand) & (df["연도"] == prev_year)]
+            # long 포맷 기준 필터링
+            current = df_long[
+                (df_long["브랜드"] == brand) &
+                (df_long["연도"] == year)
+            ]
 
-            cur_sum = current.groupby("공장명(국가)")[month_cols].sum(numeric_only=True).sum(axis=1).rename("current")
-            prev_sum = previous.groupby("공장명(국가)")[month_cols].sum(numeric_only=True).sum(axis=1).rename("previous")
+            previous = df_long[
+                (df_long["브랜드"] == brand) &
+                (df_long["연도"] == prev_year)
+            ]
+
+            cur_sum = current.groupby("공장명(국가)")["생산량"].sum().rename("current")
+            prev_sum = previous.groupby("공장명(국가)")["생산량"].sum().rename("previous")
 
             merged = pd.concat([cur_sum, prev_sum], axis=1).dropna()
             merged["성장률"] = ((merged["current"] - merged["previous"]) / merged["previous"] * 100).round(2)
