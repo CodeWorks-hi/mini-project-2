@@ -133,6 +133,7 @@ def prediction_ui():
             fig.tight_layout()
 
             st.pyplot(fig)
+            plt.close(fig)
 
             # 저장 경로 생성
             save_path = f"images/result/{region_name} LSTM 지역별 수출량 예측_{forecast_months}개월.png"
@@ -302,6 +303,7 @@ def prediction_ui():
             fig.tight_layout()
 
             st.pyplot(fig)
+            plt.close(fig)
 
             # 저장 경로 생성
             save_path = f"images/result/{car_name} LSTM 지역별 수출량 예측_{forecast_months}개월.png"
@@ -476,8 +478,8 @@ def prediction_ui():
             ax.grid(True)
             fig.tight_layout()
 
-            # Streamlit 시각화
             st.pyplot(fig)
+            plt.close(fig)
 
             # 저장 경로 설정 및 디렉토리 생성
             save_path = f"images/result/{plant_name} LSTM 공장별 판매량 예측_{forecast_months}개월.png"
