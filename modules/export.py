@@ -5,8 +5,6 @@ import pydeck as pdk
 import requests
 from datetime import datetime, timedelta
 import urllib3
-import re
-import os
 
 # 수출관리 
 # SSL 경고 메시지 비활성화
@@ -43,12 +41,29 @@ def load_csv(path):
     try:
         return pd.read_csv(path)
     except Exception as e:
-        st.error(f"csv 파일 로드 중 오류 발생: {str(e)}")
+        st.error(f"CSV 파일 로드 중 오류 발생: {str(e)}")
         return None
 
+# 연도 컬럼 추가 함수
+def extract_year_column(df):
+    month_cols = extract_month_columns(df)
+    if "연도" not in df.columns:
+        def get_year(row):
+            valid_years = [int(col.split("-")[0]) for col in month_cols if pd.notnull(row[col])]
+            return max(valid_years) if valid_years else None
+        df["연도"] = df.apply(get_year, axis=1)
+    
+    # NaN 값이 있는 연도 컬럼을 '전체'로 대체 (필요한 경우)
+    df["연도"].fillna('전체', inplace=True)
+    return df
+
+# NaN 값을 0으로 채우는 함수
+def fillna_with_zero(df):
+    return df.fillna(0)
+
 # 데이터 병합 함수 (수출 실적)
-def load_and_merge_export_data(hyundai_path="data/processed/hyundai-by-region.csv", 
-                                kia_path="data/processed/kia-by-region.csv"):
+def load_and_merge_export_data(hyundai_path="data/processed/현대_지역별수출실적_전처리.CSV", 
+                                kia_path="data/processed/기아_지역별수출실적_전처리.CSV"):
     df_h = load_csv(hyundai_path)
     df_k = load_csv(kia_path)
     
@@ -61,7 +76,11 @@ def load_and_merge_export_data(hyundai_path="data/processed/hyundai-by-region.cs
     if "차량 구분" not in df_h.columns:
         df_h["차량 구분"] = "기타"
     
-    return pd.concat([df_h, df_k], ignore_index=True)
+    # 데이터 병합 후 NaN 값 처리
+    df_merged = pd.concat([df_h, df_k], ignore_index=True)
+    df_merged = fillna_with_zero(df_merged)  # NaN 값을 0으로 처리
+    
+    return df_merged
 
 # 월별 컬럼 추출 함수
 def extract_month_columns(df):
@@ -69,27 +88,27 @@ def extract_month_columns(df):
 
 # 연도 리스트 추출 함수
 def extract_year_list(df):
-    return sorted({
+    years = sorted({
         int(col.split("-")[0])
         for col in df.columns
-        if re.match(r"\d{4}-\d{2}", col)
+        if "-" in col and col[:4].isdigit()
     })
-
-# 월 리스트 추출 함수 (특정 연도에 대해)
-def extract_month_list(df, year: int):
-    return sorted({
-        int(col.split("-")[1])
-        for col in df.columns
-        if col.startswith(str(year)) and re.match(r"\d{4}-\d{2}", col)
-    })
+    return years
 
 # 필터링 UI 생성 함수
 def get_filter_values(df, key_prefix):
-    brand = st.selectbox(f"브랜드 선택", df["브랜드"].dropna().unique(), key=f"{key_prefix}_brand")
+    # 브랜드 선택
+    brand_options = sorted(df["브랜드"].dropna().unique())
+    brand = st.selectbox(f"브랜드 선택", brand_options, key=f"{key_prefix}_brand")
+
+    # 연도 선택
     year_list = extract_year_list(df)
     year = st.selectbox(f"연도 선택", year_list[::-1], key=f"{key_prefix}_year")
+
+    # 국가 선택
     country_list = df[df["브랜드"] == brand]["지역명"].dropna().unique()
     country = st.selectbox(f"국가 선택", country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"], key=f"{key_prefix}_country")
+    
     return brand, year, country
 
 # 수출 UI
