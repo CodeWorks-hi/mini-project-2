@@ -33,27 +33,27 @@ import os
 #     except Exception as e:
 #         return f"❗ 데이터 가져오기 실패: {e}"
 
-# def dashboard_ui():
-#     st.markdown("""
-#         <div style='padding: 15px; background-color: #f8f9fa; border-radius: 10px; margin-bottom: 20px;'>
-#             <h1 style='margin: 0;'>📊 Hyundai & Kia Export Dashboard</h1>
-#         </div>
-#     """, unsafe_allow_html=True)
+def dashboard_ui():
+    # st.markdown("""
+    #     <div style='padding: 15px; background-color: #f8f9fa; border-radius: 10px; margin-bottom: 20px;'>
+    #         <h1 style='margin: 0;'>📊 Hyundai & Kia Export Dashboard</h1>
+    #     </div>
+    # """, unsafe_allow_html=True)
 
-#     # 환율 정보 카드
-#     with st.container():
-#         st.markdown("""
-#             <div style='padding: 10px; background-color: #e8f0fe; border-radius: 10px; margin-bottom: 15px;'>
-#                 <h4>💱 실시간 환율 (네이버 기준)</h4>
-#         """, unsafe_allow_html=True)
+    # # 환율 정보 카드
+    # with st.container():
+    #     st.markdown("""
+    #         <div style='padding: 10px; background-color: #e8f0fe; border-radius: 10px; margin-bottom: 15px;'>
+    #             <h4>💱 실시간 환율 (네이버 기준)</h4>
+    #     """, unsafe_allow_html=True)
 
-#         exchange_rate_placeholder = st.empty()
-#         currencies = ['USD', 'EUR', 'JPY', 'CNY', 'GBP']
-#         for currency in currencies:
-#             rate_info = get_exchange_rate(currency)
-#             exchange_rate_placeholder.markdown(f"<div style='margin-bottom: 5px;'>🪙 {rate_info}</div>", unsafe_allow_html=True)
+    #     exchange_rate_placeholder = st.empty()
+    #     currencies = ['USD', 'EUR', 'JPY', 'CNY', 'GBP']
+    #     for currency in currencies:
+    #         rate_info = get_exchange_rate(currency)
+    #         exchange_rate_placeholder.markdown(f"<div style='margin-bottom: 5px;'>🪙 {rate_info}</div>", unsafe_allow_html=True)
 
-#         st.markdown("""</div>""", unsafe_allow_html=True)
+    #     st.markdown("""</div>""", unsafe_allow_html=True)
 
     # 데이터 로드 및 병합
     df = load_and_merge_export_data()
