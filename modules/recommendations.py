@@ -9,7 +9,6 @@ from huggingface_hub import InferenceClient
 if "last_forecast_image" in st.session_state:
     image_path = st.session_state["last_forecast_image"]
 
-
 # Gemma 시스템
 # 설정
 VISION_MODEL_ID = "openbmb/MiniCPM-Llama3-V-2_5" 
