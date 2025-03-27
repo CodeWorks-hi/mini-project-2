@@ -16,6 +16,8 @@
 import streamlit as st
 from core.master_auth import master_login, is_master_logged_in
 
+import streamlit as st
+
 # ✅ 페이지 설정
 st.set_page_config(
     page_title="ERP 차량 관리 시스템",
@@ -23,28 +25,50 @@ st.set_page_config(
     page_icon="🚗"
 )
 
-# ✅ 에러 방지용 안전 로딩 함수
-def safe_tab_import(tab, module_name, ui_function_name, tab_label):
-    try:
-        mod = __import__(f"modules.{module_name}", fromlist=[ui_function_name])
-        getattr(mod, ui_function_name)()
-    except Exception as e:
-        with tab:
-            st.error(f"❌ [{tab_label}] 모듈 실행 중 에러 발생:\n\n{e}")
-
-# ✅ 탭 구성
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9 = st.tabs([
+# ✅ 탭 UI 정의
+TABS = [
     " 대시보드", " 판매 관리", " 생산 관리", " 재고 관리",
     " 수출 관리", " 분석 리포트", " 인트로", " 설정", "추천 시스템"
-])
+]
 
-# ✅ 각 탭에 안전하게 모듈 로딩
-safe_tab_import(tab1, "dashboard", "dashboard_ui", "대시보드")
-safe_tab_import(tab2, "sales", "sales_ui", "판매 관리")
-safe_tab_import(tab3, "production", "production_ui", "생산 관리")
-safe_tab_import(tab4, "inventory", "inventory_ui", "재고 관리")
-safe_tab_import(tab5, "export", "export_ui", "수출 관리")
-safe_tab_import(tab6, "analytics", "analytics_ui", "분석 리포트")
-safe_tab_import(tab7, "intro", "intro_ui", "인트로")
-safe_tab_import(tab8, "settings", "settings_ui", "설정")
-safe_tab_import(tab9, "recommendations", "recommendations_ui", "추천 시스템")
+# ✅ 탭 생성
+tabs = st.tabs(TABS)
+
+# ✅ 각 탭에 해당하는 기능 모듈 import
+import modules.dashboard as dashboard
+import modules.sales as sales
+import modules.production as production
+import modules.inventory as inventory
+import modules.export as export
+import modules.analytics as analytics
+import modules.intro as intro
+import modules.settings as settings
+import modules.recommendations as recommendations
+
+# ✅ 각 탭에 해당하는 UI 실행
+with tabs[0]:
+    dashboard.dashboard_ui()
+
+with tabs[1]:
+    sales.sales_ui()
+
+with tabs[2]:
+    production.production_ui()
+
+with tabs[3]:
+    inventory.inventory_ui()
+
+with tabs[4]:
+    export.export_ui()
+
+with tabs[5]:
+    analytics.analytics_ui()
+
+with tabs[6]:
+    intro.intro_ui()
+
+with tabs[7]:
+    settings.settings_ui()
+
+with tabs[8]:
+    recommendations.recommendations_ui()
