@@ -24,16 +24,16 @@ def load_and_merge_export_data():
     return pd.concat([df_h, df_k], ignore_index=True)
 
 def load_hyundai_factory_data():
-    df = load_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
+    df = load_csv("../data/processed/현대_해외공장판매실적_전처리.CSV")
     if df is not None:
         df["브랜드"] = "현대"
     return df
 
 def load_kia_factory_data():
-    df = load_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
+    df = load_csv("../data/processed/기아_해외공장판매실적_전처리.CSV")
     if df is not None:
         df["브랜드"] = "기아"
     return df
 
 def load_location_data():
-    return load_csv("data/세일즈파일/지역별_위치정보.csv")
+    return load_csv("../data/세일즈파일/지역별_위치정보.csv")
