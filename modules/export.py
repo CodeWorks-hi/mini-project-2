@@ -5,6 +5,8 @@ import pydeck as pdk
 import requests
 from datetime import datetime, timedelta
 import urllib3
+import re
+import os
 
 # 수출관리 
 # SSL 경고 메시지 비활성화
@@ -41,29 +43,12 @@ def load_csv(path):
     try:
         return pd.read_csv(path)
     except Exception as e:
-        st.error(f"CSV 파일 로드 중 오류 발생: {str(e)}")
+        st.error(f"csv 파일 로드 중 오류 발생: {str(e)}")
         return None
 
-# 연도 컬럼 추가 함수
-def extract_year_column(df):
-    month_cols = extract_month_columns(df)
-    if "연도" not in df.columns:
-        def get_year(row):
-            valid_years = [int(col.split("-")[0]) for col in month_cols if pd.notnull(row[col])]
-            return max(valid_years) if valid_years else None
-        df["연도"] = df.apply(get_year, axis=1)
-    
-    # NaN 값이 있는 연도 컬럼을 '전체'로 대체 (필요한 경우)
-    df["연도"].fillna('전체', inplace=True)
-    return df
-
-# NaN 값을 0으로 채우는 함수
-def fillna_with_zero(df):
-    return df.fillna(0)
-
 # 데이터 병합 함수 (수출 실적)
-def load_and_merge_export_data(hyundai_path="data/processed/현대_지역별수출실적_전처리.CSV", 
-                                kia_path="data/processed/기아_지역별수출실적_전처리.CSV"):
+def load_and_merge_export_data(hyundai_path="data/processed/hyundai-by-region.csv", 
+                                kia_path="data/processed/kia-by-region.csv"):
     df_h = load_csv(hyundai_path)
     df_k = load_csv(kia_path)
     
@@ -76,11 +61,7 @@ def load_and_merge_export_data(hyundai_path="data/processed/현대_지역별수�
     if "차량 구분" not in df_h.columns:
         df_h["차량 구분"] = "기타"
     
-    # 데이터 병합 후 NaN 값 처리
-    df_merged = pd.concat([df_h, df_k], ignore_index=True)
-    df_merged = fillna_with_zero(df_merged)  # NaN 값을 0으로 처리
-    
-    return df_merged
+    return pd.concat([df_h, df_k], ignore_index=True)
 
 # 월별 컬럼 추출 함수
 def extract_month_columns(df):
@@ -88,31 +69,55 @@ def extract_month_columns(df):
 
 # 연도 리스트 추출 함수
 def extract_year_list(df):
-    years = sorted({
+    return sorted({
         int(col.split("-")[0])
         for col in df.columns
-        if "-" in col and col[:4].isdigit()
+        if re.match(r"\d{4}-\d{2}", col)
     })
-    return years
+
+# 월 리스트 추출 함수 (특정 연도에 대해)
+def extract_month_list(df, year: int):
+    return sorted({
+        int(col.split("-")[1])
+        for col in df.columns
+        if col.startswith(str(year)) and re.match(r"\d{4}-\d{2}", col)
+    })
+
+# 연도 컬럼 추가 함수
+def extract_year_column(df):
+    # 월별 컬럼을 가져오는 함수
+    month_cols = extract_month_columns(df)
+    
+    # '연도' 컬럼이 없으면 추가
+    if "연도" not in df.columns:
+        def get_year(row):
+            # 유효한 월별 컬럼을 통해 연도 추출
+            valid_years = [int(col.split("-")[0]) for col in month_cols if pd.notnull(row[col])]
+            return max(valid_years) if valid_years else None
+        
+        # '연도' 컬럼 추가
+        df["연도"] = df.apply(get_year, axis=1)
+    
+    # NaN 값이 있는 '연도' 컬럼을 '전체'로 대체 (필요한 경우)
+    df["연도"].fillna('전체', inplace=True)
+    
+    # 추가: 연도 컬럼이 제대로 채워졌는지 출력해보기
+    st.write("연도 컬럼 확인:", df["연도"].unique())  # 디버깅용으로 연도값을 출력해 확인
+
+    return df
 
 # 필터링 UI 생성 함수
 def get_filter_values(df, key_prefix):
-    # 브랜드 선택
-    brand_options = sorted(df["브랜드"].dropna().unique())
-    brand = st.selectbox(f"브랜드 선택", brand_options, key=f"{key_prefix}_brand")
-
-    # 연도 선택
+    brand = st.selectbox(f"브랜드 선택", df["브랜드"].dropna().unique(), key=f"{key_prefix}_brand")
     year_list = extract_year_list(df)
     year = st.selectbox(f"연도 선택", year_list[::-1], key=f"{key_prefix}_year")
-
-    # 국가 선택
     country_list = df[df["브랜드"] == brand]["지역명"].dropna().unique()
     country = st.selectbox(f"국가 선택", country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"], key=f"{key_prefix}_country")
-    
     return brand, year, country
 
-# 수출 UI
+# 수출 UI ======================== 메인화면 시작 함수 
 def export_ui():
+    # 데이터 로드
     df = load_and_merge_export_data()
     if df is None:
         st.error("❌ 수출 데이터를 불러오지 못했습니다.")
@@ -132,15 +137,11 @@ def export_ui():
 
     # --- 탭 1: 수출 실적 대시보드 ---
     with tab1:
-        # ✅ 수출 등록 토글 함수
-        def toggle_export_form():
-            st.session_state["show_export_form"] = not st.session_state.get("show_export_form", False)
-
-        # ✅ 등록 버튼 (토글)
+        # 등록 버튼 (토글)
         btn_label = "등록 취소" if st.session_state.get("show_export_form", False) else "📥 수출 등록"
         st.button(btn_label, on_click=toggle_export_form)
 
-        # ✅ 수출 등록 폼 표시
+        # 수출 등록 폼 표시
         if st.session_state.get("show_export_form", False):
             with st.form("add_export_form"):
                 st.subheader("📬 신규 수출 데이터 등록")
@@ -177,13 +178,13 @@ def export_ui():
                     elif brand == "현대":
                         df[df["브랜드"] == "현대"].to_csv("data/processed/hyundai-by-region.csv", index=False, encoding="utf-8-sig")
 
-        # ✅ 월 컬럼 추출
+        # 월 컬럼 추출
         month_cols = extract_month_columns(df)
 
-        # ✅ 필터링 UI 호출
+        # 필터링 UI 호출
         brand, year, country = get_filter_values(df, "export_1")
 
-        # ✅ 월 필터링 컬럼
+        # 월 필터링 컬럼
         month_filter_cols = [col for col in month_cols if col.startswith(str(year))]
         filtered = df[(df["브랜드"] == brand) & (df["지역명"] == country)]
 
@@ -192,13 +193,13 @@ def export_ui():
             avg_export = int(filtered[month_filter_cols].mean(numeric_only=True).mean(skipna=True))
             type_count = filtered["차량 구분"].nunique()
 
-            # ✅ KPI
+            # KPI
             kpi1, kpi2, kpi3 = st.columns(3)
             kpi1.metric(label="총 수출량", value=f"{total_export:,} 대")
             kpi2.metric(label="평균 수출량", value=f"{avg_export:,} 대")
             kpi3.metric(label="차량 구분 수", value=f"{type_count} 종")
 
-            # ✅ 월별 수출량 차트
+            # 월별 수출량 차트
             df_melted = filtered.melt(id_vars=["차량 구분"], value_vars=month_filter_cols, var_name="월", value_name="수출량")
             df_melted.dropna(subset=["수출량"], inplace=True)
 
@@ -210,15 +211,16 @@ def export_ui():
                 ).properties(width=900, height=400, title="📈 월별 차량 구분 수출 추이")
                 st.altair_chart(chart, use_container_width=True)
 
-            # ✅ 원본 데이터 보기
+            # 원본 데이터 보기
             with st.expander("📋 원본 데이터 보기"):
                 st.dataframe(filtered, use_container_width=True)
 
-            # ✅ csv 다운로드
+            # CSV 다운로드
             csv = filtered.to_csv(index=False).encode("utf-8-sig")
             st.download_button("📥 현재 데이터 다운로드", data=csv, file_name=f"{brand}_{country}_{year}_수출실적.csv", mime="text/csv")
         else:
             st.warning("선택한 조건에 해당하는 데이터가 없습니다.")
+
 
     # --- 국가별 비교 ---
     with tab2:
@@ -248,7 +250,6 @@ def export_ui():
             else:
                 st.warning("수출량 데이터가 없습니다.")
 
-
     # --- 연도별 추이 ---
     with tab3:
         # 필터링 UI 호출
@@ -271,14 +272,40 @@ def export_ui():
         # 필터링 UI 호출
         brand, year, country = get_filter_values(df, "export_4")
 
+        # 목표 수출량 입력
         goal = st.number_input("🎯 수출 목표 (대)", min_value=0, step=1000)
 
+        # 필터링된 데이터
         filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["지역명"] == country)]
+        
+        # 실제 수출량 계산
         actual = int(filtered[month_cols].sum(numeric_only=True).sum(skipna=True)) if not filtered.empty else 0
         rate = (actual / goal * 100) if goal > 0 else 0
 
-        st.metric("총 수출량", f"{actual:,} 대")
-        st.metric("목표 달성률", f"{rate:.2f}%")
+        # KPI 카드
+        kpi1, kpi2 = st.columns(2)
+        kpi1.metric("총 수출량", f"{actual:,} 대")
+        kpi2.metric("목표 달성률", f"{rate:.2f}%")
+
+        # 목표 미달 경고 (목표 미달 또는 목표 초과)
+        if rate < 100:
+            st.warning(f"⚠️ 목표 달성률이 100% 미만입니다! 목표에 도달하기 위해 더 많은 수출이 필요합니다.")
+        elif rate == 100:
+            st.success(f"🎯 목표를 100% 달성했습니다!")
+        else:
+            st.success(f"🎯 목표를 초과 달성했습니다! ({rate:.2f}% 목표 초과)")
+
+        # 수출 목표 대비 실적 변화 차트
+        data = pd.DataFrame({
+            "목표": [goal],
+            "실제": [actual]
+        })
+
+        st.bar_chart(data, width=600, height=400)
+
+        # 원본 데이터 보기
+        with st.expander("📋 원본 데이터 보기"):
+            st.dataframe(filtered, use_container_width=True)
 
     # --- 수출 지도 ---
     with tab5:
@@ -385,4 +412,3 @@ def export_ui():
                 height=400
             )
             st.altair_chart(chart, use_container_width=True)
-
