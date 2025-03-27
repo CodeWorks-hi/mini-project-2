@@ -9,6 +9,15 @@ import urllib3
 # SSL 경고 메시지 비활성화
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+# 이전 평일 계산 함수
+def get_previous_weekday(date):
+    one_day = timedelta(days=1)
+    while True:
+        date -= one_day
+        if date.weekday() < 5:
+            return date
+
+
 # 환율 데이터 조회 함수
 def fetch_exim_exchange(date, api_key):
     url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON"
@@ -26,13 +35,6 @@ def fetch_exim_exchange(date, api_key):
         st.error(f"\u2757 API 호출 오류: {e}")
         return None
 
-# 이전 평일 계산 함수
-def get_previous_weekday(date):
-    one_day = timedelta(days=1)
-    while True:
-        date -= one_day
-        if date.weekday() < 5:
-            return date
 
 def load_data():
     hyundai = pd.read_csv("data/processed/현대_지역별수출실적_전처리.CSV")
@@ -46,25 +48,13 @@ def load_data():
     # 월 컬럼 식별
     month_cols = [col for col in df.columns if "-" in col and col[:4].isdigit()]
 
-    # 연도 컬럼이 없는 경우에만 생성
-    if "연도" not in df.columns:
-        def get_year(row):
-            # 행에서 값이 있는 월 컬럼들만 추출
-            valid_years = [
-                int(col.split("-")[0])
-                for col in month_cols
-                if pd.notnull(row[col])
-            ]
-            if valid_years:
-                # 여러 연도가 섞인 경우 → 가장 큰 연도로 결정
-                return max(valid_years)
-            else:
-                # 모두 NaN인 경우 → None 또는 원하는 기본값
-                return None
-
-        df["연도"] = df.apply(get_year, axis=1)
-
-    return df
+# 이전 평일 계산 함수
+def get_previous_weekday(date):
+    one_day = timedelta(days=1)
+    while True:
+        date -= one_day
+        if date.weekday() < 5:
+            return date
 
 def extract_year_list(df):
     # 해당 df의 컬럼 중 'YYYY-MM' 형식에서 연도만 추출 → 정렬
@@ -80,7 +70,7 @@ def export_ui():
     st.title("📨 수출 실적 대시보드")
     st.button("수출 등록")
 
-    month_cols = [col for col in df.columns if "-" in col and col[:4].isdigit()]
+
 
     year_list = extract_year_list(df)
 
@@ -107,9 +97,9 @@ def export_ui():
             type_count = filtered["차량 구분"].nunique()
 
             kpi1, kpi2, kpi3 = st.columns(3)
-            kpi1.metric("총 수출량", f"{total_export:,} 대")
-            kpi2.metric("평균 수출량", f"{avg_export:,} 대")
-            kpi3.metric("차량 구분 수", f"{type_count} 종")
+            kpi1.metric(label="총 수출량", value=f"{total_export:,} 대")
+            kpi2.metric(label="평균 수출량",value= f"{avg_export:,} 대")
+            kpi3.metric(label="차량 구분 수", value=f"{type_count} 종")
 
             df_melted = filtered.melt(id_vars=["차량 구분"], value_vars=month_filter_cols, var_name="월", value_name="수출량")
             df_melted.dropna(subset=["수출량"], inplace=True)
@@ -315,11 +305,11 @@ def export_ui():
         # 데이터프레임 생성
         all_rows = []
         for row in data:
-            if isinstance(row, dict) and row.get("result") == 1:  # 딕셔너리인지 확인 후 처리
+            if isinstance(row, dict) and row.get("result") == 1:
                 try:
                     rate = float(row["deal_bas_r"].replace(",", ""))
-                    latitude = float(row.get("latitude", 0))  # 위도 추가 (API에서 제공된 데이터 사용)
-                    longitude = float(row.get("longitude", 0))  # 경도 추가 (API에서 제공된 데이터 사용)
+                    latitude = float(row.get("latitude", 0))
+                    longitude = float(row.get("longitude", 0))
                     all_rows.append({
                         "통화": row.get("cur_unit"),
                         "통화명": row.get("cur_nm"),
@@ -332,21 +322,22 @@ def export_ui():
                     continue
 
         if not all_rows:
-            st.info("❗ 환율 데이터가 비어있습니다.")
+            st.warning("❗ 처리된 환율 데이터가 없습니다.")
             st.stop()
 
         df_all = pd.DataFrame(all_rows)
 
-        # ======================
-        # 📋 전체 테이블 표시 (위도/경도 제외)
-        # ======================
-        st.markdown("### 📋 전체 환율 데이터 테이블")
-        st.dataframe(df_all[["통화", "통화명", "환율"]], use_container_width=True, hide_index=True)
+        # 📋 텍스트 요약 시각화
+        st.markdown("### 🌐 국가별 환율 요약")
+        cols = st.columns(4)
+        chunked = [all_rows[i::4] for i in range(4)]
+        for i, chunk in enumerate(chunked):
+            with cols[i]:
+                for row in chunk:
+                    st.markdown(f"- {row['통화']} ({row['통화명']}): {row['환율']:,} KRW")
 
-        # ======================
-        # 🌍 지도 시각화 (위도/경도 포함)
-        # ======================
-        st.markdown("### 🌍 세계 지도에서 환율 정보 보기")
+        # 🌍 지도 시각화
+        st.markdown("### 🌍 환율 지도 시각화")
 
         layer = pdk.Layer(
             "ScatterplotLayer",
@@ -370,6 +361,7 @@ def export_ui():
             initial_view_state=view_state,
             layers=[layer]
         ))
+
 
 def load_data():
     hyundai = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")

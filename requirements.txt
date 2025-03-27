@@ -17,6 +17,7 @@ altair>=5.0.0
 pydeck
 beautifulsoup4
 plotly
+accelerate>=0.26.0
 
 
 
