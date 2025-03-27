@@ -5,15 +5,16 @@ from PIL import Image
 from transformers import AutoModel, AutoTokenizer
 from huggingface_hub import InferenceClient
 
-# =====================
+# 추천시스템
+
 # 설정
-# =====================
+
 VISION_MODEL_ID = "openbmb/MiniCPM-Llama3-V-2_5" 
 TEXT_MODEL_ID = "google/gemma-2-9b-it"
 
-# =====================
+
 # 토큰 로딩
-# =====================
+
 def get_huggingface_tokens():
     return {
         "gemma": st.secrets.get("HUGGINGFACE_API_TOKEN_GEMMA")
@@ -22,15 +23,15 @@ def get_huggingface_tokens():
 def get_huggingface_token(model_type):
     return get_huggingface_tokens().get(model_type)
 
-# =====================
+
 # 입력 정제
-# =====================
+
 def clean_input(text: str) -> str:
     return re.sub(r"(해줘|알려줘|설명해 줘|말해 줘)", "", text).strip()
 
-# =====================
+
 # 텍스트 생성 (Gemma API)
-# =====================
+
 def generate_text_via_api(prompt: str, model_name: str = TEXT_MODEL_ID) -> str:
     token = get_huggingface_token("gemma")
     if not token:
@@ -97,9 +98,9 @@ def generate_text_via_api(prompt: str, model_name: str = TEXT_MODEL_ID) -> str:
         st.error(f"텍스트 생성 오류: {e}")
         return ""
 
-# =====================
+
 # 이미지 분석 (MiniCPM-Llama3-V 모델 로컬 실행)
-# =====================
+
 @st.cache_resource
 def load_minicpm_model():
     tokenizer = AutoTokenizer.from_pretrained(VISION_MODEL_ID, trust_remote_code=True)
@@ -120,9 +121,9 @@ def analyze_image_with_minicpm(image: Image.Image, question: str) -> str:
     except Exception as e:
         return f"❌ 이미지 분석 오류: {e}"
 
-# =====================
+
 # Streamlit UI
-# =====================
+
 def recommendations_ui():
 
     st.title("🤖 AI 수출 분석 & 차량 추천 시스템")
