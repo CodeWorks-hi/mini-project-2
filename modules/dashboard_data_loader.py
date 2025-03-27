@@ -7,7 +7,6 @@ import streamlit as st
 def load_csv(path):
     try:
         file_path = os.path.abspath(path)
-        st.write(f"📂 로딩 중: {file_path}")  # 현재 경로 표시
         return pd.read_csv(file_path)
     except Exception as e:
         st.error(f"❌ CSV 파일 로드 중 오류 발생: {str(e)}")
