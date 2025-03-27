@@ -4,7 +4,7 @@ import pydeck as pdk
 import requests
 import altair as alt
 from modules.dashboard_kpi import calculate_kpis, render_kpi_card
-from modules.dashboard_data_loader import load_and_merge_export_data, load_location_data
+from modules.dashboard_data_loader import load_and_merge_export_data
 from modules.dashboard_news import fetch_naver_news, render_news_results
 from modules.dashboard_charts import render_hyundai_chart, render_kia_chart, render_export_map, render_top_bottom_summary
 from modules.dashboard_filter import render_filter_options
