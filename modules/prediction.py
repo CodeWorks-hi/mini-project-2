@@ -189,18 +189,21 @@ def prediction_ui():
                 # ✅ 특정 기간 값이 모두 0인지 확인
                 zero_check_range = region_data.loc["2024-09":"2025-02", "y"]
                 if zero_check_range.sum() == 0:
-                    print("🚫 이 지역은 현재 검색이 불가능합니다.")
+                    st.error("🚫 이 지역은 현재 검색이 불가능합니다.")
                 else :
                     if status:
                         lstm_model = load_model(get_model_path(region_name), compile=False)
                         scaler = joblib.load(get_scaler_path(region_name))
                     else:
-                        X, y, scaler = prepare_lstm_data(region_data)
-                        lstm_model = train_lstm_model(X, y, region_name=region_name)
-                        # 모델이 조기 종료되지 않은 경우에만 여기서 저장
-                        if not os.path.exists(get_model_path(region_name)):
-                            lstm_model.save(get_model_path(region_name))
-                            joblib.dump(scaler, get_scaler_path(region_name))
+                        st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
+                        st.info("30초 이상 소요될 수 있습니다.")
+                        with st.spinner("🔄 모델을 학습 중입니다... 잠시만 기다려주세요."):
+                            X, y, scaler = prepare_lstm_data(region_data)
+                            lstm_model = train_lstm_model(X, y, region_name=region_name)
+                            # 모델이 조기 종료되지 않은 경우에만 여기서 저장
+                            if not os.path.exists(get_model_path(region_name)):
+                                lstm_model.save(get_model_path(region_name))
+                                joblib.dump(scaler, get_scaler_path(region_name))
 
                     lstm_forecast = forecast_lstm(lstm_model, region_data, forecast_months, scaler)
                     plot_lstm_forecast(region_data, lstm_forecast, region_name, forecast_months)
@@ -360,18 +363,21 @@ def prediction_ui():
                     # ✅ 특정 기간 값이 모두 0인지 확인
                     zero_check_range = car_data.loc["2024-09":"2025-02", "y"]
                     if zero_check_range.sum() == 0:
-                        print("🚫 이 차는 더 이상 생산하지 않습니다.")
+                        st.error("🚫 이 차는 더 이상 생산하지 않습니다.")
                     else :
                         if status:
                             lstm_model = load_model(get_model_path(car_name), compile=False)
                             scaler = joblib.load(get_scaler_path(car_name))
                         else:
-                            X, y, scaler = prepare_lstm_data(car_data)
-                            lstm_model = train_lstm_model(X, y, car_name=car_name)
-                            # 모델이 조기 종료되지 않은 경우에만 여기서 저장
-                            if not os.path.exists(get_model_path(car_name)):
-                                lstm_model.save(get_model_path(car_name))
-                                joblib.dump(scaler, get_scaler_path(car_name))
+                            st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
+                            st.info("30초 이상 소요될 수 있습니다.")
+                            with st.spinner("🔄 모델을 학습 중입니다... 잠시만 기다려주세요."):
+                                X, y, scaler = prepare_lstm_data(car_data)
+                                lstm_model = train_lstm_model(X, y, car_name=car_name)
+                                # 모델이 조기 종료되지 않은 경우에만 여기서 저장
+                                if not os.path.exists(get_model_path(car_name)):
+                                    lstm_model.save(get_model_path(car_name))
+                                    joblib.dump(scaler, get_scaler_path(car_name))
 
                         lstm_forecast = forecast_lstm(lstm_model, car_data, forecast_months, scaler)
                         plot_lstm_forecast(car_data, lstm_forecast, car_name, forecast_months)
@@ -535,18 +541,21 @@ def prediction_ui():
                     # ✅ 특정 기간 값이 모두 0인지 확인
                     zero_check_range = plant_data.loc["2024-09":"2025-02", "y"]
                     if zero_check_range.sum() == 0:
-                        print("🚫 이 차는 더 이상 생산하지 않습니다.")
+                        st.error("🚫 이 차는 더 이상 생산하지 않습니다.")
                     else :
                         if status:
                             lstm_model = load_model(get_model_path(plant_name), compile=False)
                             scaler = joblib.load(get_scaler_path(plant_name))
                         else:
-                            X, y, scaler = prepare_lstm_data(plant_data)
-                            lstm_model = train_lstm_model(X, y, plant_name=plant_name)
-                            # 모델이 조기 종료되지 않은 경우에만 여기서 저장
-                            if not os.path.exists(get_model_path(plant_name)):
-                                lstm_model.save(get_model_path(plant_name))
-                                joblib.dump(scaler, get_scaler_path(plant_name))
+                            st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
+                            st.info("30초 이상 소요될 수 있습니다.")
+                            with st.spinner("🔄 모델을 학습 중입니다... 잠시만 기다려주세요."):
+                                X, y, scaler = prepare_lstm_data(plant_data)
+                                lstm_model = train_lstm_model(X, y, plant_name=plant_name)
+                                # 모델이 조기 종료되지 않은 경우에만 여기서 저장
+                                if not os.path.exists(get_model_path(plant_name)):
+                                    lstm_model.save(get_model_path(plant_name))
+                                    joblib.dump(scaler, get_scaler_path(plant_name))
 
                         lstm_forecast = forecast_lstm(lstm_model, plant_data, forecast_months, scaler)
                         plot_lstm_forecast(plant_data, lstm_forecast, plant_name, forecast_months)
