@@ -28,12 +28,12 @@ def analytics_ui():
     @st.cache_data
     def load_data():
         # 파일 로드
-        prod_h = pd.read_csv("../data/processed/hyundai-by-plant.csv")
-        prod_k = pd.read_csv("../data/processed/kia-by-plant.csv")
-        sales_h = pd.read_csv("../data/processed/hyundai-by-car.csv")
-        sales_k = pd.read_csv("../data/processed/kia-by-car.csv")
-        export_h = pd.read_csv("../data/processed/hyundai-by-region.csv")
-        export_k = pd.read_csv("../data/processed/kia-by-region.csv")
+        prod_h = pd.read_csv("data/processed/hyundai-by-plant.csv")
+        prod_k = pd.read_csv("data/processed/kia-by-plant.csv")
+        sales_h = pd.read_csv("data/processed/hyundai-by-car.csv")
+        sales_k = pd.read_csv("data/processed/kia-by-car.csv")
+        export_h = pd.read_csv("data/processed/hyundai-by-region.csv")
+        export_k = pd.read_csv("data/processed/kia-by-region.csv")
 
         for df_, brand_ in [
             (prod_h, "현대"), (prod_k, "기아"),
