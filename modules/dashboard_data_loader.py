@@ -7,9 +7,7 @@ import streamlit as st
 def load_csv(path):
     try:
         # 현재 파일 위치에서 상위 폴더로 이동한 후 'data/processed' 폴더로 경로 설정
-        st.write(os.getcwd())  # 현재 작업 디렉토리 출력 (디버깅 용)
-        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'processed', path)  # 상위 폴더로 이동
-        return pd.read_csv(file_path)
+        return pd.read_csv(path)
     except Exception as e:
         st.error(f"CSV 파일 로드 중 오류 발생: {str(e)}")
         return None
@@ -18,7 +16,7 @@ def load_csv(path):
 def load_and_merge_export_data(hyundai_path="현대_지역별수출실적_전처리.csv", 
                                 kia_path="기아_지역별수출실적_전처리.csv"):
     # 상위 폴더로 이동한 후 'data/processed' 폴더로 경로 설정
-    base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'processed')  # 상위 폴더로 이동
+    base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../', 'data', 'processed')  # 상위 폴더로 이동
     hyundai_file = os.path.join(base_path, hyundai_path)
     kia_file = os.path.join(base_path, kia_path)
     
