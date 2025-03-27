@@ -11,6 +11,7 @@ from modules.dashboard_filter import render_filter_options
 from datetime import datetime, timedelta
 import time
 from bs4 import BeautifulSoup
+import os
 
 st.write("현재 작업 디렉토리:", os.getcwd())
 
