@@ -12,6 +12,9 @@ from datetime import datetime, timedelta
 import time
 from bs4 import BeautifulSoup
 
+import os
+st.write(os.getcwd())
+
 def get_previous_weekday(date):
     one_day = timedelta(days=1)
     while True:
