@@ -43,12 +43,12 @@ def load_csv(path):
     try:
         return pd.read_csv(path)
     except Exception as e:
-        st.error(f"CSV 파일 로드 중 오류 발생: {str(e)}")
+        st.error(f"csv 파일 로드 중 오류 발생: {str(e)}")
         return None
 
 # 데이터 병합 함수 (수출 실적)
-def load_and_merge_export_data(hyundai_path="data/processed/현대_지역별수출실적_전처리.CSV", 
-                                kia_path="data/processed/기아_지역별수출실적_전처리.CSV"):
+def load_and_merge_export_data(hyundai_path="data/processed/현대_지역별수출실적_전처리.csv", 
+                                kia_path="data/processed/기아_지역별수출실적_전처리.csv"):
     df_h = load_csv(hyundai_path)
     df_k = load_csv(kia_path)
     
@@ -154,9 +154,9 @@ def export_ui():
 
                     # 저장
                     if brand == "기아":
-                        df[df["브랜드"] == "기아"].to_csv("data/processed/기아_지역별수출실적_전처리.CSV", index=False, encoding="utf-8-sig")
+                        df[df["브랜드"] == "기아"].to_csv("data/processed/기아_지역별수출실적_전처리.csv", index=False, encoding="utf-8-sig")
                     elif brand == "현대":
-                        df[df["브랜드"] == "현대"].to_csv("data/processed/현대_지역별수출실적_전처리.CSV", index=False, encoding="utf-8-sig")
+                        df[df["브랜드"] == "현대"].to_csv("data/processed/현대_지역별수출실적_전처리.csv", index=False, encoding="utf-8-sig")
 
         # ✅ 월 컬럼 추출
         month_cols = extract_month_columns(df)
@@ -195,7 +195,7 @@ def export_ui():
             with st.expander("📋 원본 데이터 보기"):
                 st.dataframe(filtered, use_container_width=True)
 
-            # ✅ CSV 다운로드
+            # ✅ csv 다운로드
             csv = filtered.to_csv(index=False).encode("utf-8-sig")
             st.download_button("📥 현재 데이터 다운로드", data=csv, file_name=f"{brand}_{country}_{year}_수출실적.csv", mime="text/csv")
         else:
