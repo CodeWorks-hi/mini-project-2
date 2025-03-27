@@ -61,7 +61,13 @@ def load_and_merge_export_data(hyundai_path="data/processed/hyundai-by-region.cs
     if "차량 구분" not in df_h.columns:
         df_h["차량 구분"] = "기타"
     
-    return pd.concat([df_h, df_k], ignore_index=True)
+    # 데이터 병합
+    df = pd.concat([df_h, df_k], ignore_index=True)
+    
+    # '연도' 컬럼 추가
+    df = extract_year_column(df)  # 연도 컬럼 추가
+    
+    return df
 
 # 월별 컬럼 추출 함수
 def extract_month_columns(df):
@@ -109,11 +115,17 @@ def extract_year_column(df):
 # 필터링 UI 생성 함수
 def get_filter_values(df, key_prefix):
     brand = st.selectbox(f"브랜드 선택", df["브랜드"].dropna().unique(), key=f"{key_prefix}_brand")
+    
+    # 연도 추출 함수가 반환한 연도 리스트를 제대로 반영
     year_list = extract_year_list(df)
     year = st.selectbox(f"연도 선택", year_list[::-1], key=f"{key_prefix}_year")
+    
+    # 국가 선택 UI
     country_list = df[df["브랜드"] == brand]["지역명"].dropna().unique()
     country = st.selectbox(f"국가 선택", country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"], key=f"{key_prefix}_country")
+    
     return brand, year, country
+
 
 # 수출 UI ======================== 메인화면 시작 함수 
 def export_ui():
@@ -184,6 +196,10 @@ def export_ui():
         # 필터링 UI 호출
         brand, year, country = get_filter_values(df, "export_1")
 
+        if not year:  # 만약 'year'가 선택되지 않았다면 경고 메시지 출력
+            st.warning("연도를 선택해야 합니다.")
+            return
+        
         # 월 필터링 컬럼
         month_filter_cols = [col for col in month_cols if col.startswith(str(year))]
         filtered = df[(df["브랜드"] == brand) & (df["지역명"] == country)]
