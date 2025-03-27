@@ -122,8 +122,8 @@ def render_top_bottom_summary(merged_df: pd.DataFrame):
     top_display = top_table[["지역명", "차량 구분", "총수출"]].reset_index(drop=True)
     bottom_display = bottom_table[["지역명", "차량 구분", "총수출"]].reset_index(drop=True)
 
-    st.dataframe(top_display.style.format({'총수출': '{:,}'}), use_container_width=True)
+    st.dataframe(top_display.style.format({'총수출': '{:,}'}), use_container_width=True, hide_index=True)
     st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
-    st.dataframe(bottom_display.style.format({'총수출': '{:,}'}), use_container_width=True)
+    st.dataframe(bottom_display.style.format({'총수출': '{:,}'}), use_container_width=True, hide_index=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
