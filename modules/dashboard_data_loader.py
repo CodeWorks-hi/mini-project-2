@@ -18,7 +18,8 @@ def load_csv(path):
 def load_and_merge_export_data(hyundai_path="현대_지역별수출실적_전처리.csv", 
                                 kia_path="기아_지역별수출실적_전처리.csv"):
     # 상위 폴더로 이동한 후 'data/processed' 폴더로 경로 설정
-    base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'processed')  # 상위 폴더로 이동
+    base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'processed')
+    base_path = os.path.normpath(base_path)
     hyundai_file = os.path.join(base_path, hyundai_path)
     kia_file = os.path.join(base_path, kia_path)
     
