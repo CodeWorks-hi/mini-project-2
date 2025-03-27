@@ -121,7 +121,7 @@ def prediction_ui():
             forecast_index = pd.to_datetime(forecast_df['연도'].astype(str) + '-' + forecast_df['월'].astype(str))
             forecast_values = forecast_df['예측 수출량'].values
 
-            fig, ax = plt.subplots(figsize=(12, 6))
+            fig1, ax = plt.subplots(figsize=(12, 6))
             ax.plot(series.index, series['y'], label='실제 수출량', color='black')
             ax.plot(forecast_index, forecast_values, label='LSTM 예측', color='red', linestyle='--')
             ax.axvline(x=series.index[-1], color='gray', linestyle=':', label='예측 시작점')
@@ -130,15 +130,15 @@ def prediction_ui():
             ax.set_ylabel("수출량")
             ax.legend()
             ax.grid(True)
-            fig.tight_layout()
+            fig1.tight_layout()
 
-            st.pyplot(fig)
-            plt.close(fig)
+            st.pyplot(fig1)
+            plt.close(fig1)
 
             # 저장 경로 생성
             save_path = f"images/result/{region_name} LSTM 지역별 수출량 예측_{forecast_months}개월.png"
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
-            fig.savefig(save_path, dpi=300)
+            fig1.savefig(save_path, dpi=300)
 
             # ✅ 세션 스테이트에 저장
             st.session_state["last_forecast_image"] = save_path
@@ -291,7 +291,7 @@ def prediction_ui():
             forecast_index = pd.to_datetime(forecast_df['연도'].astype(str) + '-' + forecast_df['월'].astype(str))
             forecast_values = forecast_df['예측 판매량'].values
 
-            fig, ax = plt.subplots(figsize=(12, 6))
+            fig2, ax = plt.subplots(figsize=(12, 6))
             ax.plot(series.index, series['y'], label='실제 판매량', color='black')
             ax.plot(forecast_index, forecast_values, label='LSTM 예측', color='red', linestyle='--')
             ax.axvline(x=series.index[-1], color='gray', linestyle=':', label='예측 시작점')
@@ -300,15 +300,15 @@ def prediction_ui():
             ax.set_ylabel("판매량")
             ax.legend()
             ax.grid(True)
-            fig.tight_layout()
+            fig2.tight_layout()
 
-            st.pyplot(fig)
-            plt.close(fig)
+            st.pyplot(fig2)
+            plt.close(fig2)
 
             # 저장 경로 생성
             save_path = f"images/result/{car_name} LSTM 지역별 수출량 예측_{forecast_months}개월.png"
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
-            fig.savefig(save_path, dpi=300)
+            fig2.savefig(save_path, dpi=300)
 
             # ✅ 세션 스테이트에 저장
             st.session_state["last_forecast_image"] = save_path
@@ -467,7 +467,7 @@ def prediction_ui():
             forecast_index = pd.to_datetime(forecast_df['연도'].astype(str) + '-' + forecast_df['월'].astype(str))
             forecast_values = forecast_df['예측 판매량'].values
 
-            fig, ax = plt.subplots(figsize=(12, 6))
+            fig3, ax = plt.subplots(figsize=(12, 6))
             ax.plot(series.index, series['y'], label='실제 판매량', color='black')
             ax.plot(forecast_index, forecast_values, label='LSTM 예측', color='red', linestyle='--')
             ax.axvline(x=series.index[-1], color='gray', linestyle=':', label='예측 시작점')
@@ -476,15 +476,15 @@ def prediction_ui():
             ax.set_ylabel("판매량")
             ax.legend()
             ax.grid(True)
-            fig.tight_layout()
+            fig3.tight_layout()
 
-            st.pyplot(fig)
-            plt.close(fig)
+            st.pyplot(fig3)
+            plt.close(fig3)
 
             # 저장 경로 설정 및 디렉토리 생성
             save_path = f"images/result/{plant_name} LSTM 공장별 판매량 예측_{forecast_months}개월.png"
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
-            fig.savefig(save_path, dpi=300)
+            fig3.savefig(save_path, dpi=300)
 
             # 세션 스테이트에 저장
             st.session_state["last_forecast_image"] = save_path
