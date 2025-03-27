@@ -44,7 +44,6 @@ def render_hyundai_chart(year: int):
 
     st.markdown("</div>", unsafe_allow_html=True)
 
-
 # 기아 도넛 차트
 def render_kia_chart(year: int):
     st.markdown("""
