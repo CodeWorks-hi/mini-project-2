@@ -6,6 +6,7 @@ import requests
 from datetime import datetime, timedelta
 import urllib3
 import re
+import os
 
 # 수출관리 
 # SSL 경고 메시지 비활성화
