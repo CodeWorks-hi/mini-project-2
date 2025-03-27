@@ -5,15 +5,15 @@ import altair as alt
 # 재고 관리
 def inventory_ui():
     # 생산 데이터 로드
-    hyundai_prod = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
-    kia_prod = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
+    hyundai_prod = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.csv")
+    kia_prod = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.csv")
     hyundai_prod["브랜드"] = "현대"
     kia_prod["브랜드"] = "기아"
     prod_df = pd.concat([hyundai_prod, kia_prod], ignore_index=True)
 
     # 판매 데이터 로드
-    hyundai_sales = pd.read_csv("data/processed/현대_차종별판매실적_전처리.CSV")
-    kia_sales = pd.read_csv("data/processed/기아_차종별판매실적_전처리.CSV")
+    hyundai_sales = pd.read_csv("data/processed/현대_차종별판매실적_전처리.csv")
+    kia_sales = pd.read_csv("data/processed/기아_차종별판매실적_전처리.csv")
     hyundai_sales["브랜드"] = "현대"
     kia_sales["브랜드"] = "기아"
     sales_df = pd.concat([hyundai_sales, kia_sales], ignore_index=True)

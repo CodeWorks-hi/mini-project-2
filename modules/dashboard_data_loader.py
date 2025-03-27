@@ -7,10 +7,10 @@ def load_csv(path):
     try:
         return pd.read_csv(path)
     except Exception as e:
-        st.error(f"CSV 파일 로드 중 오류 발생: {str(e)}")
+        st.error(f"csv 파일 로드 중 오류 발생: {str(e)}")
         return None
 
-def load_and_merge_export_data(hyundai_path="현대_지역별수출실적_전처리.CSV", 
+def load_and_merge_export_data(hyundai_path="현대_지역별수출실적_전처리.csv", 
                                 kia_path="기아_지역별수출실적_전처리."):
     base_path = os.path.join(os.getcwd(), 'data', 'processed')  # 절대 경로 설정
     hyundai_file = os.path.join(base_path, hyundai_path)
@@ -34,13 +34,13 @@ def load_and_merge_export_data(hyundai_path="현대_지역별수출실적_전처
     return df_merged
 
 def load_hyundai_factory_data():
-    df = load_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
+    df = load_csv("data/processed/현대_해외공장판매실적_전처리.csv")
     if df is not None:
         df["브랜드"] = "현대"
     return df
 
 def load_kia_factory_data():
-    df = load_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
+    df = load_csv("data/processed/기아_해외공장판매실적_전처리.csv")
     if df is not None:
         df["브랜드"] = "기아"
     return df
