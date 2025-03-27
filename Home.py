@@ -16,50 +16,35 @@
 import streamlit as st
 from core.master_auth import master_login, is_master_logged_in
 
-
-
 # ✅ 페이지 설정
-st.set_page_config(page_title="ERP 차량 관리 시스템", layout="wide",  page_icon="🚗")
+st.set_page_config(
+    page_title="ERP 차량 관리 시스템",
+    layout="wide",
+    page_icon="🚗"
+)
 
+# ✅ 에러 방지용 안전 로딩 함수
+def safe_tab_import(tab, module_name, ui_function_name, tab_label):
+    try:
+        mod = __import__(f"modules.{module_name}", fromlist=[ui_function_name])
+        getattr(mod, ui_function_name)()
+    except Exception as e:
+        with tab:
+            st.error(f"❌ [{tab_label}] 모듈 실행 중 에러 발생:\n\n{e}")
 
-# ✅ 로그인 후에는 탭 UI로 구성
+# ✅ 탭 구성
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9 = st.tabs([
     " 대시보드", " 판매 관리", " 생산 관리", " 재고 관리",
     " 수출 관리", " 분석 리포트", " 인트로", " 설정", "추천 시스템"
 ])
 
-with tab1:
-    import modules.dashboard as dashboard
-    dashboard.dashboard_ui()
-
-with tab2:
-    import modules.sales as sales
-    sales.sales_ui()
-
-with tab3:
-    import modules.production as production
-    production.production_ui()
-
-with tab4:
-    import modules.inventory as inventory
-    inventory.inventory_ui()
-
-with tab5:
-    import modules.export as export
-    export.export_ui()
-
-with tab6:
-    import modules.analytics as analytics
-    analytics.analytics_ui()
-
-with tab7:
-    import modules.intro as intro
-    intro.intro_ui()
-
-with tab8:
-    import modules.settings as settings
-    settings.settings_ui()
-
-with tab9:
-    import modules.recommendations as recommendations
-    recommendations.recommendations_ui()
+# ✅ 각 탭에 안전하게 모듈 로딩
+safe_tab_import(tab1, "dashboard", "dashboard_ui", "대시보드")
+safe_tab_import(tab2, "sales", "sales_ui", "판매 관리")
+safe_tab_import(tab3, "production", "production_ui", "생산 관리")
+safe_tab_import(tab4, "inventory", "inventory_ui", "재고 관리")
+safe_tab_import(tab5, "export", "export_ui", "수출 관리")
+safe_tab_import(tab6, "analytics", "analytics_ui", "분석 리포트")
+safe_tab_import(tab7, "intro", "intro_ui", "인트로")
+safe_tab_import(tab8, "settings", "settings_ui", "설정")
+safe_tab_import(tab9, "recommendations", "recommendations_ui", "추천 시스템")
