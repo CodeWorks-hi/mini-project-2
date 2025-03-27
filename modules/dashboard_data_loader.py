@@ -33,7 +33,7 @@ def load_and_merge_export_data(hyundai_path="data/processed/hyundai-by-region.cs
 
 # ✅ 현대차 공장 판매 실적 데이터 로드
 def load_hyundai_factory_data():
-    hyundai_file = "data/processed/현대_해외공장판매실적_전처리.csv"
+    hyundai_file = "data/processed/hyundai-by-plant.csv"
     df = load_csv(hyundai_file)
     if df is not None:
         df["브랜드"] = "현대"
@@ -41,13 +41,9 @@ def load_hyundai_factory_data():
 
 # ✅ 기아차 공장 판매 실적 데이터 로드
 def load_kia_factory_data():
-    kia_file = "data/processed/기아_해외공장판매실적_전처리.csv"
+    kia_file = "data/processed/kia-by-plant.csv"
     df = load_csv(kia_file)
     if df is not None:
         df["브랜드"] = "기아"
     return df
 
-# ✅ 위치 정보 데이터 로드
-def load_location_data():
-    location_file = "data/세일즈파일/지역별_위치정보.csv"
-    return load_csv(location_file)

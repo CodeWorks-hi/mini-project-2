@@ -47,8 +47,8 @@ def load_csv(path):
         return None
 
 # 데이터 병합 함수 (수출 실적)
-def load_and_merge_export_data(hyundai_path="data/processed/현대_지역별수출실적_전처리.csv", 
-                                kia_path="data/processed/기아_지역별수출실적_전처리.csv"):
+def load_and_merge_export_data(hyundai_path="data/processed/hyundai-by-region.csv", 
+                                kia_path="data/processed/kia-by-region.csv"):
     df_h = load_csv(hyundai_path)
     df_k = load_csv(kia_path)
     
@@ -154,9 +154,9 @@ def export_ui():
 
                     # 저장
                     if brand == "기아":
-                        df[df["브랜드"] == "기아"].to_csv("data/processed/기아_지역별수출실적_전처리.csv", index=False, encoding="utf-8-sig")
+                        df[df["브랜드"] == "기아"].to_csv("data/processed/kia-by-region.csv", index=False, encoding="utf-8-sig")
                     elif brand == "현대":
-                        df[df["브랜드"] == "현대"].to_csv("data/processed/현대_지역별수출실적_전처리.csv", index=False, encoding="utf-8-sig")
+                        df[df["브랜드"] == "현대"].to_csv("data/processed/hyundai-by-region.csv", index=False, encoding="utf-8-sig")
 
         # ✅ 월 컬럼 추출
         month_cols = extract_month_columns(df)

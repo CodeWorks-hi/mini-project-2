@@ -7,8 +7,8 @@ from plotly.subplots import make_subplots
 import re
 
 def load_data():
-    hyundai = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.csv")
-    kia = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.csv")
+    hyundai = pd.read_csv("data/processed/hyundai-by-plant.csv")
+    kia = pd.read_csv("data/processed/kia-by-plant.csv")
     
     if "차종" not in hyundai.columns:
         hyundai["차종"] = "기타"

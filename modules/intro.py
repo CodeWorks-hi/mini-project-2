@@ -63,7 +63,7 @@ def intro_ui():
             "- 데이터 구조:",
             "    • data/raw/ : 원본 csv",
             "    • data/processed/ : 전처리 csv",
-            "    • data/세일즈파일/ : 예시/위치정보/업로드용 파일",
+            "    • data/processed/ : 예시/위치정보/업로드용 파일",
             "",
             "[4] 배포 및 운영",
             "- 배포: Streamlit Cloud",

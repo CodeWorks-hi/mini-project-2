@@ -12,14 +12,14 @@ from datetime import datetime
 from typing import Optional, Tuple
 
 # 상수 정의
-csv_PATH = "data/세일즈파일/sales_records.csv"
-DELETED_LOG_PATH = "data/세일즈파일/deleted_log.csv"
-BACKUP_PATH = "data/세일즈파일/backups/"
+CSV_PATH = "data/processed/sales_records.csv"
+DELETED_LOG_PATH = "data/processed/deleted_log.csv"
+BACKUP_PATH = "data/processed/backups/"
 
 def load_sales_data() -> pd.DataFrame:
     """판매 데이터 로드 함수"""
     try:
-        df = pd.read_csv(csv_PATH, parse_dates=['판매일'])
+        df = pd.read_csv(CSV_PATH, parse_dates=['판매일'])
         df.insert(0, '고유ID', range(1, 1 + len(df)))
         return df
     except FileNotFoundError:
@@ -62,7 +62,7 @@ def handle_deletions(original_df: pd.DataFrame, edited_df: pd.DataFrame) -> None
             
         deleted_rows.to_csv(DELETED_LOG_PATH, index=False)
         remaining_ids = edited_df[~edited_df["삭제"]]['고유ID']
-        original_df[original_df['고유ID'].isin(remaining_ids)].to_csv(csv_PATH, index=False)
+        original_df[original_df['고유ID'].isin(remaining_ids)].to_csv(CSV_PATH, index=False)
         st.success(f"✅ {len(deleted_rows)}건 삭제 완료 | 백업: {BACKUP_PATH}")
         st.experimental_rerun()
 
