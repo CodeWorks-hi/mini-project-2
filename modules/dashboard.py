@@ -99,7 +99,7 @@ def dashboard_ui():
         st.error(f"위치 정보 병합 중 오류: {e}")
         st.stop()
 
-    colA, colB, colC, colD = st.columns([2, 2, 3, 2])
+    colA, colB, colC, colD = st.columns([2.4, 2, 3, 1.8])
 
     with colA:
         render_hyundai_chart(year)
