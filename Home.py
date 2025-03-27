@@ -25,7 +25,7 @@ st.set_page_config(page_title="ERP 차량 관리 시스템", layout="wide",  pag
 # ✅ 로그인 후에는 탭 UI로 구성
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9 = st.tabs([
     " 대시보드", " 판매 관리", " 생산 관리", " 재고 관리",
-    " 수출 관리", " 추천 시스템", " 분석 리포트", " 인트로", " 설정"
+    " 수출 관리", " 분석 리포트", " 인트로", " 설정", "추천 시스템"
 ])
 
 with tab1:
@@ -48,18 +48,20 @@ with tab5:
     import modules.export as export
     export.export_ui()
 
-with tab6:
-    import modules.recommendations as recommendations
-    recommendations.recommendations_ui()
 
-with tab7:
+
+with tab6:
     import modules.analytics as analytics
     analytics.analytics_ui()
 
-with tab8:
+with tab7:
     import modules.intro as intro
     intro.intro_ui()
 
-with tab9:
+with tab8:
     import modules.settings as settings
     settings.settings_ui()
+
+with tab9:
+    import modules.recommendations as recommendations
+    recommendations.recommendations_ui()
