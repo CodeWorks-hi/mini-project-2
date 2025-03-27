@@ -63,7 +63,7 @@ def production_ui():
                 y="생산량",
                 color="차종",
                 text_auto=True,
-                title=f"{year}년 {brand} - {factory} 차종별 생산량 분포 (히스토그램)",
+                title=f"{year}년 {brand} - {factory} 차종별 생산량 분포",
                 color_discrete_sequence=px.colors.qualitative.Set3
             )
 
