@@ -31,9 +31,11 @@ elif platform.system() == "Linux":  # Linux (Ubuntu, Docker 등)
     rc("font", family=font_name)
 
 
-st.title("AI 판매 예측 시스템")
-
 def prediction_ui():
+
+    image_path = None
+
+    st.title("AI 판매 예측 시스템")
 
     tab1, tab2, tab3 = st.tabs(["지역별 수출량 예측", "차종별 판매량 예측", "공장별 판매량 예측"])
 
@@ -138,7 +140,6 @@ def prediction_ui():
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             fig1.savefig(save_path, dpi=300)
 
-            # ✅ 세션 스테이트에 저장
             st.session_state["last_forecast_image"] = save_path
 
             st.success(f"그래프가 저장되었습니다: `{save_path}`")
@@ -308,7 +309,6 @@ def prediction_ui():
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             fig2.savefig(save_path, dpi=300)
 
-            # ✅ 세션 스테이트에 저장
             st.session_state["last_forecast_image"] = save_path
 
             st.success(f"📊 그래프가 저장되었습니다: `{save_path}`")
@@ -484,7 +484,6 @@ def prediction_ui():
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             fig3.savefig(save_path, dpi=300)
 
-            # 세션 스테이트에 저장
             st.session_state["last_forecast_image"] = save_path
 
             st.success(f"📊 그래프가 저장되었습니다: `{save_path}`")
