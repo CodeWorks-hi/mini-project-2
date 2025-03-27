@@ -6,6 +6,7 @@ numpy
 matplotlib
 seaborn
 components
+sci-kit-learn
 streamlit_option_menu
 reportlab
 fonttools
