@@ -13,8 +13,6 @@ import time
 from bs4 import BeautifulSoup
 import os
 
-st.write("현재 작업 디렉토리:", os.getcwd())
-
 def get_previous_weekday(date):
     one_day = timedelta(days=1)
     while True:
