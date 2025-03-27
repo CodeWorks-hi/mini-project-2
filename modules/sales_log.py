@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 
-csv_PATH = "data/세일즈파일/sales_records.csv"
+CSV_PATH = "data/세일즈파일/sales_records.csv"
 DELETED_LOG_PATH = "data/세일즈파일/deleted_log.csv"
 
 def show_sales_log_table(df: pd.DataFrame):
@@ -47,7 +47,7 @@ def show_sales_log_table(df: pd.DataFrame):
                     delete_rows = pd.concat([deleted_log, delete_rows], ignore_index=True)
                 delete_rows.to_csv(DELETED_LOG_PATH, index=False)
 
-            keep_rows.to_csv(csv_PATH, index=False)
+            keep_rows.to_csv(CSV_PATH, index=False)
             st.success(f"✅ {len(delete_rows)}건 삭제됨. 로그 저장 완료.")
             if hasattr(st, "experimental_rerun"):
                 st.experimental_rerun()

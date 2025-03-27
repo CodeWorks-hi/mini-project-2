@@ -26,8 +26,8 @@ def load_car_info():
 # 🔹 판매 데이터 저장
 def save_sale_record(data: dict):
     new_df = pd.DataFrame([data])
-    if os.path.exists(csv_PATH):
-        df = pd.read_csv(csv_PATH)
+    if os.path.exists(CSV_PATH):
+        df = pd.read_csv(CSV_PATH)
         for col in ["판매일", "모델명", "수량", "지역", "담당자", "차종", "가격"]:
             if col not in df.columns:
                 df[col] = None
@@ -39,18 +39,18 @@ def save_sale_record(data: dict):
         df = pd.concat([df, new_df], ignore_index=True)
     else:
         df = new_df
-    df.to_csv(csv_PATH, index=False)
+    df.to_csv(CSV_PATH, index=False)
     st.success("✅ 판매 등록 완료")
 
 # 🔹 판매 데이터 삭제
 def delete_sale_record(del_data: dict):
-    if os.path.exists(csv_PATH):
-        df = pd.read_csv(csv_PATH)
+    if os.path.exists(CSV_PATH):
+        df = pd.read_csv(CSV_PATH)
         df = df[~((df['판매일'] == del_data['판매일']) &
                   (df['모델명'] == del_data['모델명']) &
                   (df['지역'] == del_data['지역']) &
                   (df['담당자'] == del_data['담당자']))]
-        df.to_csv(csv_PATH, index=False)
+        df.to_csv(CSV_PATH, index=False)
         st.success("✅ 판매 기록 삭제 완료")
         st.experimental_rerun()
 
@@ -113,8 +113,8 @@ def sales_ui():
             save_sale_record(record)
 
     # 🔸 판매 기록, KPI, 차트
-    if os.path.exists(csv_PATH):
-        sales_df = pd.read_csv(csv_PATH)
+    if os.path.exists(CSV_PATH):
+        sales_df = pd.read_csv(CSV_PATH)
         show_kpi_cards(sales_df)
         show_sales_log_table(sales_df)
         show_sales_charts(sales_df)
