@@ -8,11 +8,26 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import os
 
+
+# 연도/월 컬럼 추출 함수 추가
+def extract_month_columns(df):
+    return [col for col in df.columns if "-" in col and col[:4].isdigit()]
+
+# 연도 컬럼 생성 함수 수정 없이 유지
+def extract_year_column(df):
+    month_cols = extract_month_columns(df)
+    if "연도" not in df.columns:
+        def get_year(row):
+            valid_years = [int(col.split("-")[0]) for col in month_cols if pd.notnull(row[col])]
+            return max(valid_years) if valid_years else None
+        df["연도"] = df.apply(get_year, axis=1)
+    return df
+
 def analytics_ui():
-    st.title("📊 분석 리포트")
 
     @st.cache_data
     def load_data():
+        # 파일 로드
         prod_h = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
         prod_k = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
         sales_h = pd.read_csv("data/processed/현대_차종별판매실적_전처리.CSV")
@@ -27,17 +42,12 @@ def analytics_ui():
         ]:
             df_["브랜드"] = brand_
 
-        prod_df_ = pd.concat([prod_h, prod_k], ignore_index=True)
-        sales_df_ = pd.concat([sales_h, sales_k], ignore_index=True)
-        export_df_ = pd.concat([export_h, export_k], ignore_index=True)
+        # 병합
+        prod_df = pd.concat([prod_h, prod_k], ignore_index=True)
+        sales_df = pd.concat([sales_h, sales_k], ignore_index=True)
+        export_df = pd.concat([export_h, export_k], ignore_index=True)
 
-        month_cols_ = [f"{i}월" for i in range(1, 13)]
-
-        for df_ in [prod_df_, sales_df_, export_df_]:
-            existing_month_cols = [c for c in month_cols_ if c in df_.columns]
-            df_[existing_month_cols] = df_[existing_month_cols].apply(pd.to_numeric, errors='coerce')
-
-        return prod_df_, sales_df_, export_df_
+        return prod_df, sales_df, export_df
 
     # 데이터 로드
     prod_df, sales_df, export_df = load_data()
@@ -52,12 +62,15 @@ def analytics_ui():
             df["연도"] = df.apply(get_year, axis=1)
         return df
 
+    # 밖에서 연도 컬럼, 월 컬럼 추출
     prod_df = extract_year_column(prod_df)
     sales_df = extract_year_column(sales_df)
     export_df = extract_year_column(export_df)
 
-    month_cols = [f"{i}월" for i in range(1, 13)]
+    # 실제 월 컬럼 (yyyy-mm 형식)
+    month_cols = extract_month_columns(prod_df)
 
+    # 필터 UI
     col1, col2 = st.columns(2)
     with col1:
         brand_options = ["전체"] + sorted(prod_df["브랜드"].dropna().unique())
@@ -69,6 +82,7 @@ def analytics_ui():
             return
         year = st.selectbox("연도 선택", year_options, key="analytics_year")
 
+    # 데이터 필터링 함수
     def apply_filters(df):
         if "연도" not in df.columns:
             return pd.DataFrame()
@@ -93,6 +107,8 @@ def analytics_ui():
     k4.metric("예상 재고량", f"{total_stock:,} 대")
 
     st.subheader("📈 월별 판매 / 생산 / 수출 추이")
+
+    # 월별 합계 계산
     def sum_by_month(df_):
         existing_cols = [c for c in month_cols if c in df_.columns]
         summed = df_[existing_cols].sum(numeric_only=True).reset_index(name="값").rename(columns={"index": "월"})
@@ -113,6 +129,8 @@ def analytics_ui():
     st.altair_chart(chart, use_container_width=True)
 
     st.subheader("⚠️ 재고 경고 요약")
+
+    # 재고 경고 분석
     prod_group = prod_filtered.groupby(["브랜드", "차종"])[month_cols].sum(numeric_only=True).sum(axis=1).rename("누적생산")
     sales_group = sales_filtered.groupby(["브랜드", "차종"])[month_cols].sum(numeric_only=True).sum(axis=1).rename("누적판매")
 
@@ -161,40 +179,3 @@ def analytics_ui():
             c.setFont("NanumGothic", 14)
             c.drawString(30, height - 50, f"ERP 분석 리포트 - {brand} {year}년")
 
-        c.setFont("Helvetica", 10)
-        c.drawString(30, height - 80, f"총 생산량: {total_prod:,} 대")
-        c.drawString(30, height - 100, f"총 판매량: {total_sales:,} 대")
-        c.drawString(30, height - 120, f"총 수출량: {total_export:,} 대")
-        c.drawString(30, height - 140, f"예상 재고량: {total_stock:,} 대")
-
-        c.drawString(30, height - 170, "재고 경고 요약:")
-        y_pos = height - 190
-        for i, row in low_stock.head(5).iterrows():
-            c.drawString(40, y_pos, f"🚨 {row['브랜드']} - {row['차종']}: {int(row['예상재고'])} 대")
-            y_pos -= 15
-        for i, row in high_stock.head(5).iterrows():
-            c.drawString(40, y_pos, f"📦 {row['브랜드']} - {row['차종']}: {int(row['예상재고'])} 대")
-            y_pos -= 15
-
-        y_pos -= 30
-        c.drawString(30, y_pos, "💡 분석 인사이트:")
-        y_pos -= 20
-        if not sales_filtered.empty:
-            c.drawString(40, y_pos, f"가장 많이 팔린 차종: {top_model}")
-            y_pos -= 20
-        if not inventory_df.empty:
-            c.drawString(40, y_pos, f"가장 많이 재고가 쌓인 차종: {top_stock}")
-            y_pos -= 20
-
-        c.showPage()
-        c.save()
-        buffer.seek(0)
-        return buffer
-
-    pdf_file = create_pdf()
-    st.download_button(
-        "📄 PDF 리포트 다운로드",
-        data=pdf_file,
-        file_name=f"ERP_리포트_{brand}_{year}.pdf",
-        mime="application/pdf"
-    )
