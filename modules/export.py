@@ -36,58 +36,105 @@ def fetch_exim_exchange(date, api_key):
         return None
 
 
-def load_data():
-    hyundai = pd.read_csv("data/processed/현대_지역별수출실적_전처리.CSV")
-    kia = pd.read_csv("data/processed/기아_지역별수출실적_전처리.CSV")
+# 데이터 로드 함수 - 캐시 처리
+@st.cache_data
+def load_csv(path):
+    try:
+        return pd.read_csv(path)
+    except Exception as e:
+        st.error(f"CSV 파일 로드 중 오류 발생: {str(e)}")
+        return None
 
-    hyundai["브랜드"] = "현대"
-    kia["브랜드"] = "기아"
+# 데이터 병합 함수 (수출 실적)
+def load_and_merge_export_data(hyundai_path="data/processed/현대_지역별수출실적_전처리.CSV", 
+                                kia_path="data/processed/기아_지역별수출실적_전처리.CSV"):
+    df_h = load_csv(hyundai_path)
+    df_k = load_csv(kia_path)
+    
+    if df_h is None or df_k is None:
+        return None
 
-    df = pd.concat([hyundai, kia], ignore_index=True)
+    df_h["브랜드"] = "현대"
+    df_k["브랜드"] = "기아"
+    
+    if "차량 구분" not in df_h.columns:
+        df_h["차량 구분"] = "기타"
+    
+    return pd.concat([df_h, df_k], ignore_index=True)
 
-    # 월 컬럼 식별
-    month_cols = [col for col in df.columns if "-" in col and col[:4].isdigit()]
+# 데이터 병합 함수 (해외공장 판매 실적)
+def load_hyundai_factory_data(hyundai_path="data/processed/현대_해외공장판매실적_전처리.CSV"):
+    df = load_csv(hyundai_path)
+    if df is not None:
+        df["브랜드"] = "현대"
+    return df
 
-# 이전 평일 계산 함수
-def get_previous_weekday(date):
-    one_day = timedelta(days=1)
-    while True:
-        date -= one_day
-        if date.weekday() < 5:
-            return date
+def load_kia_factory_data(kia_path="data/processed/기아_해외공장판매실적_전처리.CSV"):
+    df = load_csv(kia_path)
+    if df is not None:
+        df["브랜드"] = "기아"
+    return df
 
+def load_location_data(location_path="data/세일즈파일/지역별_위치정보.csv"):
+    return load_csv(location_path)
+
+# 월별 컬럼 추출 함수
+def extract_month_columns(df):
+    return [col for col in df.columns if "-" in col and col[:4].isdigit()]
+
+# 수출 데이터 로드
+df = load_and_merge_export_data()
+
+# 연도 리스트 추출 함수
 def extract_year_list(df):
     # 해당 df의 컬럼 중 'YYYY-MM' 형식에서 연도만 추출 → 정렬
-    return sorted({
+    years = sorted({
         int(col.split("-")[0])
         for col in df.columns
         if "-" in col and col[:4].isdigit()
     })
+    return years
 
-df = load_data()
+def get_filter_values(df, key_prefix):
+    """브랜드, 연도, 국가 선택을 위한 필터 UI 반환"""
+    # 브랜드 선택
+    brand = st.selectbox(f"브랜드 선택", df["브랜드"].dropna().unique(), key=f"{key_prefix}_brand")
+    
+    # 연도 선택
+    year_list = extract_year_list(df)
+    year = st.selectbox(f"연도 선택", year_list[::-1], key=f"{key_prefix}_year")
+    
+    # 국가 선택
+    country_list = df[df["브랜드"] == brand]["지역명"].dropna().unique()
+    country = st.selectbox(f"국가 선택", country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"], key=f"{key_prefix}_country")
+
+    return brand, year, country
+
 
 def export_ui():
-    st.title("📨 수출 실적 대시보드")
-    st.button("수출 등록")
+    # 월 컬럼 추출
+    month_cols = extract_month_columns(df)
 
-
-
+    # 연도 리스트 추출
     year_list = extract_year_list(df)
 
+    # 텝 구성
     tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
         "기본 현황", "국가별 비교", "연도별 추이", "목표 달성률", "수출 지도", "성장률 분석", "실시간 환율"
     ])
 
+    # --- 탭 1 (기본 현황) ---
     with tab1:
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_1")
-        with col2:
-            year = st.selectbox("연도 선택", year_list[::-1], key="export_year_1")
-        with col3:
-            country_list = df[df["브랜드"] == brand]["지역명"].dropna().unique()
-            country = st.selectbox("국가 선택", country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"], key="export_country_1")
+        st.title("📨 수출 실적 대시보드")
+        st.button("수출 등록", key="export_register_tab1")
 
+        # 월 컬럼 추출
+        month_cols = extract_month_columns(df)
+
+        # 필터링 UI 호출
+        brand, year, country = get_filter_values(df, "export_1")
+
+        # 월 필터링 컬럼
         month_filter_cols = [col for col in month_cols if col.startswith(str(year))]
         filtered = df[(df["브랜드"] == brand) & (df["지역명"] == country)]
 
@@ -98,7 +145,7 @@ def export_ui():
 
             kpi1, kpi2, kpi3 = st.columns(3)
             kpi1.metric(label="총 수출량", value=f"{total_export:,} 대")
-            kpi2.metric(label="평균 수출량",value= f"{avg_export:,} 대")
+            kpi2.metric(label="평균 수출량", value=f"{avg_export:,} 대")
             kpi3.metric(label="차량 구분 수", value=f"{type_count} 종")
 
             df_melted = filtered.melt(id_vars=["차량 구분"], value_vars=month_filter_cols, var_name="월", value_name="수출량")
@@ -120,11 +167,11 @@ def export_ui():
         else:
             st.warning("선택한 조건에 해당하는 데이터가 없습니다.")
 
-
     # --- 국가별 비교 ---
     with tab2:
-        brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_2")
-        year = st.selectbox("연도 선택 (국가 비교)", sorted(df["연도"].dropna().unique(), reverse=True), key="export_year_2")
+        # 필터링 UI 호출
+        brand, year, country = get_filter_values(df, "export_2")
+
         grouped = df[(df["브랜드"] == brand) & (df["연도"] == year)]
         compare_df = grouped.groupby("지역명")[month_cols].sum(numeric_only=True)
         compare_df["총수출"] = compare_df.sum(axis=1)
@@ -139,8 +186,9 @@ def export_ui():
 
     # --- 연도별 추이 ---
     with tab3:
-        brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_3")
-        country = st.selectbox("국가 선택 (연도별 추이)", df[df["브랜드"] == brand]["지역명"].dropna().unique(), key="export_country_2")
+        # 필터링 UI 호출
+        brand, year, country = get_filter_values(df, "export_3")
+
         yearly = df[(df["브랜드"] == brand) & (df["지역명"] == country)]
         yearly_sum = yearly.groupby("연도")[month_cols].sum(numeric_only=True)
         yearly_sum["총수출"] = yearly_sum.sum(axis=1)
@@ -152,11 +200,12 @@ def export_ui():
         ).properties(title="📈 연도별 총 수출량 변화 추이", width=700, height=400)
         st.altair_chart(line_chart, use_container_width=True)
 
+
     # --- 목표 달성률 ---
     with tab4:
-        brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_4")
-        year = st.selectbox("연도 선택 (목표)", sorted(df["연도"].dropna().unique(), reverse=True), key="export_year_3")
-        country = st.selectbox("국가 선택 (목표)", df[df["브랜드"] == brand]["지역명"].dropna().unique(), key="export_country_3")
+        # 필터링 UI 호출
+        brand, year, country = get_filter_values(df, "export_4")
+
         goal = st.number_input("🎯 수출 목표 (대)", min_value=0, step=1000)
 
         filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["지역명"] == country)]
@@ -168,9 +217,7 @@ def export_ui():
 
     # --- 수출 지도 ---
     with tab5:
-        # -----------------------------------------
         # 공장 → 수출국 데이터 정의
-        # -----------------------------------------
         flow_data = {
             "공장명": ["울산공장", "울산공장", "앨라배마공장", "인도공장"],
             "수출국": ["미국", "독일", "캐나다", "인도네시아"],
@@ -182,9 +229,7 @@ def export_ui():
 
         df_flow = pd.DataFrame(flow_data)
 
-        # -----------------------------------------
         # UI 제목 (카드 스타일)
-        # -----------------------------------------
         st.markdown("""
         <div style='background-color:#f4faff; padding:20px; border-radius:10px; margin-bottom:15px;'>
             <h3 style='margin:0;'>🚢 공장에서 수출국으로의 이동 시각화</h3>
@@ -192,9 +237,7 @@ def export_ui():
         </div>
         """, unsafe_allow_html=True)
 
-        # -----------------------------------------
         # 지도 시각화 구성
-        # -----------------------------------------
         arc_layer = pdk.Layer(
             "ArcLayer",
             data=df_flow,
@@ -217,9 +260,7 @@ def export_ui():
             pickable=True,
         )
 
-        # -----------------------------------------
         # 초기 지도 뷰 설정
-        # -----------------------------------------
         view_state = pdk.ViewState(
             latitude=25,
             longitude=40,
@@ -227,9 +268,7 @@ def export_ui():
             pitch=0,
         )
 
-        # -----------------------------------------
         # 지도 렌더링
-        # -----------------------------------------
         st.pydeck_chart(pdk.Deck(
             map_style="mapbox://styles/mapbox/light-v9",
             layers=[scatter_layer, arc_layer],
@@ -240,13 +279,16 @@ def export_ui():
     # --- 성장률 분석 ---
     with tab6:
         st.subheader("📊 국가별 수출 성장률 분석")
-        brand = st.selectbox("브랜드 선택", df["브랜드"].dropna().unique(), key="export_brand_5")
+        
+        # 필터링 UI 호출
+        brand, year, country = get_filter_values(df, "export_6")
+        
         year_list = sorted(df["연도"].dropna().unique())
-
+        
         if len(year_list) < 2:
             st.warning("성장률 분석을 위해 최소 2개 연도의 데이터가 필요합니다.")
         else:
-            year = st.selectbox("기준 연도 선택", year_list[1:], key="export_year_4")
+            year = st.selectbox("기준 연도 선택", year_list[1:], key="export_year_6")
             prev_year = year_list[year_list.index(year) - 1]
 
             current = df[(df["브랜드"] == brand) & (df["연도"] == year)]
@@ -278,6 +320,7 @@ def export_ui():
                 height=400
             )
             st.altair_chart(chart, use_container_width=True)
+
 
     # --- 실시간 환율 탭 ---
     with tab7:
@@ -361,19 +404,3 @@ def export_ui():
             initial_view_state=view_state,
             layers=[layer]
         ))
-
-
-def load_data():
-    hyundai = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
-    kia = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
-
-    if "차종" not in hyundai.columns:
-        hyundai["차종"] = "기타"
-    if "차종" not in kia.columns:
-        kia["차종"] = "기타"
-
-    hyundai["브랜드"] = "현대"
-    kia["브랜드"] = "기아"
-    return pd.concat([hyundai, kia], ignore_index=True)
-
-
