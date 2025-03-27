@@ -5,6 +5,7 @@ import pydeck as pdk
 import requests
 from datetime import datetime, timedelta
 import urllib3
+import re
 
 # 수출관리 
 # SSL 경고 메시지 비활성화
@@ -67,12 +68,19 @@ def extract_month_columns(df):
 
 # 연도 리스트 추출 함수
 def extract_year_list(df):
-    years = sorted({
+    return sorted({
         int(col.split("-")[0])
         for col in df.columns
-        if "-" in col and col[:4].isdigit()
+        if re.match(r"\d{4}-\d{2}", col)
     })
-    return years
+
+# 월 리스트 추출 함수 (특정 연도에 대해)
+def extract_month_list(df, year: int):
+    return sorted({
+        int(col.split("-")[1])
+        for col in df.columns
+        if col.startswith(str(year)) and re.match(r"\d{4}-\d{2}", col)
+    })
 
 # 필터링 UI 생성 함수
 def get_filter_values(df, key_prefix):
