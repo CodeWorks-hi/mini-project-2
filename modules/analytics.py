@@ -8,7 +8,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import os
 
-
+#분석 리포트
 # 연도/월 컬럼 추출 함수 추가
 def extract_month_columns(df):
     return [col for col in df.columns if "-" in col and col[:4].isdigit()]

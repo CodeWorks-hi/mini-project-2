@@ -54,7 +54,7 @@ def inventory_ui():
         on=["브랜드", "차종", "연도"],
         how="outer"
     ).fillna(0)
-    inventory_df["예상재고"] = inventory_df["누적생산"] - inventory_df["누적판매"]
+    inventory_df["재고변동"] = inventory_df["누적생산"] - inventory_df["누적판매"]
 
     # 필터 선택
     st.subheader("🔍 필터 선택")
@@ -73,9 +73,9 @@ def inventory_ui():
     # KPI
     total_prod = int(filtered["누적생산"].sum())
     total_sales = int(filtered["누적판매"].sum())
-    total_stock = int(filtered["예상재고"].sum())
-    low_count = (filtered["예상재고"] < 100).sum()
-    high_count = (filtered["예상재고"] > 10000).sum()
+    total_stock = int(filtered["재고변동"].sum())
+    low_count = (filtered["재고변동"] < 100).sum()
+    high_count = (filtered["재고변동"] > 10000).sum()
 
     k1, k2, k3, k4, k5 = st.columns(5)
     k1.metric("총 생산량", f"{total_prod:,} 대")
@@ -85,14 +85,14 @@ def inventory_ui():
     k5.metric("재고 과잉 차종", f"{high_count} 종")
 
     # 차트
-    st.subheader("📊 예상 재고량 분포 (양방향)")
+    st.subheader("📊 재고 변동폭 (양방향)")
     chart_data = filtered.copy()
     chart_data["차종 (연도)"] = chart_data["차종"] + " (" + chart_data["연도"].astype(str) + ")"
     base_chart = alt.Chart(chart_data).mark_bar().encode(
-        y=alt.Y("예상재고:Q", title="예상 재고량", axis=alt.Axis(format=",d")),
+        y=alt.Y("재고변동:Q", title="재고량", axis=alt.Axis(format=",d")),
         x=alt.X("차종 (연도):N", sort="-y", title="차종", axis=alt.Axis(labelAngle=-50)),
         color="브랜드:N",
-        tooltip=["브랜드", "차종", "연도", alt.Tooltip("예상재고", format=",")]
+        tooltip=["브랜드", "차종", "연도", alt.Tooltip("재고변동", format=",")]
     ).properties(height=700)
     zero_line = alt.Chart(pd.DataFrame({"y": [0]})).mark_rule(color="gray", strokeDash=[4,2]).encode(y="y")
     final_chart = alt.layer(base_chart, zero_line).configure_view(stroke=None).configure_axis(grid=True).interactive()
@@ -100,16 +100,16 @@ def inventory_ui():
 
     # 랭킹
     st.subheader("📈 재고 Top/Bottom 차종")
-    top10 = filtered.sort_values("예상재고", ascending=False).head(10)
-    bottom10 = filtered.sort_values("예상재고").head(10)
+    top10 = filtered.sort_values("재고변동", ascending=False).head(10)
+    bottom10 = filtered.sort_values("재고변동").head(10)
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("#### 🔝 재고 많은 차종 TOP 10")
-        st.dataframe(top10[["브랜드", "차종", "연도", "예상재고"]], use_container_width=True, hide_index=True)
+        st.dataframe(top10[["브랜드", "차종", "연도", "재고변동"]], use_container_width=True, hide_index=True)
     with col2:
         st.markdown("#### 🔻 재고 적은 차종 BOTTOM 10")
-        st.dataframe(bottom10[["브랜드", "차종", "연도", "예상재고"]], use_container_width=True, hide_index=True)
+        st.dataframe(bottom10[["브랜드", "차종", "연도", "재고변동"]], use_container_width=True, hide_index=True)
 
     # 상세
     st.subheader("📋 필터 결과 상세 데이터")
-    st.dataframe(filtered.sort_values("예상재고"), use_container_width=True, hide_index=True)
+    st.dataframe(filtered.sort_values("재고변동"), use_container_width=True, hide_index=True)
