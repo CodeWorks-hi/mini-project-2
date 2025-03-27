@@ -318,7 +318,7 @@ def export_ui():
         with st.expander("📋 원본 데이터 보기"):
             st.dataframe(filtered, use_container_width=True)
 
-   # --- 수출 지도 ---
+    # --- 수출 지도 ---
     with tab5:
         # 공장 → 수출국 데이터 정의
         flow_data = {
@@ -380,6 +380,7 @@ def export_ui():
             initial_view_state=view_state,
             tooltip={"text": "공장: {공장명} → 수출국: {수출국}"}
         ))
+
 
 
     # --- 성장률 분석 ---
