@@ -1,10 +1,12 @@
 import pandas as pd
 import streamlit as st
+import os
 
 @st.cache_data
 def load_csv(path):
+    base_dir = os.path.dirname(__file__)  # 현재 파일의 위치
     try:
-        return pd.read_csv(path)
+        return pd.read_csv(os.path.join(base_dir, path))
     except Exception as e:
         st.error(f"CSV 파일 로드 중 오류 발생: {str(e)}")
         return None
