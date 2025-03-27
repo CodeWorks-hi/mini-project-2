@@ -5,16 +5,17 @@ from PIL import Image
 from transformers import AutoModel, AutoTokenizer
 from huggingface_hub import InferenceClient
 
-# 추천시스템
 
+if "last_forecast_image" in st.session_state:
+    image_path = st.session_state["last_forecast_image"]
+
+
+# Gemma 시스템
 # 설정
-
 VISION_MODEL_ID = "openbmb/MiniCPM-Llama3-V-2_5" 
 TEXT_MODEL_ID = "google/gemma-2-9b-it"
 
-
 # 토큰 로딩
-
 def get_huggingface_tokens():
     return {
         "gemma": st.secrets.get("HUGGINGFACE_API_TOKEN_GEMMA")

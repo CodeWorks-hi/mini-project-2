@@ -20,7 +20,7 @@ st.set_page_config(page_title="ERP 차량 관리 시스템", layout="wide", page
 # ✅ 탭 UI 구성
 tabs = st.tabs([
     " 대시보드", " 판매 관리", " 생산 관리", " 재고 관리",
-    " 수출 관리", " 분석 리포트", " 인트로", " 설정", "추천 시스템"
+    " 수출 관리", " 분석 리포트", " 인트로", " 설정", "예측 시스템", "추천 시스템"
 ])
 
 tab_modules = [
@@ -32,6 +32,7 @@ tab_modules = [
     ("modules.analytics", "analytics_ui"),
     ("modules.intro", "intro_ui"),
     ("modules.settings", "settings_ui"),
+    ("modules.prediction", "prediction_ui"),
     ("modules.recommendations", "recommendations_ui"),
 ]
 

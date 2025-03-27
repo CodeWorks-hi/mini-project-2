@@ -22,7 +22,7 @@ torch>=2.0.0
 sentencepiece>=0.1.99
 transformers
 torchvision
-
+tensorflow
 
 
 
