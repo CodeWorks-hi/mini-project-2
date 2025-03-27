@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
 import re
+import plotly.graph_objects as go
 
 def load_data():
     hyundai = pd.read_csv("data/processed/hyundai-by-plant.csv")
@@ -17,6 +18,7 @@ def load_data():
     
     hyundai["브랜드"] = "현대"
     kia["브랜드"] = "기아"
+    
     df = pd.concat([hyundai, kia], ignore_index=True)
     
     # 데이터가 0인 경우 '기타'로 처리
@@ -47,26 +49,63 @@ def production_ui():
             df_melted = filtered.melt(id_vars=["차종"], value_vars=month_cols, var_name="월", value_name="생산량")
             df_melted = df_melted[df_melted["생산량"] > 0]  # 0 제외
             
-            # 히스토그램
-            hist = alt.Chart(df_melted).mark_bar().encode(
-                x=alt.X("생산량:Q", bin=alt.Bin(maxbins=20), title="생산량"),
-                y=alt.Y("count()", title="빈도"),
-                color="차종:N"
-            ).properties(
-                title="생산량 분포",
-                width=400,
-                height=300
-            )
-            st.altair_chart(hist, use_container_width=True)
-            
-            # 파이 차트
+            # 차종별 생산량 계산
             model_production = filtered.groupby("차종")[month_cols].sum().sum(axis=1)
-            fig_pie = px.pie(
-                values=model_production.values,
-                names=model_production.index,
-                title=f"{year}년 {brand} - {factory} 차종별 생산 비율"
+            model_production = model_production[model_production > 0]  # 0 제외
+
+            df_hist = model_production.reset_index()
+            df_hist.columns = ["차종", "생산량"]
+
+            # 히스토그램 스타일의 막대 차트
+            fig_hist = px.histogram(
+                df_hist,
+                x="차종",
+                y="생산량",
+                color="차종",
+                text_auto=True,
+                title=f"{year}년 {brand} - {factory} 차종별 생산량 분포 (히스토그램)",
+                color_discrete_sequence=px.colors.qualitative.Set3
             )
-            st.plotly_chart(fig_pie, use_container_width=True)
+
+            fig_hist.update_layout(
+                bargap=0.3,
+                xaxis_title="차종",
+                yaxis_title="총 생산량",
+                height=500
+            )
+
+            st.plotly_chart(fig_hist, use_container_width=True)
+
+            #2. 히스토그램 + 박스 플롯 조합
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                # 히스토그램 (Altair)
+                hist = alt.Chart(df_melted).mark_bar().encode(
+                    x=alt.X("생산량:Q", bin=alt.Bin(maxbins=30), title="생산량 구간"),
+                    y=alt.Y("count()", title="발생 빈도"),
+                    color=alt.Color("차종:N", legend=alt.Legend(title="차종"))
+                ).properties(
+                    title="생산량 분포 차트",
+                    width=400,
+                    height=300
+                )
+                st.altair_chart(hist, use_container_width=True)
+            
+            with col2:
+                # 박스 플롯 (Plotly)
+                fig_box = px.box(df_melted, 
+                                x="차종", 
+                                y="생산량",
+                                color="차종",
+                                title="차종별 생산량 분포")
+                fig_box.update_layout(
+                    xaxis_title="차종",
+                    yaxis_title="생산량",
+                    showlegend=False
+                )
+                st.plotly_chart(fig_box, use_container_width=True)
+
     
     with tab2:
         st.subheader("🏢 공장별 비교")
