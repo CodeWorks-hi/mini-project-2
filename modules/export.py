@@ -26,6 +26,7 @@ def fetch_exim_exchange(date, api_key):
         "searchdate": date.strftime("%Y%m%d"),
         "data": "AP01"
     }
+    
     try:
         response = requests.get(url, params=params, verify=False)
         response.raise_for_status()
