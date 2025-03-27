@@ -6,10 +6,9 @@ import streamlit as st
 @st.cache_data
 def load_csv(path):
     try:
-        # 절대 경로를 사용해 경로를 동적으로 설정
-        # 스트림릿의 실행 환경에 맞게 경로를 설정
-        st.write(os.getcwd())
-        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), path)  # 현재 파일 위치 기준으로 절대 경로 설정
+        # 현재 파일 위치에서 상위 폴더로 이동한 후 'data/processed' 폴더로 경로 설정
+        st.write(os.getcwd())  # 현재 작업 디렉토리 출력 (디버깅 용)
+        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'processed', path)  # 상위 폴더로 이동
         return pd.read_csv(file_path)
     except Exception as e:
         st.error(f"CSV 파일 로드 중 오류 발생: {str(e)}")
@@ -18,7 +17,8 @@ def load_csv(path):
 # 수출 데이터 병합 함수
 def load_and_merge_export_data(hyundai_path="현대_지역별수출실적_전처리.csv", 
                                 kia_path="기아_지역별수출실적_전처리.csv"):
-    base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../data', 'processed')  # 현재 파일 위치 기준으로 절대 경로 설정
+    # 상위 폴더로 이동한 후 'data/processed' 폴더로 경로 설정
+    base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'processed')  # 상위 폴더로 이동
     hyundai_file = os.path.join(base_path, hyundai_path)
     kia_file = os.path.join(base_path, kia_path)
     
@@ -41,7 +41,8 @@ def load_and_merge_export_data(hyundai_path="현대_지역별수출실적_전처
 
 # 현대차 공장 판매 실적 데이터 로드
 def load_hyundai_factory_data():
-    hyundai_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'processed', "현대_해외공장판매실적_전처리.csv")
+    # 상위 폴더로 이동한 후 'data/processed' 폴더로 경로 설정
+    hyundai_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'processed', "현대_해외공장판매실적_전처리.csv")
     df = load_csv(hyundai_file)
     if df is not None:
         df["브랜드"] = "현대"
@@ -49,7 +50,8 @@ def load_hyundai_factory_data():
 
 # 기아차 공장 판매 실적 데이터 로드
 def load_kia_factory_data():
-    kia_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'processed', "기아_해외공장판매실적_전처리.csv")
+    # 상위 폴더로 이동한 후 'data/processed' 폴더로 경로 설정
+    kia_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'processed', "기아_해외공장판매실적_전처리.csv")
     df = load_csv(kia_file)
     if df is not None:
         df["브랜드"] = "기아"
@@ -57,6 +59,6 @@ def load_kia_factory_data():
 
 # 위치 데이터 로드
 def load_location_data():
-    location_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', '세일즈파일', "지역별_위치정보.csv")
+    # 상위 폴더로 이동한 후 'data/세일즈파일' 폴더로 경로 설정
+    location_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', '세일즈파일', "지역별_위치정보.csv")
     return load_csv(location_file)
-
