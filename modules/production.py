@@ -5,7 +5,7 @@ import pydeck as pdk
 import plotly.graph_objects as go
 import re
 
-# 재고 관리
+# 생산 관리
 def load_data():
     hyundai = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
     kia = pd.read_csv("data/processed/기아_해외공장판매실적_전처리.CSV")
