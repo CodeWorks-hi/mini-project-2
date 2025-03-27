@@ -48,8 +48,6 @@ with tab5:
     import modules.export as export
     export.export_ui()
 
-
-
 with tab6:
     import modules.analytics as analytics
     analytics.analytics_ui()
