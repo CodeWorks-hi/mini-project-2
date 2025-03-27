@@ -142,7 +142,7 @@ def recommendations_ui():
         if image_file:
             try:
                 image = Image.open(image_file).convert("RGB")
-                st.image(image, caption="업로드된 이미지", use_column_width=True)
+                st.image(image, caption="업로드된 이미지", use_container_width=True)
                 with st.spinner("🔍 이미지 분석 중..."):
                     result_img = analyze_image_with_minicpm(image, user_input or "이 차량의 특징을 분석해줘")
                     results.append(f"### 🔍 이미지 분석 결과\n{result_img}")
