@@ -23,7 +23,8 @@ torch>=2.0.0
 sentencepiece>=0.1.99
 transformers
 torchvision
-tensorflow
-keras
+tensorflow>=2.18
+keras>=3.0
+
 
 
