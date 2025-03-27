@@ -12,8 +12,8 @@ def load_csv(path):
         return None
 
 def load_and_merge_export_data():
-    df_h = load_csv("data/processed/현대_지역별수출실적_전처리.CSV")
-    df_k = load_csv("data/processed/기아_지역별수출실적_전처리.CSV")
+    df_h = load_csv("../data/processed/현대_지역별수출실적_전처리.CSV")
+    df_k = load_csv("../data/processed/기아_지역별수출실적_전처리.CSV")
     if df_h is None or df_k is None:
         return None
 
