@@ -8,6 +8,7 @@ def load_csv(path):
     try:
         # 절대 경로를 사용해 경로를 동적으로 설정
         # 스트림릿의 실행 환경에 맞게 경로를 설정
+        st.write(os.getcwd())
         file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), path)  # 현재 파일 위치 기준으로 절대 경로 설정
         return pd.read_csv(file_path)
     except Exception as e:
