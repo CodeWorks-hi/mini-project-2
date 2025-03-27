@@ -162,5 +162,6 @@ def recommendations_ui():
                 st.markdown(res)
         else:
             st.warning("입력 내용을 확인해주세요.")
+    torch.cuda.empty_cache()
 
 

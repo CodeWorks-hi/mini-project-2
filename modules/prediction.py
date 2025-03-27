@@ -12,6 +12,7 @@ import joblib
 from sklearn.metrics import r2_score
 import matplotlib.dates as mdates
 import tensorflow as tf
+import tensorflow.keras.backend as K
 
 
 # 한글 폰트 조정
@@ -561,3 +562,5 @@ def prediction_ui():
 
                         lstm_forecast = forecast_lstm(lstm_model, plant_data, forecast_months, scaler)
                         plot_lstm_forecast(plant_data, lstm_forecast, plant_name, forecast_months)
+
+    K.clear_session()
