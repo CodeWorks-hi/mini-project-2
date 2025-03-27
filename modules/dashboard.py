@@ -20,6 +20,7 @@ def get_previous_weekday(date):
         if date.weekday() < 5:
             return date
 
+
 def get_exchange_rate(currency_code):
     url = f"https://finance.naver.com/marketindex/exchangeDetail.naver?marketindexCd=FX_{currency_code}KRW"
     try:
