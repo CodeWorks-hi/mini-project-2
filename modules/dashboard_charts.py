@@ -19,7 +19,7 @@ def render_hyundai_chart(year: int):
     <h4>현대 공장별 생산 비중</h4>
     """, unsafe_allow_html=True)
 
-    df = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
+    df = pd.read_csv("../data/processed/현대_해외공장판매실적_전처리.CSV")
     df["브랜드"] = "현대"
 
     month_cols = [col for col in df.columns if str(year) in col and "-" in col]
