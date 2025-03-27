@@ -13,9 +13,9 @@ from modules.sales_log import show_sales_log_table
 from modules.sales_chart import show_sales_charts
 
 # 📁 파일 경로 상수
-csv_PATH = "data/세일즈파일/sales_records.csv"
-CAR_INFO_PATH = "data/세일즈파일/차량정보.csv"
-SAMPLE_PATH = "data/세일즈파일/판매기록_샘플_차정보포함.xlsx"
+CSV_PATH = "data/processed/sales_records.csv"
+CAR_INFO_PATH = "data/processed/차량정보.csv"
+SAMPLE_PATH = "data/processed/판매기록_샘플_차정보포함.xlsx"
 
 # 🔹 차량 정보 로드
 def load_car_info():

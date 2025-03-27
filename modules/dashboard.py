@@ -90,17 +90,6 @@ def dashboard_ui():
         st.markdown("---")
 
 
-    loc_df = load_location_data()
-    if loc_df is None:
-        st.error("위치 정보 로드 실패")
-        st.stop()
-    try:
-        merged = pd.merge(df_filtered, loc_df, on="지역명", how="left")
-        merged = merged.dropna(subset=["위도", "경도", "총수출"])
-    except Exception as e:
-        st.error(f"위치 정보 병합 중 오류: {e}")
-        st.stop()
-
     colA, colB, colC = st.columns([2.8, 2.6, 1.5])
 
     with colA:
@@ -108,7 +97,7 @@ def dashboard_ui():
     with colB:
         render_kia_chart(year)
     with colC:
-        render_top_bottom_summary(merged)
+        render_top_bottom_summary(df_filtered)
 
     with st.container():
         st.markdown("""
