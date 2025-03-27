@@ -14,8 +14,8 @@ def load_csv(path):
         return None
 
 # ✅ 수출 데이터 병합 함수
-def load_and_merge_export_data(hyundai_path="data/processed/현대_지역별수출실적_전처리.csv", 
-                                kia_path="data/processed/기아_지역별수출실적_전처리.csv"):
+def load_and_merge_export_data(hyundai_path="data/processed/hyundai-region.csv", 
+                                kia_path="data/processed/kia-region.csv"):
     df_h = load_csv(hyundai_path)
     df_k = load_csv(kia_path)
     
