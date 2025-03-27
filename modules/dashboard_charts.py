@@ -10,6 +10,7 @@ import altair as alt
 import pydeck as pdk
 import streamlit as st
 import pandas as pd
+import os
 
 # 현대 도넛 차트
 
@@ -19,7 +20,9 @@ def render_hyundai_chart(year: int):
     <h4>현대 공장별 생산 비중</h4>
     """, unsafe_allow_html=True)
 
-    df = pd.read_csv("../data/processed/현대_해외공장판매실적_전처리.CSV")
+    st.write("현재 작업 디렉토리:", os.getcwd())
+
+    df = pd.read_csv("data/processed/현대_해외공장판매실적_전처리.CSV")
     df["브랜드"] = "현대"
 
     month_cols = [col for col in df.columns if str(year) in col and "-" in col]
@@ -50,6 +53,8 @@ def render_kia_chart(year: int):
     <div style='background-color:#fff8e1;padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.05);'>
     <h4>기아 공장별 생산 비중</h4>
     """, unsafe_allow_html=True)
+
+    st.write("현재 작업 디렉토리:", os.getcwd())
 
     df = pd.read_csv("../data/processed/기아_해외공장판매실적_전처리.CSV")
     df["브랜드"] = "기아"
