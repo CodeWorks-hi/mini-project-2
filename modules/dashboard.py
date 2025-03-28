@@ -40,21 +40,6 @@ def dashboard_ui():
         </div>
     """, unsafe_allow_html=True)
 
-    # 환율 정보 카드
-    with st.container():
-        st.markdown("""
-            <div style='padding: 10px; background-color: #e8f0fe; border-radius: 10px; margin-bottom: 15px;'>
-                <h4>💱 실시간 환율 (네이버 기준)</h4>
-        """, unsafe_allow_html=True)
-
-        exchange_rate_placeholder = st.empty()
-        currencies = ['USD', 'EUR', 'JPY', 'CNY', 'GBP']
-        for currency in currencies:
-            rate_info = get_exchange_rate(currency)
-            exchange_rate_placeholder.markdown(f"<div style='margin-bottom: 5px;'>🪙 {rate_info}</div>", unsafe_allow_html=True)
-
-        st.markdown("""</div>""", unsafe_allow_html=True)
-
     #데이터 로드 및 병합
     df = load_and_merge_export_data()
     if df is None:
@@ -70,11 +55,22 @@ def dashboard_ui():
     }
 
     # KPI + 필터 카드
-    col1, col2 = st.columns([4, 5])
+    col1, col2 = st.columns([1, 1])
     with col1:
-        year, company = render_filter_options(df)
+        st.markdown("""
+            <div style='padding: 10px; background-color: #e8f0fe; border-radius: 10px; margin-bottom: 15px;'>
+                <h4>💱 실시간 환율 (네이버 기준)</h4>
+        """, unsafe_allow_html=True)
+
+        exchange_rate_placeholder = st.empty()
+        currencies = ['USD', 'EUR', 'JPY', 'CNY', 'GBP']
+        for currency in currencies:
+            rate_info = get_exchange_rate(currency)
+            exchange_rate_placeholder.markdown(f"<div style='margin-bottom: 5px;'>🪙 {rate_info}</div>", unsafe_allow_html=True)
+
+        st.markdown("""</div>""", unsafe_allow_html=True)
     with col2:
-        st.markdown("---")
+        year, company = render_filter_options(df)
         month_cols = [col for col in df.columns if str(year) in col and "-" in col]
 
         df_filtered = df.copy()
@@ -83,10 +79,6 @@ def dashboard_ui():
             df_filtered = df_filtered[df_filtered["브랜드"] == company]
 
         df_filtered["총수출"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
-        kpi1, kpi2, kpi3 = calculate_kpis(df_filtered, month_cols, brand=company)
-        render_kpi_card(kpi1, kpi2, kpi3)
-        st.markdown("---")
-
 
     colA, colB, colC = st.columns([2.8, 2.6, 1.5])
 
