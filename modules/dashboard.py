@@ -83,7 +83,7 @@ def dashboard_ui():
         # 날짜 선택 UI
         now = datetime.now()
         default_date = get_previous_weekday(now) if now.weekday() >= 5 or now.hour < 11 else now
-        selected_date = st.date_input("📆 환율 조회 날짜", default_date.date(), max_value=datetime.today())
+        selected_date = st.date_input("환율 조회 날짜", default_date.date(), max_value=datetime.today())
         query_date = datetime.combine(selected_date, datetime.min.time())
 
         # API 호출 및 데이터 처리
@@ -233,7 +233,7 @@ def dashboard_ui():
     with colD:
         st.markdown("""
         <div style='margin-top:20px; padding:10px; background-color:#ede7f6; border-radius:10px;'>
-            <h4>📊 월별 Top 3 수출 국가</h4>
+            <h4>월별 Top 3 수출 국가</h4>
         </div>
         """, unsafe_allow_html=True)
         fig_top = px.bar(top_df, x="월", y="수출량", color="지역명", barmode="group",
@@ -241,13 +241,13 @@ def dashboard_ui():
                         height=400)
         st.plotly_chart(fig_top, use_container_width=True)
 
-        with st.expander("📋 원본 데이터 보기", expanded=False):
+        with st.expander("원본 데이터 보기", expanded=False):
             st.dataframe(top_df.style.format({'수출량': '{:,}'}), use_container_width=True, hide_index=True)
 
     with colE:
         st.markdown("""
         <div style='margin-top:20px; padding:10px; background-color:#f0f4c3; border-radius:10px;'>
-            <h4>📊 월별 Bottom 3 수출 국가</h4>
+            <h4>월별 Bottom 3 수출 국가</h4>
         </div>
         """, unsafe_allow_html=True)
         fig_bottom = px.bar(bottom_df, x="월", y="수출량", color="지역명", barmode="group",
@@ -255,17 +255,17 @@ def dashboard_ui():
                             height=400)
         st.plotly_chart(fig_bottom, use_container_width=True)
 
-        with st.expander("📋 원본 데이터 보기", expanded=False):
+        with st.expander("원본 데이터 보기", expanded=False):
             st.dataframe(bottom_df.style.format({'수출량': '{:,}'}), use_container_width=True, hide_index=True)
 
 
     col_left, col_right = st.columns([1, 1])
 
     with col_left:
-        # 📈 월별 국가별 판매량 변화 추이 (라인 차트)
+        # 월별 국가별 판매량 변화 추이 (라인 차트)
         st.markdown("""
         <div style='margin-top:30px; padding:10px; background-color:#e3f2fd; border-radius:10px;'>
-            <h4>📈 월별 국가별 판매량 변화 추이</h4>
+            <h4>월별 국가별 판매량 변화 추이</h4>
         </div>
         """, unsafe_allow_html=True)
 
@@ -296,7 +296,7 @@ def dashboard_ui():
     with col_right:
         st.markdown(f"""
         <div style='margin-top:30px; padding:10px; background-color:#f5f5f5; border-radius:10px;'>
-            <h4>🗂️ 국가별 {year}년 판매량 데이터</h4>
+            <h4>국가별 {year}년 판매량 데이터</h4>
         </div>
         """, unsafe_allow_html=True)
         st.text("")
@@ -305,7 +305,7 @@ def dashboard_ui():
     with st.container():
         st.markdown("""
             <div style='background-color:#e3f2fd;padding:10px;border-radius:12px;margin-top:40px;'>
-            <h4>📰 현대차 수출 관련 뉴스</h4>
+            <h4>현대차 수출 관련 뉴스</h4>
         """, unsafe_allow_html=True)
 
         news_data = fetch_naver_news("현대차 수출", display=4)
