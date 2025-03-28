@@ -117,13 +117,13 @@ def inventory_ui():
 
     # ✅ 필터 UI - 브랜드
     with col2:
-        st.markdown("#### 🔍 브랜드 필터")
+        st.markdown("####브랜드 필터")
         brand_list = ["전체"] + inventory_df["브랜드"].dropna().unique().tolist()
         brand_sel = st.selectbox("브랜드 선택", brand_list, key="inventory_brand")
 
     # ✅ 필터 UI - 연도
     with col3:
-        st.markdown("#### 📅 연도 필터")
+        st.markdown("#### 연도 필터")
         available_years = sorted(inventory_df["연도"].dropna().unique(), reverse=True)
         year_sel = st.selectbox("연도 선택", available_years, key="inventory_year")
 
@@ -135,7 +135,7 @@ def inventory_ui():
     
     # ✅ KPI 카드
     with col1:
-        st.markdown("#### 📊 주요 지표")
+        st.markdown("#### 주요 지표")
         prod, sales, stock, low, high = get_kpi_summary(filtered)
         k1, k2, k3 = st.columns(3)
         k1.metric("총 생산량", f"{prod:,} 대")
