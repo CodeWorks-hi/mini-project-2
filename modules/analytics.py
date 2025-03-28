@@ -115,7 +115,7 @@ def analytics_ui():
         st.markdown(analysis_text)
 
     # 시나리오 데이터 시각화
-    st.subheader("📈 2025 시장 시나리오 분석")
+    st.subheader(" 2025 시장 시나리오 분석")
     scenario_data = {
         '시나리오': ['낙관적', '중립적', '비관적'],
         '선점 가능성': [90, 60, 30],
@@ -134,7 +134,7 @@ def analytics_ui():
     st.altair_chart(bubble_chart, use_container_width=True)
 
     # 경쟁사 비교 분석
-    st.subheader("🚗 주요 경쟁사 비교 분석")
+    st.subheader(" 주요 경쟁사 비교 분석")
     competitor_data = {
         '브랜드': ['현대', '기아', 'BYD', '테슬라'],
         '시장점유율': [8.2, 7.5, 12.3, 37.9],
@@ -156,7 +156,7 @@ def analytics_ui():
     st.altair_chart(radar_chart, use_container_width=True)
 
     # 월별 추이 분석 강화
-    st.subheader("📅 월별 생산-판매-수출 상관관계 분석")
+    st.subheader(" 월별 생산-판매-수출 상관관계 분석")
     # 월별 합계 계산 함수 정의
     def sum_by_month(df_):
         existing_cols = [c for c in month_cols if c in df_.columns]
@@ -178,7 +178,7 @@ def analytics_ui():
     st.altair_chart(heatmap, use_container_width=True)
 
     # 재고 분석 시각화 강화
-    st.subheader("📦 재고 분석 (차종별)")
+    st.subheader(" 재고 분석 (차종별)")
     prod_group = prod_filtered.groupby(["브랜드", "차종"])[month_cols].sum(numeric_only=True).sum(axis=1).rename("누적생산")
     sales_group = sales_filtered.groupby(["브랜드", "차종"])[month_cols].sum(numeric_only=True).sum(axis=1).rename("누적판매")
 
@@ -201,7 +201,7 @@ def analytics_ui():
     st.altair_chart(hist, use_container_width=True)
 
     # 인사이트 시각화 강화
-    st.subheader("🔍 주요 인사이트 시각화")
+    st.subheader("주요 인사이트 시각화")
     
     # 상위 5개 모델 시각화
     if not sales_filtered.empty:
