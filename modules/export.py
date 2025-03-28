@@ -107,7 +107,7 @@ def export_ui():
     # 데이터 로드
     df = load_and_merge_export_data()
     if df is None:
-        st.error("❌ 수출 데이터를 불러오지 못했습니다.")
+        st.error(" 수출 데이터를 불러오지 못했습니다.")
         return
 
     month_cols = extract_month_columns(df)
@@ -126,13 +126,13 @@ def export_ui():
     # --- 탭 1: 수출 실적 대시보드 ---
     with tab1:
         # 등록 버튼 (토글)
-        btn_label = "등록 취소" if st.session_state.get("show_export_form", False) else "📥 수출 등록"
+        btn_label = "등록 취소" if st.session_state.get("show_export_form", False) else " 수출 등록"
         st.button(btn_label, on_click=toggle_export_form)
 
         # 수출 등록 폼 표시
         if st.session_state.get("show_export_form", False):
             with st.form("add_export_form"):
-                st.subheader("📬 신규 수출 데이터 등록")
+                st.subheader(" 신규 수출 데이터 등록")
 
                 col1, col2 = st.columns(2)
                 with col1:
@@ -148,7 +148,7 @@ def export_ui():
 
                 submitted = st.form_submit_button("등록하기")
                 if submitted:
-                    st.success("✅ 수출 데이터가 등록되었습니다!")
+                    st.success("수출 데이터가 등록되었습니다!")
 
                     new_col = f"{year}-{month}"
                     new_row = pd.DataFrame([{
@@ -197,7 +197,7 @@ def export_ui():
                     color="차량 구분",
                     markers=True,
                     line_shape="spline",  # 곡선 형태
-                    title="📊 차량 구분별 수출량 변화 추이"
+                    title="차량 구분별 수출량 변화 추이"
                 )
                 fig.update_layout(
                     xaxis_title="월",
@@ -217,12 +217,12 @@ def export_ui():
             st.markdown("---")
         
             # 원본 데이터 보기
-            with st.expander("📋 원본 데이터 보기"):
+            with st.expander("원본 데이터 보기"):
                 st.dataframe(filtered, use_container_width=True)
 
             # CSV 다운로드
             csv = filtered.to_csv(index=False).encode("utf-8-sig")
-            st.download_button("📥 현재 데이터 다운로드", data=csv, file_name=f"{brand}_{country}_{year}_수출실적.csv", mime="text/csv")
+            st.download_button("현재 데이터 다운로드", data=csv, file_name=f"{brand}_{country}_{year}_수출실적.csv", mime="text/csv")
         else:
             st.warning("선택한 조건에 해당하는 데이터가 없습니다.")
 
@@ -250,7 +250,7 @@ def export_ui():
                     x=alt.X("총수출:Q", title="총 수출량"),
                     y=alt.Y("지역명:N", sort="-x", title="지역명"),
                     color="지역명:N"
-                ).properties(width=800, height=500, title="🌍 국가별 총 수출량 비교")
+                ).properties(width=800, height=500, title="국가별 총 수출량 비교")
                 st.altair_chart(chart, use_container_width=True)
             else:
                 st.warning("수출량 데이터가 없습니다.")

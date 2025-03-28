@@ -83,7 +83,7 @@ def render_kia_chart(year: int):
 def render_export_map(merged_df: pd.DataFrame, vehicle_type: str, color_map: dict):
     st.markdown("""
     <div style='background-color:#f9fbe7;padding:15px;border-radius:12px;margin-bottom:20px;'>
-    <h4>🗺️ 수출 국가별 지도</h4>
+    <h4>수출 국가별 지도</h4>
     """, unsafe_allow_html=True)
 
     if len(merged_df) == 0:
@@ -128,7 +128,7 @@ def render_top_bottom_summary(merged_df: pd.DataFrame, company, year):
 
     # st.markdown("""
     # <div style='margin-top:20px; padding:10px; background-color:#fff3e0; border-radius:10px;'>
-    #     <h5 style='margin-bottom:10px;'>🚚 국가별 총 판매량 시각화</h5>
+    #     <h5 style='margin-bottom:10px;'>국가별 총 판매량 시각화</h5>
     # </div>
     # """, unsafe_allow_html=True)
     total_export_df = merged_df[["지역명", "총수출"]].sort_values("총수출", ascending=False)

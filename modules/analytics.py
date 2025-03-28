@@ -106,7 +106,7 @@ def analytics_ui():
     k3.metric("총 수출량", f"{total_export:,} 대")
     k4.metric("예상 재고량", f"{total_stock:,} 대")
 
-    st.subheader("📈 월별 판매 / 생산 / 수출 추이")
+    st.subheader("월별 판매 / 생산 / 수출 추이")
 
     # 월별 합계 계산
     def sum_by_month(df_):
@@ -128,7 +128,7 @@ def analytics_ui():
     ).properties(width=800, height=400)
     st.altair_chart(chart, use_container_width=True)
 
-    st.subheader("⚠️ 재고 경고 요약")
+    st.subheader("재고 경고 요약")
 
     # 재고 경고 분석
     prod_group = prod_filtered.groupby(["브랜드", "차종"])[month_cols].sum(numeric_only=True).sum(axis=1).rename("누적생산")
@@ -142,13 +142,13 @@ def analytics_ui():
 
     c1, c2 = st.columns(2)
     with c1:
-        st.markdown("#### 🚨 재고 부족 차종 (미만 100)")
+        st.markdown("#### 재고 부족 차종 (미만 100)")
         st.dataframe(low_stock, use_container_width=True, hide_index=True)
     with c2:
-        st.markdown("#### 📦 재고 과잉 차종 (초과 10,000)")
+        st.markdown("#### 재고 과잉 차종 (초과 10,000)")
         st.dataframe(high_stock, use_container_width=True, hide_index=True)
 
-    st.subheader("💡 인사이트 요약")
+    st.subheader("인사이트 요약")
     if not sales_filtered.empty:
         top_model = sales_filtered.groupby("차종")[month_cols].sum(numeric_only=True).sum(axis=1).sort_values(ascending=False).index[0]
         st.info(f"가장 많이 팔린 차종은 **{top_model}** 입니다.")
@@ -161,9 +161,9 @@ def analytics_ui():
     else:
         st.info("재고 데이터가 없어, 재고가 가장 많은 차종을 알 수 없습니다.")
 
-    st.subheader("📥 리포트 다운로드")
+    st.subheader("리포트 다운로드")
     csv_bytes = inventory_df.to_csv(index=False).encode("utf-8-sig")
-    st.download_button("📥 재고 리포트 다운로드", data=csv_bytes, file_name="재고리포트.csv", mime="text/csv")
+    st.download_button("재고 리포트 다운로드", data=csv_bytes, file_name="재고리포트.csv", mime="text/csv")
 
     def create_pdf():
         buffer = BytesIO()

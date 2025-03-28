@@ -35,9 +35,9 @@ def data_preview_ui():
 
     df = load_csv(selected_path)
     if df is not None:
-        st.markdown(f"### ✅ `{os.path.basename(selected_path)}` 미리보기")
+        st.markdown(f"### `{os.path.basename(selected_path)}` 미리보기")
         st.dataframe(df, use_container_width=True, hide_index=True)
-        st.caption(f"총 {df.shape[0]:,} 행 × {df.shape[1]} 열")
+        st.caption(f"총 {df.shape[0]:,} 행 {df.shape[1]} 열")
 
         # 하단 텍스트 정보
     st.markdown("---")

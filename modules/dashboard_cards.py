@@ -63,17 +63,17 @@ def handle_deletions(original_df: pd.DataFrame, edited_df: pd.DataFrame) -> None
         deleted_rows.to_csv(DELETED_LOG_PATH, index=False)
         remaining_ids = edited_df[~edited_df["삭제"]]['고유ID']
         original_df[original_df['고유ID'].isin(remaining_ids)].to_csv(CSV_PATH, index=False)
-        st.success(f"✅ {len(deleted_rows)}건 삭제 완료 | 백업: {BACKUP_PATH}")
+        st.success(f"{len(deleted_rows)}건 삭제 완료 | 백업: {BACKUP_PATH}")
         st.experimental_rerun()
 
 def show_sales_log_table():
     """판매 로그 관리 메인 인터페이스"""
-    st.subheader("📋 판매 내역 관리")
+    st.subheader("판매 내역 관리")
     df = load_sales_data()
     if df.empty:
         return
 
-    with st.expander("🔍 상세 필터 설정", expanded=True):
+    with st.expander("상세 필터 설정", expanded=True):
         col1, col2, col3 = st.columns([2,2,1])
         with col1:
             model_filter = st.multiselect(
@@ -112,11 +112,11 @@ def show_sales_log_table():
 
         col1, col2 = st.columns([3,1])
         with col2:
-            if st.button("🗑️ 선택 항목 삭제", type="primary"):
+            if st.button("선택 항목 삭제", type="primary"):
                 handle_deletions(df, edited_df)
         with col1:
             st.download_button(
-                "💾 현재 데이터 내보내기",
+                "현재 데이터 내보내기",
                 data=filtered_df.drop(columns=["삭제", "고유ID"]).to_csv(index=False).encode("utf-8-sig"),
                 file_name=f"sales_export_{datetime.now().strftime('%Y%m%d')}.csv",
                 mime="text/csv"

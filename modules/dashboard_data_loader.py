@@ -9,7 +9,7 @@ def load_csv(path):
         file_path = os.path.abspath(path)
         return pd.read_csv(file_path)
     except Exception as e:
-        st.error(f"❌ CSV 파일 로드 중 오류 발생: {str(e)}")
+        st.error(f"CSV 파일 로드 중 오류 발생: {str(e)}")
         return None
 
 # ✅ 수출 데이터 병합 함수

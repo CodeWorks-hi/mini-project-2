@@ -6,7 +6,7 @@ from modules.dashboard_kpi import calculate_kpis, render_kpi_card
 def render_filter_options(df):
     st.markdown("""
         <div style='padding: 10px; background-color: #f0f7ec; border-radius: 10px; margin-bottom: 15px;'>
-            <h4>🎯 필터 및 주요 지표</h4>
+            <h4>필터 및 주요 지표</h4>
     """, unsafe_allow_html=True)
 
     col1, col2 = st.columns([1, 1])

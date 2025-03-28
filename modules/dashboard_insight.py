@@ -21,11 +21,11 @@ def generate_sales_insights(df: pd.DataFrame, month_cols: list) -> Tuple[str, st
         
         # 상위 판매 차종
         top_models = sales_by_model.nlargest(3)
-        top_model = " 🥇 ".join(top_models.index.tolist())
+        top_model = " ".join(top_models.index.tolist())
         
         # 최저 판매 차종
         bottom_models = sales_by_model.nsmallest(3)
-        bottom_model = " 🥈 ".join(bottom_models.index.tolist())
+        bottom_model = " ".join(bottom_models.index.tolist())
         
         # 평균 대비 판매 비율
         avg_sales = sales_by_model.mean()
@@ -48,11 +48,11 @@ def generate_inventory_insights(df: pd.DataFrame) -> Tuple[str, str, float]:
         
         # 상위 재고 차종
         top_stock = overstock.nlargest(3, '예상재고')['차종'].tolist()
-        top_stock_str = " 🏭 ".join(top_stock) if top_stock else "-"
+        top_stock_str = " ".join(top_stock) if top_stock else "-"
         
         # 부족 재고 차종
         low_stock = understock.nsmallest(3, '예상재고')['차종'].tolist()
-        low_stock_str = " ⚠️ ".join(low_stock) if low_stock else "-"
+        low_stock_str = " ".join(low_stock) if low_stock else "-"
         
         # 전체 재고량
         total_stock = df['예상재고'].sum()
@@ -72,7 +72,7 @@ def show_insight(sales_df: pd.DataFrame, inventory_df: pd.DataFrame, month_cols:
         inventory_df (pd.DataFrame): 재고 데이터
         month_cols (list): 월별 컬럼 리스트
     """
-    st.subheader(f"🔍 {datetime.now().month}월 주요 인사이트")
+    st.subheader(f"{datetime.now().month}월 주요 인사이트")
     
     # 판매 인사이트
     top_model, bottom_model, avg_sales = generate_sales_insights(sales_df, month_cols)
@@ -85,7 +85,7 @@ def show_insight(sales_df: pd.DataFrame, inventory_df: pd.DataFrame, month_cols:
     
     with col1:
         with st.container(border=True):
-            st.markdown("### 🚗 판매 현황")
+            st.markdown("### 판매 현황")
             if top_model != "-":
                 st.success(f"**BEST 3 차종**: {top_model}")
                 st.metric("월 평균 판매량", f"{avg_sales:,.0f}대")
@@ -94,7 +94,7 @@ def show_insight(sales_df: pd.DataFrame, inventory_df: pd.DataFrame, month_cols:
     
     with col2:
         with st.container(border=True):
-            st.markdown("### 📦 재고 현황")
+            st.markdown("### 재고 현황")
             if top_stock != "-":
                 st.warning(f"**과잉 재고 차종**: {top_stock}")
             if low_stock != "-":
@@ -102,7 +102,7 @@ def show_insight(sales_df: pd.DataFrame, inventory_df: pd.DataFrame, month_cols:
             st.metric("총 예상 재고량", f"{total_stock:,.0f}대")
 
     # 추가 분석 섹션
-    with st.expander("📈 심화 분석 보기"):
+    with st.expander("심화 분석 보기"):
         tab1, tab2 = st.tabs(["판매 분포", "재고 트렌드"])
         
         with tab1:

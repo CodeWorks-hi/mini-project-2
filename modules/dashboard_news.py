@@ -19,7 +19,7 @@ def fetch_naver_news(query: str, display: int = 5, sort: str = "date") -> list:
         client_id = st.secrets["naver"]["client_id"]
         client_secret = st.secrets["naver"]["client_secret"]
     except Exception:
-        st.error("❌ 네이버 API 키가 누락되었습니다. `.streamlit/secrets.toml` 파일을 확인해주세요.")
+        st.error("네이버 API 키가 누락되었습니다. `.streamlit/secrets.toml` 파일을 확인해주세요.")
         return []
 
     url = "https://openapi.naver.com/v1/search/news.json"
@@ -34,16 +34,16 @@ def fetch_naver_news(query: str, display: int = 5, sort: str = "date") -> list:
         if response.status_code == 200:
             return response.json().get("items", [])
         else:
-            st.error(f"🚫 뉴스 검색 실패 (status code: {response.status_code})")
+            st.error(f"뉴스 검색 실패 (status code: {response.status_code})")
             return []
     except requests.exceptions.RequestException as e:
-        st.error(f"🌐 API 요청 오류: {e}")
+        st.error(f"API 요청 오류: {e}")
         return []
 
 # 🔹 4. 뉴스 카드 시각화 함수
 def render_news_results(news_items: list):
     if not news_items:
-        st.warning("🔍 뉴스 검색 결과가 없습니다.")
+        st.warning("뉴스 검색 결과가 없습니다.")
         return
 
     for news in news_items:
@@ -64,9 +64,9 @@ def render_news_results(news_items: list):
             f"""
             <div style="background-color: #f8f8fa; padding: 1.2rem; border-radius: 10px; margin-bottom: 1rem; border: 1px solid #ddd;">
                 <div style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem;">
-                    🔗 <a href="{link}" target="_blank" style="text-decoration: none; color: #333;">{title}</a>
+                     <a href="{link}" target="_blank" style="text-decoration: none; color: #333;">{title}</a>
                 </div>
-                <div style="font-size: 0.85rem; color: gray; margin-bottom: 0.6rem;">🕒 {pub_date}</div>
+                <div style="font-size: 0.85rem; color: gray; margin-bottom: 0.6rem;"> {pub_date}</div>
                 <div style="font-size: 0.95rem; line-height: 1.6; color: #444;">{description}</div>
             </div>
             """,
