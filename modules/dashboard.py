@@ -47,7 +47,7 @@ def fetch_exim_exchange(date, api_key):
 def dashboard_ui():
     st.markdown("""
         <div style='padding: 15px; background-color: #f8f9fa; border-radius: 10px; margin-bottom: 20px;'>
-            <h1 style='margin: 0;'>📊 Hyundai & Kia Export Dashboard</h1>
+            <h1 style='margin: 0;'>Hyundai & Kia Export Dashboard</h1>
         </div>
     """, unsafe_allow_html=True)
 
