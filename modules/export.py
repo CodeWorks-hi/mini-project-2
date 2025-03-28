@@ -525,7 +525,7 @@ def export_ui():
         }
 
         df_flow = pd.DataFrame(flow_data)
-        tools.display_dataframe_to_user(name="수출 공장-국가 연결 데이터", dataframe=df_flow)
+        # tools.display_dataframe_to_user(name="수출 공장-국가 연결 데이터", dataframe=df_flow)
 
 
         # 프레임 데이터 생성
