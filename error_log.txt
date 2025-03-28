@@ -2935,3 +2935,10 @@ ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent 
     return total_prod, total_sales, total_stock, low_count, high_count
 IndentationError: unexpected indent
 
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1009, in _find_and_load_unlocked
+KeyError: 'modules'
+
