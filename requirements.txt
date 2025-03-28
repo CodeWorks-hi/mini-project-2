@@ -25,6 +25,7 @@ transformers
 torchvision
 tensorflow>=2.18
 keras>=3.0
+ace_tools_open
 
 
 
