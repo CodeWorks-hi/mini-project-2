@@ -142,5 +142,5 @@ def sales_render_kpi_card(total_sales: int, car_count: int, sales_growth: int, t
         st.markdown("#### 🌍 전년 대비 판매 증가율")
         st.metric(label="", value=sales_growth)
     with col4:
-        st.markdown("#### 🌍 최대 판매 차종")
+        st.markdown("#### 🌍 최다 판매 차종")
         st.metric(label="", value=top_car)
