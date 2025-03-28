@@ -200,10 +200,11 @@ def dashboard_ui():
     col1, col2 = st.columns([1, 1])
     with col1:
         st.markdown("""
-            <div style='padding: 10px; background-color: #e8f0fe; border-radius: 10px; margin-bottom: 15px;'>
+            <div style='background-color:#e3f2fd;padding:10px;border-radius:12px;margin-top:40px;'>
                 <h4>💱 국가별 실시간 환율 조회 </h4>
             </div>
         """, unsafe_allow_html=True)
+        st.write("")
         
         # API 키 로드
         try:
@@ -305,6 +306,8 @@ def dashboard_ui():
                 <div style='background-color:#e3f2fd;padding:10px;border-radius:12px;margin-top:40px;'>
                 <h4>현대차 수출 관련 뉴스</h4>
             """, unsafe_allow_html=True)
+
+            st.write("")
 
             news_data = fetch_naver_news("현대차 수출", display=4)
             if news_data:

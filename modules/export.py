@@ -89,25 +89,39 @@ def extract_year_column(df):
 
 # 필터링 UI 생성 함수
 def get_filter_values(df, key_prefix):
-    brand = st.selectbox(f"브랜드 선택", df["브랜드"].dropna().unique(), key=f"{key_prefix}_brand")
+    col1, col2, col3 = st.columns(3)
     
-    # 연도 추출 함수가 반환한 연도 리스트를 제대로 반영
-    year_list = extract_year_list(df)
-    year = st.selectbox(f"연도 선택", year_list[::-1], key=f"{key_prefix}_year")
+    with col1:
+        brand = st.selectbox(
+            "브랜드 선택",
+            options=df["브랜드"].dropna().unique(),
+            key=f"{key_prefix}_brand"
+        )
     
-    # 국가 선택 UI
-    country_list = df[df["브랜드"] == brand]["지역명"].dropna().unique()
-    country = st.selectbox(f"국가 선택", country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"], key=f"{key_prefix}_country")
+    with col2:
+        year_list = extract_year_list(df)
+        year = st.selectbox(
+            "연도 선택",
+            options=year_list[::-1],  # 역순으로 정렬
+            key=f"{key_prefix}_year"
+        )
+    
+    with col3:
+        country_list = df[df["브랜드"] == brand]["지역명"].dropna().unique()
+        country = st.selectbox(
+            "국가 선택",
+            options=country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"],
+            key=f"{key_prefix}_country"
+        )
     
     return brand, year, country
-
 
 # 수출 UI ======================== 메인화면 시작 함수 
 def export_ui():
     # 데이터 로드
     df = load_and_merge_export_data()
     if df is None:
-        st.error(" 수출 데이터를 불러오지 못했습니다.")
+        st.error("❌ 수출 데이터를 불러오지 못했습니다.")
         return
 
     month_cols = extract_month_columns(df)
@@ -126,13 +140,13 @@ def export_ui():
     # --- 탭 1: 수출 실적 대시보드 ---
     with tab1:
         # 등록 버튼 (토글)
-        btn_label = "등록 취소" if st.session_state.get("show_export_form", False) else " 수출 등록"
+        btn_label = "등록 취소" if st.session_state.get("show_export_form", False) else "수출 등록"
         st.button(btn_label, on_click=toggle_export_form)
 
         # 수출 등록 폼 표시
         if st.session_state.get("show_export_form", False):
             with st.form("add_export_form"):
-                st.subheader(" 신규 수출 데이터 등록")
+                st.subheader("신규 수출 데이터 등록")
 
                 col1, col2 = st.columns(2)
                 with col1:
@@ -148,7 +162,7 @@ def export_ui():
 
                 submitted = st.form_submit_button("등록하기")
                 if submitted:
-                    st.success("수출 데이터가 등록되었습니다!")
+                    st.success("✅ 수출 데이터가 등록되었습니다!")
 
                     new_col = f"{year}-{month}"
                     new_row = pd.DataFrame([{
@@ -188,25 +202,43 @@ def export_ui():
             # 월별 수출량 차트
             df_melted = filtered.melt(id_vars=["차량 구분"], value_vars=month_filter_cols, var_name="월", value_name="수출량")
             df_melted.dropna(subset=["수출량"], inplace=True)
+            df_melted["월_숫자"] = df_melted["월"].apply(lambda x: int(x.split("-")[1]))
 
             if not df_melted.empty:
-                fig = px.line(
+                # 라인차트
+                fig_line = px.line(
                     df_melted,
                     x="월",
                     y="수출량",
                     color="차량 구분",
                     markers=True,
-                    line_shape="spline",  # 곡선 형태
-                    title="차량 구분별 수출량 변화 추이"
+                    line_shape="spline",
+                    title="차량 구분별 수출량 변화 추이 (라인차트)"
                 )
-                fig.update_layout(
+                fig_line.update_layout(
                     xaxis_title="월",
                     yaxis_title="수출량",
-                    height=500,
+                    height=400,
                     template="plotly_white"
                 )
 
-                st.plotly_chart(fig, use_container_width=True)
+                # 📊 바차트
+                fig_bar = px.bar(
+                    df_melted,
+                    x="월",
+                    y="수출량",
+                    color="차량 구분",
+                    barmode="group",
+                    title="차량 구분별 수출량 변화 추이 (막대차트)"
+                )
+                fig_bar.update_layout(
+                    xaxis_title="월",
+                    yaxis_title="수출량",
+                    height=400,
+                    template="plotly_white"
+                )
+                st.plotly_chart(fig_line, use_container_width=True)
+                st.plotly_chart(fig_bar, use_container_width=True)
             # 추가 정보 표시
             st.info(f"{year}년 {brand} {country} 수출 실적 ")
             col1, col2, col3= st.columns(3)
@@ -217,7 +249,7 @@ def export_ui():
             st.markdown("---")
         
             # 원본 데이터 보기
-            with st.expander("원본 데이터 보기"):
+            with st.expander(" 원본 데이터 보기"):
                 st.dataframe(filtered, use_container_width=True)
 
             # CSV 다운로드
@@ -227,33 +259,33 @@ def export_ui():
             st.warning("선택한 조건에 해당하는 데이터가 없습니다.")
 
 
-    # --- 국가별 비교 ---
+    # --- 탭 2: 국가별 비교 ---
     with tab2:
-        # 필터링 UI 호출
-        brand, year, country = get_filter_values(df, "export_2")
+        st.subheader("국가별 비교")
+        brand, year, _ = get_filter_values(df, "export_2")
 
-        # 데이터 필터링 확인
+        if not brand:
+            st.warning("브랜드를 선택해야 합니다.")
+            return
+        
         grouped = df[(df["브랜드"] == brand) & (df["연도"] == year)]
         
-        # 필터링된 데이터가 있는지 확인
         if grouped.empty:
             st.warning("선택한 조건에 해당하는 데이터가 없습니다.")
         else:
-            # 그룹화 및 총수출 계산
-            compare_df = grouped.groupby("지역명")[month_cols].sum(numeric_only=True)
-            compare_df["총수출"] = compare_df.sum(axis=1)
-            compare_df = compare_df.reset_index()
+            compare_df = grouped.groupby("지역명")[month_cols].sum(numeric_only=True).reset_index()
+            melted_df = compare_df.melt(id_vars=["지역명"], var_name="월", value_name="수출량")
 
-            # 차트 그리기
-            if not compare_df.empty:
-                chart = alt.Chart(compare_df).mark_bar().encode(
-                    x=alt.X("총수출:Q", title="총 수출량"),
-                    y=alt.Y("지역명:N", sort="-x", title="지역명"),
-                    color="지역명:N"
-                ).properties(width=800, height=500, title="국가별 총 수출량 비교")
-                st.altair_chart(chart, use_container_width=True)
-            else:
-                st.warning("수출량 데이터가 없습니다.")
+            fig = px.bar(
+                melted_df,
+                x="지역명",
+                y="수출량",
+                color="지역명",
+                animation_frame="월",
+                title=f"{year}년 {brand} 국가별 월별 수출량 비교"
+            )
+            fig.update_layout(height=600, width=800)
+            st.plotly_chart(fig, use_container_width=True)
 
 
                 
@@ -271,7 +303,7 @@ def export_ui():
         line_chart = alt.Chart(yearly_sum).mark_line(point=True).encode(
             x="연도:O",
             y="총수출:Q"
-        ).properties(title="📈 연도별 총 수출량 변화 추이", width=700, height=400)
+        ).properties(title="연도별 총 수출량 변화 추이", width=700, height=400)
         st.altair_chart(line_chart, use_container_width=True)
 
 
@@ -279,7 +311,7 @@ def export_ui():
     with tab4:
         st.subheader("🎯 목표 수출 달성률")
         brand, year, country = get_filter_values(df, "export_4")
-        goal = st.number_input("🎯 수출 목표 (대)", min_value=0, step=1000000, value=5000000)
+        goal = st.number_input(" 수출 목표 (대)", min_value=0, step=1000000, value=5000000)
 
         # 데이터 필터링
         filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["지역명"] == country)]
@@ -398,7 +430,7 @@ def export_ui():
         tools.display_dataframe_to_user(name="수출 공장-국가 연결 데이터", dataframe=df_flow)
 
 
-        # 🎞️ 프레임 데이터 생성
+        # 프레임 데이터 생성
         frames = []
         for i, row in df_flow.iterrows():
             frames.append({
@@ -421,7 +453,7 @@ def export_ui():
         df_frames = pd.DataFrame(frames)
         df_frames["경로"] = df_frames["공장명"] + " → " + df_frames["수출국"]
 
-        # 🌐 애니메이션 지도 시각화
+        # 애니메이션 지도 시각화
         fig = px.line_geo(
             df_frames,
             lat="위도",
@@ -436,7 +468,7 @@ def export_ui():
         fig.update_geos(projection_type="natural earth")
         fig.update_layout(height=600)
 
-        # 📍 Streamlit에서 출력
+        #  Streamlit에서 출력
         st.plotly_chart(fig, use_container_width=True)
         
     # --- 성장률 분석 ---
