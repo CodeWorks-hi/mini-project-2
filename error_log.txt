@@ -3167,3 +3167,48 @@ ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent 
     ^^
 IndentationError: expected an indented block after function definition on line 47
 
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard.py", line 69, in dashboard_ui
+    year, company = render_filter_options(df)
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard_filter.py", line 31, in render_filter_options
+    calculate_kpis_by_car()
+TypeError: calculate_kpis_by_car() missing 2 required positional arguments: 'df' and 'month_cols'
+
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard.py", line 69, in dashboard_ui
+    year, company = render_filter_options(df)
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard_filter.py", line 31, in render_filter_options
+    calculate_kpis_by_car()
+TypeError: calculate_kpis_by_car() missing 2 required positional arguments: 'df' and 'month_cols'
+
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard.py", line 69, in dashboard_ui
+    year, company = render_filter_options(df)
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard_filter.py", line 31, in render_filter_options
+    calculate_kpis_by_car()
+TypeError: calculate_kpis_by_car() missing 2 required positional arguments: 'df' and 'month_cols'
+
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard.py", line 69, in dashboard_ui
+    year, company = render_filter_options(df)
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard_filter.py", line 31, in render_filter_options
+    calculate_kpis_by_car()
+TypeError: calculate_kpis_by_car() missing 2 required positional arguments: 'df' and 'month_cols'
+
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard.py", line 69, in dashboard_ui
+    year, company = render_filter_options(df)
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard_filter.py", line 31, in render_filter_options
+    calculate_kpis_by_car()
+TypeError: calculate_kpis_by_car() missing 2 required positional arguments: 'df' and 'month_cols'
+
