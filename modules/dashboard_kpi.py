@@ -27,7 +27,7 @@ def calculate_kpis_by_region(df: pd.DataFrame, month_cols: list, brand: str = "�
 def calculate_kpis_by_car(df: pd.DataFrame, month_cols: list, brand: str = "전체"):
     df_filtered = df.copy()
 
-    df_
+    
 
 
 
