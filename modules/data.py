@@ -38,3 +38,10 @@ def data_preview_ui():
         st.markdown(f"### ✅ `{os.path.basename(selected_path)}` 미리보기")
         st.dataframe(df, use_container_width=True, hide_index=True)
         st.caption(f"총 {df.shape[0]:,} 행 × {df.shape[1]} 열")
+
+        # 하단 텍스트 정보
+    st.markdown("---")
+    st.markdown("""
+    **데이터 출처**: 현대자동차, 기아자동차 공식 홈페이지  
+    **추가 데이터**: 2016년부터 2022년까지의 글로벌 판매 및 수출 현황 기반 데이터
+    """)
