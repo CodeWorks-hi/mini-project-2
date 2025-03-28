@@ -17,19 +17,19 @@ def clean_input(text: str) -> str:
 def generate_text_via_api(prompt: str, model_name: str = TEXT_MODEL_ID) -> str:
     token = get_huggingface_token("gemma")
     if not token:
-        st.error("❌ Hugging Face API 토큰이 없습니다.")
+        st.error("Hugging Face API 토큰이 없습니다.")
         return ""
 
     system_prompt = """
     [시스템 지시사항]
     ### 1. 분석 요구사항
-    **🖼️ 이미지 분석**
+    **이미지 분석**
     - 차량 모델 특성 식별:
     - 연식: ±1년 오차 허용 (예: 2024-2026)
     - 디자인 요소: 전면 그릴/헤드라이트/휠 디자인 상세 분석
     - 기술 사양: 배터리 용량 (±5kWh), 주행거리 (NEDC ±30km)
 
-    **📝 텍스트 분석**
+    **텍스트 분석**
     - 현대차그룹 2025 목표: 739만 대 중 전기차 67만 대
     - 글로벌 전기차 시장: 2025년 1,160만 대 (전년比 +30%)
     - 리스크: BYD 가격경쟁, Euro7 규제, 충전 표준화 지연
@@ -80,7 +80,7 @@ def generate_text_via_api(prompt: str, model_name: str = TEXT_MODEL_ID) -> str:
 
 # Streamlit UI
 def recommendations_ui():
-    st.title("🤖 AI 기반 시장 예측 및 분석")
+    st.title("AI 기반 시장 예측 및 분석")
     st.markdown("""
                 
     - 사용자 질문에 대한 심층 예측 및 분석 제공
@@ -90,18 +90,18 @@ def recommendations_ui():
 
 
     with st.form("analyze_form"):
-        user_input = st.text_area("📝 예측 및 분석 입력", placeholder="예: 2025년 미국 수출 예측해줘 ")
-        submitted = st.form_submit_button("🚀 예측 및 분석 실행")
+        user_input = st.text_area("예측 및 분석 입력", placeholder="예: 2025년 미국 수출 예측해줘 ")
+        submitted = st.form_submit_button("예측 및 분석 실행")
 
-    st.warning("⚠️ 예측 결과는 확정된 분석이 아니므로 참고용으로만 활용해 주시기 바랍니다.")    
+    st.warning("예측 결과는 확정된 분석이 아니므로 참고용으로만 활용해 주시기 바랍니다.")    
 
     if submitted:
         st.markdown("---")
         if user_input:
-            with st.spinner("📊 시장 예측 및 분석 중..."):
+            with st.spinner("시장 예측 및 분석 중..."):
                 cleaned = clean_input(user_input)
                 result_txt = generate_text_via_api(cleaned)
-                st.markdown(f"### 📊 종합 예측 및 분석 결과\n{result_txt}")
+                st.markdown(f"### 종합 예측 및 분석 결과\n{result_txt}")
                 
         else:
             st.warning("입력 내용을 확인해주세요.")
