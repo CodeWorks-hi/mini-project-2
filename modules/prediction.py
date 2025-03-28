@@ -12,6 +12,7 @@ import joblib
 from sklearn.metrics import r2_score
 import matplotlib.dates as mdates
 import tensorflow as tf
+import io
 
 
 # 한글 폰트 조정
@@ -32,8 +33,6 @@ elif platform.system() == "Linux":  # Linux (Ubuntu, Docker 등)
 
 
 def prediction_ui():
-
-    image_path = None
 
     st.title("AI 판매 예측 시스템")
 
@@ -140,10 +139,34 @@ def prediction_ui():
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             fig1.savefig(save_path, dpi=300)
 
-            st.session_state["last_forecast_image"] = save_path
-
             st.success(f"그래프가 저장되었습니다: `{save_path}`")
 
+        def add_download_button(forecast_df, region_name, filename="lstm_forecast.csv"):
+            csv = forecast_df.to_csv(index=False).encode('utf-8-sig')
+            st.download_button(
+                label="📥 예측 결과 CSV 다운로드",
+                data=csv,
+                file_name=f"{region_name}_{filename}",
+                mime='text/csv'
+            )
+        
+        def display_lstm_forecast_table(forecast_df, region_name):
+            forecast_df = forecast_df.copy()
+            forecast_df['연도'] = forecast_df['연도'].astype(int)
+            forecast_df['월'] = forecast_df['월'].astype(int)
+            forecast_df['예측 수출량'] = forecast_df['예측 수출량'].round()
+
+            # 증감률(%) 계산 및 포맷 처리
+            pct_change = forecast_df['예측 수출량'].pct_change() * 100
+            pct_change = pct_change.round(2)
+            forecast_df['전월 대비 증감률(%)'] = pct_change.apply(lambda x: f"{x:.2f}" if pd.notnull(x) else '-')
+            
+            st.subheader("📊 예측 결과 표 (LSTM 기반)")
+            st.dataframe(forecast_df, use_container_width=True, hide_index=True)
+            
+            # 다운로드 버튼
+            filename = "LSTM_수출예측.csv"
+            add_download_button(forecast_df, region_name, filename)
 
         # 모델 및 스케일러 경로 함수
         def get_model_path(region_name):
@@ -208,7 +231,8 @@ def prediction_ui():
                                 joblib.dump(scaler, get_scaler_path(region_name))
 
                     lstm_forecast = forecast_lstm(lstm_model, region_data, forecast_months, scaler)
-                    plot_lstm_forecast(region_data, lstm_forecast, region_name, forecast_months)
+                    # plot_lstm_forecast(region_data, lstm_forecast, region_name, forecast_months)
+                    display_lstm_forecast_table(lstm_forecast, region_name)
     with tab2:
         # 2. 차종별 판매량 예측
         def prepare_lstm_data(series, time_steps=12):
@@ -309,10 +333,34 @@ def prediction_ui():
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             fig2.savefig(save_path, dpi=300)
 
-            st.session_state["last_forecast_image"] = save_path
-
             st.success(f"📊 그래프가 저장되었습니다: `{save_path}`")
 
+        def add_download_button(forecast_df, car_name, filename="lstm_forecast.csv"):
+            csv = forecast_df.to_csv(index=False).encode('utf-8-sig')
+            st.download_button(
+                label="📥 예측 결과 CSV 다운로드",
+                data=csv,
+                file_name=f"{car_name}_{filename}",
+                mime='text/csv'
+            )
+        
+        def display_lstm_forecast_table(forecast_df, car_name):
+            forecast_df = forecast_df.copy()
+            forecast_df['연도'] = forecast_df['연도'].astype(int)
+            forecast_df['월'] = forecast_df['월'].astype(int)
+            forecast_df['예측 판매량'] = forecast_df['예측 판매량'].round()
+
+            # 증감률(%) 계산 및 포맷 처리
+            pct_change = forecast_df['예측 판매량'].pct_change() * 100
+            pct_change = pct_change.round(2)
+            forecast_df['전월 대비 증감률(%)'] = pct_change.apply(lambda x: f"{x:.2f}" if pd.notnull(x) else '-')
+            
+            st.subheader("📊 예측 결과 표 (LSTM 기반)")
+            st.dataframe(forecast_df, use_container_width=True, hide_index=True)
+            
+            # 다운로드 버튼
+            filename = "LSTM_판매예측.csv"
+            add_download_button(forecast_df, car_name, filename)
 
         # 5. 실행 예시
         file_path = "data/processed/hyundai-by-car.csv"
@@ -382,7 +430,8 @@ def prediction_ui():
                                     joblib.dump(scaler, get_scaler_path(car_name))
 
                         lstm_forecast = forecast_lstm(lstm_model, car_data, forecast_months, scaler)
-                        plot_lstm_forecast(car_data, lstm_forecast, car_name, forecast_months)
+                        # plot_lstm_forecast(car_data, lstm_forecast, car_name, forecast_months)
+                        display_lstm_forecast_table(lstm_forecast, car_name)
     with tab3:
         # 공장별 판매량 예측
         # 1. 데이터 준비 함수
@@ -484,9 +533,34 @@ def prediction_ui():
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             fig3.savefig(save_path, dpi=300)
 
-            st.session_state["last_forecast_image"] = save_path
-
             st.success(f"📊 그래프가 저장되었습니다: `{save_path}`")
+
+        def add_download_button(forecast_df, plant_name, filename="lstm_forecast.csv"):
+            csv = forecast_df.to_csv(index=False).encode('utf-8-sig')
+            st.download_button(
+                label="📥 예측 결과 CSV 다운로드",
+                data=csv,
+                file_name=f"{plant_name}_{filename}",
+                mime='text/csv'
+            )
+        
+        def display_lstm_forecast_table(forecast_df, plant_name):
+            forecast_df = forecast_df.copy()
+            forecast_df['연도'] = forecast_df['연도'].astype(int)
+            forecast_df['월'] = forecast_df['월'].astype(int)
+            forecast_df['예측 판매량'] = forecast_df['예측 판매량'].round()
+
+            # 증감률(%) 계산 및 포맷 처리
+            pct_change = forecast_df['예측 판매량'].pct_change() * 100
+            pct_change = pct_change.round(2)
+            forecast_df['전월 대비 증감률(%)'] = pct_change.apply(lambda x: f"{x:.2f}" if pd.notnull(x) else '-')
+
+            st.subheader("📊 예측 결과 표 (LSTM 기반)")
+            st.dataframe(forecast_df, use_container_width=True, hide_index=True)
+            
+            # 다운로드 버튼
+            filename = "LSTM_판매예측.csv"
+            add_download_button(forecast_df, plant_name, filename)
 
         # 5. 실행 예시
         file_path = "data/processed/hyundai-by-plant.csv"
@@ -559,4 +633,5 @@ def prediction_ui():
                                     joblib.dump(scaler, get_scaler_path(plant_name))
 
                         lstm_forecast = forecast_lstm(lstm_model, plant_data, forecast_months, scaler)
-                        plot_lstm_forecast(plant_data, lstm_forecast, plant_name, forecast_months)
+                        # plot_lstm_forecast(plant_data, lstm_forecast, plant_name, forecast_months)
+                        display_lstm_forecast_table(lstm_forecast, plant_name)
