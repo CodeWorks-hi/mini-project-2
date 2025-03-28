@@ -1,0 +1,7 @@
+ERROR:root:Module modules.prediction에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/prediction.py", line 5, in <module>
+    from tensorflow.keras.models import Sequential, load_model
+ModuleNotFoundError: No module named 'tensorflow'
+
