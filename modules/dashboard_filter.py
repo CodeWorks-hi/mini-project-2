@@ -24,20 +24,16 @@ def render_filter_options(df_region, df_car, df_plant):
     new_df_region["총수출"] = new_df_region[month_cols].sum(axis=1, numeric_only=True)
     if company != "전체":
         new_df_region = new_df_region[new_df_region["브랜드"] == company]
-
     new_df_region["총수출"] = new_df_region[month_cols].sum(axis=1, numeric_only=True)
     kpi_total_export, kpi_export_country = calculate_kpis_by_region(new_df_region, month_cols, brand=company)
 
-
     new_df_car = df_car.copy()
-    
     kpi_car_count = calculate_kpis_by_car(new_df_car, month_cols, brand=company)
 
     new_df_plant = df_plant.copy()
+    kpi_plant_count = calculate_kpis_by_plant(new_df_plant, month_cols, brand=company)
 
-    calculate_kpis_by_plant(new_df_plant, month_cols, brand=company)
-
-    render_kpi_card(kpi_total_export, kpi_export_country, kpi_car_count)
+    render_kpi_card(kpi_total_export, kpi_export_country, kpi_car_count, kpi_plant_count)
     st.markdown("---")
 
     st.markdown("""</div>""", unsafe_allow_html=True)

@@ -24,6 +24,7 @@ def calculate_kpis_by_region(df: pd.DataFrame, month_cols: list, brand: str = "�
 
     return total_export, country_count
 
+
 def calculate_kpis_by_car(df: pd.DataFrame, month_cols: list, brand: str = "전체"):
     df_filtered = df.copy()
 
@@ -47,11 +48,20 @@ def calculate_kpis_by_plant(df: pd.DataFrame, month_cols: list, brand: str = "�
     if brand != "전체":
         df_filtered = df_filtered[df_filtered["브랜드"] == brand]
 
-    # 총 생산 공장 수
+    if not month_cols or not all(col in df.columns for col in month_cols):
+        st.warning("유효한 월별 컬럼이 존재하지 않습니다.")
+        return
+
+    df_filtered["합계"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
+    df_filtered = df_filtered[df_filtered["합계"] > 0]
+
+    plant_count = df_filtered["공장명(국가)"].nunique()
+
+    return plant_count
 
 
-def render_kpi_card(total_export: int, country_count: int, car_count: int):
-    col1, col2, col3 = st.columns(3)
+def render_kpi_card(total_export: int, country_count: int, car_count: int, plant_count: int):
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.markdown("#### 🚗 총 수출량")
         st.metric(label="", value=f"{total_export:,} 대")
@@ -61,3 +71,6 @@ def render_kpi_card(total_export: int, country_count: int, car_count: int):
     with col3:
         st.markdown("#### 총 판매 차종 수")
         st.metric(label="", value=car_count)
+    with col4:
+        st.markdown("#### 총 생산 공장 수")
+        st.metric(label="", value=plant_count)
