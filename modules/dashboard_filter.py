@@ -28,8 +28,6 @@ def render_filter_options(df_region):
     new_df_region["총수출"] = new_df_region[month_cols].sum(axis=1, numeric_only=True)
     kpi_total_export, kpi_export_country = calculate_kpis_by_region(new_df_region, month_cols, brand=company)
 
-    calculate_kpis_by_car()
-
     render_kpi_card(kpi_total_export, kpi_export_country)
     st.markdown("---")
 
