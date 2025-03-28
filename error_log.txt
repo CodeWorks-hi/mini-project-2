@@ -3151,3 +3151,19 @@ ERROR:root:Module modules.data에서 오류 발생: Traceback (most recent call 
     computed_value = self._info.func(*func_args, **func_kwargs)
 TypeError: load_csv() got an unexpected keyword argument 'hide_index'
 
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 59, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard.py", line 48
+    st.markdown("""
+    ^^
+IndentationError: expected an indented block after function definition on line 47
+
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 59, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard.py", line 48
+    st.markdown("""
+    ^^
+IndentationError: expected an indented block after function definition on line 47
+

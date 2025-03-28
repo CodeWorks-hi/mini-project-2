@@ -46,10 +46,12 @@ def fetch_exim_exchange(date, api_key):
 
 def dashboard_ui():
     st.markdown("""
-        <div style='padding: 15px; background-color: #f8f9fa; border-radius: 10px; margin-bottom: 20px;'>
-            <h1 style='margin: 0;'>Hyundai & Kia Export Dashboard</h1>
+        <div style='padding: 15px; background-color: #f8f9fa; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px;'>
+            <img src='https://m.ddaily.co.kr/2022/07/28/2022072820411931122_l.png' alt='Hyundai Kia Logo' style='height: 50px;' />
+            <h1 style='margin: 0; font-size: 1.8em;'>Hyundai & Kia Export Dashboard</h1>
         </div>
     """, unsafe_allow_html=True)
+
 
     #데이터 로드 및 병합
     df = load_and_merge_export_data()
