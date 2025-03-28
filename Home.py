@@ -26,8 +26,9 @@ logging.basicConfig(filename='error_log.txt', level=logging.ERROR)
 
 # ✅ 탭 UI 구성
 tabs = st.tabs([
-    " 대시보드", " 생산 관리", " 재고 관리",
-    " 판매 관리",   "예측 시스템","AI 예측 및 분석"," 분석 리포트", " 인트로","원본데이터 확인"
+" 요약 대시보드", " 생산 현황 관리", " 재고 모니터링",
+" 차량 판매 내역", " 판매 예측 시스템", " AI 기반 분석", " ERP 분석 리포트", " 시스템 소개", " 원본 데이터 뷰어"
+
 ])
 
 tab_modules = [
