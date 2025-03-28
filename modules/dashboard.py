@@ -90,7 +90,7 @@ def dashboard_ui():
     # 데이터 시각화 전처리
     start_col = f"{year}-01"
     end_col = f"{year}-12"
-    df_filtered = pd.concat([df_filtered.iloc[:, 0], df_filtered.loc[:, start_col:end_col]], axis = 1)
+    df_filtered = pd.concat([new_df_region.iloc[:, 0], new_df_region.loc[:, start_col:end_col]], axis = 1)
     merged_df = df_filtered[df_filtered.loc[:, start_col:end_col].fillna(0).sum(axis=1) > 0]
     new_df = merged_df.copy()
 

@@ -24,17 +24,6 @@ def calculate_kpis_by_region(df: pd.DataFrame, month_cols: list, brand: str = "�
 
     return total_export, country_count
 
-
-def calculate_kpis_by_car(df: pd.DataFrame, month_cols: list, brand: str = "전체"):
-    df_filtered = df.copy()
-
-    if brand != "전체":
-        df_filtered = df_filtered[df_filtered["브랜드"] == brand]
-
-    # 총 생산 차종 수
-    df_filtered["총수출"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
-    total_export = int(df_filtered[month_cols].sum().sum())
-
 def calculate_kpis_by_car(df: pd.DataFrame, month_cols: list, brand: str = "전체"):
     df_filtered = df.copy()
 
