@@ -8,7 +8,7 @@
 import streamlit as st
 import pandas as pd
 
-def calculate_kpis(df: pd.DataFrame, month_cols: list, brand: str = "전체", country: str = "전체", vehicle_type: str = "전체"):
+def calculate_kpis(df: pd.DataFrame, month_cols: list, brand: str = "전체", country: str = "전체"):
     # 연도 필터링을 마친 상태의 df를 받아서 KPI 계산
     df_filtered = df.copy()
 
@@ -16,8 +16,6 @@ def calculate_kpis(df: pd.DataFrame, month_cols: list, brand: str = "전체", co
         df_filtered = df_filtered[df_filtered["브랜드"] == brand]
     if country != "전체":
         df_filtered = df_filtered[df_filtered["지역명"] == country]
-    if vehicle_type != "전체":
-        df_filtered = df_filtered[df_filtered["차량 구분"] == vehicle_type]
 
     df_filtered["총수출"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
     total_export = int(df_filtered[month_cols].sum().sum())

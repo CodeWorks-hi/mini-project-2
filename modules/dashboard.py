@@ -72,7 +72,7 @@ def dashboard_ui():
     # KPI + 필터 카드
     col1, col2 = st.columns([2,4])
     with col1:
-        year, country_kor, vehicle_type = render_filter_options(df)
+        year, country_kor = render_filter_options(df)
     with col2:
         st.markdown("---")
         month_cols = [col for col in df.columns if str(year) in col and "-" in col]
@@ -81,11 +81,9 @@ def dashboard_ui():
         df_filtered["총수출"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
         if country_kor != "전체":
             df_filtered = df_filtered[df_filtered["지역명"] == country_kor]
-        if vehicle_type != "전체":
-            df_filtered = df_filtered[df_filtered["차량 구분"] == vehicle_type]
 
         df_filtered["총수출"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
-        kpi1, kpi2, kpi3 = calculate_kpis(df_filtered, month_cols, brand="전체", country=country_kor, vehicle_type=vehicle_type)
+        kpi1, kpi2, kpi3 = calculate_kpis(df_filtered, month_cols, brand="전체", country=country_kor)
         render_kpi_card(kpi1, kpi2, kpi3)
         st.markdown("---")
 

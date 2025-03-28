@@ -21,6 +21,7 @@ def render_hyundai_chart(year: int):
 
     df = pd.read_csv("data/processed/hyundai-by-plant.csv")
     df["브랜드"] = "현대"
+    df = df.loc[df["공장명(국가)"] != "CKD (모듈형 조립 방식)", :]
 
     month_cols = [col for col in df.columns if str(year) in col and "-" in col]
     df[month_cols] = df[month_cols].apply(pd.to_numeric, errors="coerce")
@@ -108,7 +109,6 @@ def render_export_map(merged_df: pd.DataFrame, vehicle_type: str, color_map: dic
 
 
 def render_top_bottom_summary(merged_df: pd.DataFrame):
-    import streamlit as st
 
     st.markdown("""
     <div style='background-color:#ede7f6;padding:15px;border-radius:12px;margin-bottom:20px;'>
@@ -118,8 +118,8 @@ def render_top_bottom_summary(merged_df: pd.DataFrame):
     top_table = merged_df.sort_values("총수출", ascending=False).head(3)
     bottom_table = merged_df.sort_values("총수출").head(3)
 
-    top_display = top_table[["지역명", "차량 구분", "총수출"]].reset_index(drop=True)
-    bottom_display = bottom_table[["지역명", "차량 구분", "총수출"]].reset_index(drop=True)
+    top_display = top_table[["지역명", "총수출"]].reset_index(drop=True)
+    bottom_display = bottom_table[["지역명", "총수출"]].reset_index(drop=True)
 
     st.dataframe(top_display.style.format({'총수출': '{:,}'}), use_container_width=True, hide_index=True)
     st.markdown("<div style='margin-top:10px;'></div>", unsafe_allow_html=True)
