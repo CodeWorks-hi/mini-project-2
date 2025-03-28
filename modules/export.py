@@ -140,13 +140,13 @@ def export_ui():
     # --- 탭 1: 수출 실적 대시보드 ---
     with tab1:
         # 등록 버튼 (토글)
-        btn_label = "등록 취소" if st.session_state.get("show_export_form", False) else "📥 수출 등록"
+        btn_label = "등록 취소" if st.session_state.get("show_export_form", False) else "수출 등록"
         st.button(btn_label, on_click=toggle_export_form)
 
         # 수출 등록 폼 표시
         if st.session_state.get("show_export_form", False):
             with st.form("add_export_form"):
-                st.subheader("📬 신규 수출 데이터 등록")
+                st.subheader("신규 수출 데이터 등록")
 
                 col1, col2 = st.columns(2)
                 with col1:
@@ -205,7 +205,7 @@ def export_ui():
             df_melted["월_숫자"] = df_melted["월"].apply(lambda x: int(x.split("-")[1]))
 
             if not df_melted.empty:
-                # 📈 라인차트
+                # 라인차트
                 fig_line = px.line(
                     df_melted,
                     x="월",
@@ -213,7 +213,7 @@ def export_ui():
                     color="차량 구분",
                     markers=True,
                     line_shape="spline",
-                    title="📈 차량 구분별 수출량 변화 추이 (라인차트)"
+                    title="차량 구분별 수출량 변화 추이 (라인차트)"
                 )
                 fig_line.update_layout(
                     xaxis_title="월",
@@ -229,7 +229,7 @@ def export_ui():
                     y="수출량",
                     color="차량 구분",
                     barmode="group",
-                    title="📊 차량 구분별 수출량 변화 추이 (막대차트)"
+                    title="차량 구분별 수출량 변화 추이 (막대차트)"
                 )
                 fig_bar.update_layout(
                     xaxis_title="월",
@@ -249,19 +249,19 @@ def export_ui():
             st.markdown("---")
         
             # 원본 데이터 보기
-            with st.expander("📋 원본 데이터 보기"):
+            with st.expander(" 원본 데이터 보기"):
                 st.dataframe(filtered, use_container_width=True)
 
             # CSV 다운로드
             csv = filtered.to_csv(index=False).encode("utf-8-sig")
-            st.download_button("📥 현재 데이터 다운로드", data=csv, file_name=f"{brand}_{country}_{year}_수출실적.csv", mime="text/csv")
+            st.download_button("현재 데이터 다운로드", data=csv, file_name=f"{brand}_{country}_{year}_수출실적.csv", mime="text/csv")
         else:
             st.warning("선택한 조건에 해당하는 데이터가 없습니다.")
 
 
     # --- 탭 2: 국가별 비교 ---
     with tab2:
-        st.subheader("🌍 국가별 비교")
+        st.subheader("국가별 비교")
         brand, year, _ = get_filter_values(df, "export_2")
 
         if not brand:
@@ -303,7 +303,7 @@ def export_ui():
         line_chart = alt.Chart(yearly_sum).mark_line(point=True).encode(
             x="연도:O",
             y="총수출:Q"
-        ).properties(title="📈 연도별 총 수출량 변화 추이", width=700, height=400)
+        ).properties(title="연도별 총 수출량 변화 추이", width=700, height=400)
         st.altair_chart(line_chart, use_container_width=True)
 
 
@@ -311,7 +311,7 @@ def export_ui():
     with tab4:
         st.subheader("🎯 목표 수출 달성률")
         brand, year, country = get_filter_values(df, "export_4")
-        goal = st.number_input("🎯 수출 목표 (대)", min_value=0, step=1000000, value=5000000)
+        goal = st.number_input(" 수출 목표 (대)", min_value=0, step=1000000, value=5000000)
 
         # 데이터 필터링
         filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["지역명"] == country)]
@@ -430,7 +430,7 @@ def export_ui():
         tools.display_dataframe_to_user(name="수출 공장-국가 연결 데이터", dataframe=df_flow)
 
 
-        # 🎞️ 프레임 데이터 생성
+        # 프레임 데이터 생성
         frames = []
         for i, row in df_flow.iterrows():
             frames.append({
@@ -453,7 +453,7 @@ def export_ui():
         df_frames = pd.DataFrame(frames)
         df_frames["경로"] = df_frames["공장명"] + " → " + df_frames["수출국"]
 
-        # 🌐 애니메이션 지도 시각화
+        # 애니메이션 지도 시각화
         fig = px.line_geo(
             df_frames,
             lat="위도",
@@ -468,7 +468,7 @@ def export_ui():
         fig.update_geos(projection_type="natural earth")
         fig.update_layout(height=600)
 
-        # 📍 Streamlit에서 출력
+        #  Streamlit에서 출력
         st.plotly_chart(fig, use_container_width=True)
         
     # --- 성장률 분석 ---
