@@ -137,3 +137,60 @@ streamlit.errors.StreamlitDuplicateElementId: There are multiple `selectbox` ele
 
 To fix this error, please pass a unique `key` argument to the `selectbox` element.
 
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 67, in inventory_ui
+    year_sel = st.selectbox("연도 선택", available_years, index=available_years.index(default_year), key="inventory_year")
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/metrics_util.py", line 410, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/selectbox.py", line 251, in selectbox
+    return self._selectbox(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/selectbox.py", line 297, in _selectbox
+    element_id = compute_and_register_element_id(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 241, in compute_and_register_element_id
+    _register_element_id(ctx, element_type, element_id)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 147, in _register_element_id
+    raise StreamlitDuplicateElementId(element_type)
+streamlit.errors.StreamlitDuplicateElementId: There are multiple `selectbox` elements with the same auto-generated ID. When this element is created, it is assigned an internal ID based on the element type and provided parameters. Multiple elements with the same type and parameters will cause this error.
+
+To fix this error, please pass a unique `key` argument to the `selectbox` element.
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 67, in inventory_ui
+    year_sel = st.selectbox("연도 선택", available_years, index=available_years.index(default_year), key="inventory_year")
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/metrics_util.py", line 410, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/selectbox.py", line 251, in selectbox
+    return self._selectbox(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/selectbox.py", line 297, in _selectbox
+    element_id = compute_and_register_element_id(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 241, in compute_and_register_element_id
+    _register_element_id(ctx, element_type, element_id)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 147, in _register_element_id
+    raise StreamlitDuplicateElementId(element_type)
+streamlit.errors.StreamlitDuplicateElementId: There are multiple `selectbox` elements with the same auto-generated ID. When this element is created, it is assigned an internal ID based on the element type and provided parameters. Multiple elements with the same type and parameters will cause this error.
+
+To fix this error, please pass a unique `key` argument to the `selectbox` element.
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 67, in inventory_ui
+    year_sel = st.selectbox("연도 선택", available_years, index=available_years.index(default_year), key="inventory_year")
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/metrics_util.py", line 410, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/selectbox.py", line 251, in selectbox
+    return self._selectbox(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/selectbox.py", line 297, in _selectbox
+    element_id = compute_and_register_element_id(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 241, in compute_and_register_element_id
+    _register_element_id(ctx, element_type, element_id)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 147, in _register_element_id
+    raise StreamlitDuplicateElementId(element_type)
+streamlit.errors.StreamlitDuplicateElementId: There are multiple `selectbox` elements with the same auto-generated ID. When this element is created, it is assigned an internal ID based on the element type and provided parameters. Multiple elements with the same type and parameters will cause this error.
+
+To fix this error, please pass a unique `key` argument to the `selectbox` element.
+

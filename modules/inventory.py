@@ -60,11 +60,12 @@ def inventory_ui():
     st.subheader("🔍 필터 선택")
     col1, col2 = st.columns(2)
     with col1:
-        brand_sel = st.selectbox("브랜드 선택", ["전체"] + inventory_df["브랜드"].unique().tolist())
+        brand_sel = st.selectbox("브랜드 선택", ["전체"] + inventory_df["브랜드"].unique().tolist(), key="inventory_brand")
     with col2:
         available_years = sorted(inventory_df["연도"].dropna().astype(int).unique(), reverse=True)
         default_year = 2025 if 2025 in available_years else available_years[0]
-        year_sel = st.selectbox("연도 선택", available_years, index=available_years.index(default_year))
+        year_sel = st.selectbox("연도 선택", available_years, index=available_years.index(default_year), key="inventory_year")
+
 
     filtered = inventory_df[inventory_df["연도"] == year_sel]
     if brand_sel != "전체":
