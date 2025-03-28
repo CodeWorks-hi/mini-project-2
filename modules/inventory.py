@@ -117,7 +117,7 @@ def inventory_ui():
 
     # ✅ 필터 UI - 브랜드
     with col2:
-        st.markdown("####브랜드 필터")
+        st.markdown("#### 브랜드 필터")
         brand_list = ["전체"] + inventory_df["브랜드"].dropna().unique().tolist()
         brand_sel = st.selectbox("브랜드 선택", brand_list, key="inventory_brand")
 

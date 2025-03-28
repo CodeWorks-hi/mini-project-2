@@ -262,13 +262,20 @@ def export_ui():
     # --- 탭 2: 국가별 비교 ---
     with tab2:
         st.subheader("국가별 비교")
-        brand, year, _ = get_filter_values(df, "export_2")
+        col1, col2 = st.columns([1, 3])
+    
+        with col1:
+            brand = st.selectbox(
+                "브랜드 선택",
+                options=df["브랜드"].dropna().unique(),
+                key="select_brand"
+            )
 
         if not brand:
             st.warning("브랜드를 선택해야 합니다.")
             return
         
-        grouped = df[(df["브랜드"] == brand) & (df["연도"] == year)]
+        grouped = df[df["브랜드"] == brand]
         
         if grouped.empty:
             st.warning("선택한 조건에 해당하는 데이터가 없습니다.")
@@ -287,35 +294,126 @@ def export_ui():
             fig.update_layout(height=600, width=800)
             st.plotly_chart(fig, use_container_width=True)
 
-
-                
-
     # --- 연도별 추이 ---
     with tab3:
-        # 필터링 UI 호출
-        brand, year, country = get_filter_values(df, "export_3")
+        col1, col2, col3, col4 = st.columns(4)
+    
+        with col1:
+            brand = st.selectbox(
+                "브랜드 선택",
+                options=df["브랜드"].dropna().unique(),
+                key="t3_brand"
+            )
+        
+        with col2:
+            year_list = extract_year_list(df)
+            start_year = st.selectbox(
+                "시작 연도 선택",
+                options=year_list,
+                key="t3_start_year"
+            )
+        
+        with col3:
+            year_list = extract_year_list(df)
+            end_year = st.selectbox(
+                "끝 연도 선택",
+                options=year_list[::-1],  # 역순으로 정렬
+                key="t3_end_year"
+            )
+        
+        with col4:
+            country_list = df[df["브랜드"] == brand]["지역명"].dropna().unique()
+            country = st.selectbox(
+                "국가 선택",
+                options=country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"],
+                key="t3_country"
+            )
 
-        yearly = df[(df["브랜드"] == brand) & (df["지역명"] == country)]
-        yearly_sum = yearly.groupby("연도")[month_cols].sum(numeric_only=True)
-        yearly_sum["총수출"] = yearly_sum.sum(axis=1)
-        yearly_sum = yearly_sum.reset_index()
+        # st.dataframe(df)
+        if start_year >= end_year :
+            st.error("시작 연도는 끝 연도보다 작아야 합니다.")
+        else:
+            yearly = df[(df["브랜드"] == brand) & (df["지역명"] == country)]
 
-        line_chart = alt.Chart(yearly_sum).mark_line(point=True).encode(
-            x="연도:O",
-            y="총수출:Q"
-        ).properties(title="연도별 총 수출량 변화 추이", width=700, height=400)
-        st.altair_chart(line_chart, use_container_width=True)
+            # 연도 추출
+            all_years = sorted({col[:4] for col in df.columns if "-" in col and col[:4].isdigit()})
+
+            # 연도별 총수출량 컬럼 생성
+            total_export_by_year = {}
+
+            for y in all_years:
+                year_cols = [col for col in df.columns if col.startswith(y) and "-" in col]
+                if year_cols:
+                    total = yearly[year_cols].sum(numeric_only=True).sum()
+                    total_export_by_year[f"{y}-총수출"] = [int(total)]
+
+            # 데이터프레임으로 변환
+            export_df = pd.DataFrame(total_export_by_year)
+            export_df.insert(0, "지역명", country)
+            export_df.insert(0, "브랜드", brand)
+
+            # st.dataframe(export_df)
+
+            # 1. 연도별 총수출 컬럼만 추출
+            year_columns = [
+                col for col in export_df.columns
+                if (
+                    col.endswith("-총수출")
+                    and col[:4].isdigit()
+                    and int(col[:4]) >= start_year
+                    and int(col[:4]) <= end_year
+                )
+            ]
+
+            # 2. melt (wide → long)
+            line_df = export_df.melt(
+                id_vars=["브랜드", "지역명"],
+                value_vars=year_columns,
+                var_name="연도", value_name="총수출"
+            )
+
+            # 3. '연도' 컬럼에서 '2016-총수출' → '2016' 형태로 정리
+            line_df["연도"] = line_df["연도"].str.extract(r"(\d{4})").astype(str)
+
+            # 4. 그래프 그리기
+            line_chart = alt.Chart(line_df).mark_line(point=True).encode(
+                x=alt.X("연도:O", title="연도"),
+                y=alt.Y("총수출:Q", title="총수출"),
+                color="지역명:N",  # 여러 지역 비교 시 대비용 (단일 지역이면 무시됨)
+                tooltip=["연도", "총수출"]
+            ).properties(
+                title=f"{export_df.iloc[0]['지역명']} 연도별 총 수출량 추이",
+                width=700,
+                height=400
+            )
+
+            st.altair_chart(line_chart, use_container_width=True)
 
 
     # --- 목표 달성률 ---
     with tab4:
         st.subheader("🎯 목표 수출 달성률")
         brand, year, country = get_filter_values(df, "export_4")
-        goal = st.number_input(" 수출 목표 (대)", min_value=0, step=1000000, value=5000000)
+        goal = st.number_input(" 수출 목표 (대)", min_value=0, step=10000, value=200000)
 
-        # 데이터 필터링
-        filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["지역명"] == country)]
-        actual = int(filtered[month_cols].sum(numeric_only=True).sum(skipna=True)) if not filtered.empty else 0
+        # 1. 연도별 총수출량 컬럼 생성
+        all_years = sorted({col[:4] for col in df.columns if "-" in col and col[:4].isdigit()})
+        total_export_by_year = {}
+
+        for y in all_years:
+            year_cols = [col for col in df.columns if col.startswith(y) and "-" in col]
+            yearly_filtered = df[(df["브랜드"] == brand) & (df["지역명"] == country)]
+            if year_cols and not yearly_filtered.empty:
+                total = yearly_filtered[year_cols].sum(numeric_only=True).sum()
+                total_export_by_year[f"{y}-총수출"] = int(total)
+
+        # 2. export_df 생성
+        export_df = pd.DataFrame([total_export_by_year])
+        export_df.insert(0, "지역명", country)
+        export_df.insert(0, "브랜드", brand)
+
+        target_col = f"{year}-총수출"
+        actual = int(export_df[target_col].values[0]) if target_col in export_df.columns else 0
         rate = round((actual / goal * 100), 2) if goal > 0 else 0
 
         # 동적 색상 설정
@@ -473,45 +571,78 @@ def export_ui():
         
     # --- 성장률 분석 ---
     with tab6:
-        st.subheader(" 국가별 수출 성장률 분석")
+        st.subheader("📈 국가별 수출 성장률 분석")
+
+        col1, col2, col3, col4 = st.columns(4)
+    
+        with col1:
+            brand = st.selectbox(
+                "브랜드 선택",
+                options=df["브랜드"].dropna().unique(),
+                key="t5_brand"
+            )
         
-        # 필터링 UI 호출
-        brand, year, country = get_filter_values(df, "export_6")
+        with col2:
+            year_list = extract_year_list(df)
+            start_year = st.selectbox(
+                "시작 연도 선택",
+                options=year_list,
+                key="t5_start_year"
+            )
         
-        year_list = sorted(df["연도"].dropna().unique())
+        with col3:
+            year_list = extract_year_list(df)
+            end_year = st.selectbox(
+                "끝 연도 선택",
+                options=year_list[::-1],  # 역순으로 정렬
+                key="t5_end_year"
+            )
         
-        if len(year_list) < 2:
-            st.warning("성장률 분석을 위해 최소 2개 연도의 데이터가 필요합니다.")
+        with col4:
+            country_list = df[df["브랜드"] == brand]["지역명"].dropna().unique()
+            country = st.selectbox(
+                "국가 선택",
+                options=country_list if len(country_list) > 0 else ["선택 가능한 국가 없음"],
+                key="t5_country"
+            )
+
+        # 연도 목록
+        year_list = sorted({int(col[:4]) for col in df.columns if "-" in col and col[:4].isdigit()})
+
+        # 연도별 총수출량 계산
+        export_by_year = {}
+        for y in year_list:
+            year_cols = [col for col in df.columns if col.startswith(str(y))]
+            filtered = df[(df["브랜드"] == brand) & (df["지역명"] == country)]
+            if not filtered.empty:
+                total = filtered[year_cols].sum(numeric_only=True).sum()
+                export_by_year[y] = total
+
+        # 최소 2개 연도 이상 필요
+        if start_year >= end_year:
+            st.warning("성장 변화율 분석을 위해 최소 2개 연도의 데이터가 필요합니다.")
         else:
-            year = st.selectbox("기준 연도 선택", year_list[1:], key="export_year_6")
-            prev_year = year_list[year_list.index(year) - 1]
+            # 데이터프레임 구성 및 성장률 계산
+            growth_df = pd.DataFrame({
+                "연도": list(export_by_year.keys()),
+                "총수출": list(export_by_year.values())
+            }).sort_values("연도")
 
-            current = df[(df["브랜드"] == brand) & (df["연도"] == year)]
-            previous = df[(df["브랜드"] == brand) & (df["연도"] == prev_year)]
+            growth_df["전년대비 성장률(%)"] = growth_df["총수출"].pct_change().round(4) * 100
 
-            cur_sum = current.groupby("지역명")[month_cols].sum(numeric_only=True).sum(axis=1).rename("current")
-            prev_sum = previous.groupby("지역명")[month_cols].sum(numeric_only=True).sum(axis=1).rename("previous")
+            # ✅ 선택된 연도 범위로 필터링 (start_year+1부터)
+            filtered_growth_df = growth_df[
+                (growth_df["연도"] >= start_year) & (growth_df["연도"] <= end_year)
+            ]
 
-            merged = pd.concat([cur_sum, prev_sum], axis=1).dropna()
-            merged["성장률"] = ((merged["current"] - merged["previous"]) / merged["previous"] * 100).round(2)
-            merged = merged.reset_index()
-
-            top5 = merged.sort_values("성장률", ascending=False).head(5)
-            bottom5 = merged.sort_values("성장률").head(5)
-
-            st.markdown(f"#### {prev_year} → {year} 성장률 상위 국가")
-            st.dataframe(top5, use_container_width=True)
-
-            st.markdown(f"#### {prev_year} → {year} 성장률 하위 국가")
-            st.dataframe(bottom5, use_container_width=True)
-
-            chart = alt.Chart(merged).mark_bar().encode(
-                x=alt.X("성장률:Q", title="성장률 (%)"),
-                y=alt.Y("지역명:N", sort="-x"),
-                color=alt.condition("datum.성장률 > 0", alt.value("#2E8B57"), alt.value("#DC143C"))
+            # 차트
+            line_chart = alt.Chart(filtered_growth_df).mark_line(point=True).encode(
+                x="연도:O",
+                y=alt.Y("전년대비 성장률(%):Q", title="성장률 (%)"),
+                tooltip=["연도", "전년대비 성장률(%)"]
             ).properties(
-                title=f" {prev_year} → {year} 국가별 수출 성장률",
-                width=800,
+                title=f"📊 {start_year}년 ~ {end_year}년 {country} 수출 성장률 변화",
+                width=700,
                 height=400
             )
-            st.altair_chart(chart, use_container_width=True)
+            st.altair_chart(line_chart, use_container_width=True)
