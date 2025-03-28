@@ -77,17 +77,19 @@ def dashboard_ui():
         df_filtered["총수출"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
         if company != "전체":
             df_filtered = df_filtered[df_filtered["브랜드"] == company]
+        else:
+            df_filtered["지역명"] = df_filtered["지역명"].apply(
+                lambda x: "동유럽 및 구소련" if "구소련" in x else ("유럽" if "유럽" in x else x)
+            )
 
-        df_filtered["총수출"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
-
-    colA, colB, colC = st.columns([2.8, 2.6, 1.5])
+    colA, colB, colC = st.columns([2.15, 1.75, 3.9])
 
     with colA:
         render_hyundai_chart(year)
     with colB:
         render_kia_chart(year)
     with colC:
-        render_top_bottom_summary(df_filtered)
+        render_top_bottom_summary(df_filtered, company, year)
 
     with st.container():
         st.markdown("""
