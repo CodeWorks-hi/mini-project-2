@@ -151,14 +151,25 @@ def export_ui():
                 col1, col2 = st.columns(2)
                 with col1:
                     brand = st.selectbox("브랜드", ["현대", "기아"])
-                    country_options = df["지역명"].dropna().unique().tolist()
-                    country = st.selectbox("국가명", ["직접 입력"] + country_options)
-                    type_options = df["차량 구분"].dropna().unique().tolist()
-                    car_type = st.selectbox("차량 구분", ["직접 입력"] + type_options)
-                with col2:
                     year = st.selectbox("연도", sorted({col.split("-")[0] for col in df.columns if "-" in col}), key="exp_year")
+                    count = st.number_input("수출량", min_value=0, step=100, value=100)
+                with col2:
+                    # 지역명 정제 처리
+                    raw_countries = df["지역명"].dropna().astype(str)
+                    processed_countries = []
+                    for country_name in raw_countries:
+                        if "구소련" in country_name:
+                            processed_countries.append("구소련")
+                        elif "유럽" in country_name:
+                            processed_countries.append("유럽")
+                        else:
+                            processed_countries.append(country_name)
+                    country_options = sorted(set(processed_countries))
+
+                    country = st.selectbox("국가명", ["직접 입력"] + country_options)
                     month = st.selectbox("월", [f"{i:02d}" for i in range(1, 13)], key="exp_month")
-                    count = st.number_input("수출량", min_value=0, step=1)
+                
+                
 
                 submitted = st.form_submit_button("등록하기")
                 if submitted:
