@@ -139,8 +139,6 @@ def prediction_ui():
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             fig1.savefig(save_path, dpi=300)
 
-            st.success(f"그래프가 저장되었습니다: `{save_path}`")
-
         def add_download_button(forecast_df, region_name, filename="lstm_forecast.csv"):
             csv = forecast_df.to_csv(index=False).encode('utf-8-sig')
             st.download_button(
@@ -162,7 +160,11 @@ def prediction_ui():
             forecast_df['전월 대비 증감률(%)'] = pct_change.apply(lambda x: f"{x:.2f}" if pd.notnull(x) else '-')
             
             st.subheader("📊 예측 결과 표 (LSTM 기반)")
-            st.dataframe(forecast_df, use_container_width=True, hide_index=True)
+            col1, col2 = st.columns([1, 1])
+            with col1:
+                st.dataframe(forecast_df, use_container_width=True, hide_index=True)
+            with col2:
+                plot_lstm_forecast(region_data, lstm_forecast, region_name, forecast_months)
             
             # 다운로드 버튼
             filename = "LSTM_수출예측.csv"
@@ -330,8 +332,6 @@ def prediction_ui():
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             fig2.savefig(save_path, dpi=300)
 
-            st.success(f"📊 그래프가 저장되었습니다: `{save_path}`")
-
         def add_download_button(forecast_df, car_name, filename="lstm_forecast.csv"):
             csv = forecast_df.to_csv(index=False).encode('utf-8-sig')
             st.download_button(
@@ -353,8 +353,12 @@ def prediction_ui():
             forecast_df['전월 대비 증감률(%)'] = pct_change.apply(lambda x: f"{x:.2f}" if pd.notnull(x) else '-')
             
             st.subheader("📊 예측 결과 표 (LSTM 기반)")
-            st.dataframe(forecast_df, use_container_width=True, hide_index=True)
-            
+            col1, col2 = st.columns([1, 1])
+            with col1:
+                st.dataframe(forecast_df, use_container_width=True, hide_index=True)
+            with col2:
+                plot_lstm_forecast(car_data, lstm_forecast, car_name, forecast_months)
+
             # 다운로드 버튼
             filename = "LSTM_판매예측.csv"
             add_download_button(forecast_df, car_name, filename)
@@ -539,8 +543,6 @@ def prediction_ui():
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             fig3.savefig(save_path, dpi=300)
 
-            st.success(f"📊 그래프가 저장되었습니다: `{save_path}`")
-
         def add_download_button(forecast_df, plant_name, filename="lstm_forecast.csv"):
             csv = forecast_df.to_csv(index=False).encode('utf-8-sig')
             st.download_button(
@@ -562,8 +564,11 @@ def prediction_ui():
             forecast_df['전월 대비 증감률(%)'] = pct_change.apply(lambda x: f"{x:.2f}" if pd.notnull(x) else '-')
 
             st.subheader("📊 예측 결과 표 (LSTM 기반)")
-            st.dataframe(forecast_df, use_container_width=True, hide_index=True)
-            
+            col1, col2 = st.columns([1, 1])
+            with col1:
+                st.dataframe(forecast_df, use_container_width=True, hide_index=True)
+            with col2:
+                plot_lstm_forecast(plant_data, lstm_forecast, plant_name, forecast_months)
             # 다운로드 버튼
             filename = "LSTM_판매예측.csv"
             add_download_button(forecast_df, plant_name, filename)
