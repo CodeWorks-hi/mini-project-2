@@ -26,13 +26,12 @@ logging.basicConfig(filename='error_log.txt', level=logging.ERROR)
 
 # ✅ 탭 UI 구성
 tabs = st.tabs([
-    " 대시보드", " 판매 관리", " 생산 관리", " 재고 관리",
+    " 대시보드", " 생산 관리", " 재고 관리",
     " 수출 관리", " 분석 리포트", " 인트로", " 설정", "예측 시스템", "추천 시스템"
 ])
 
 tab_modules = [
     ("modules.dashboard", "dashboard_ui"),
-    ("modules.sales", "sales_ui"),
     ("modules.production", "production_ui"),
     ("modules.inventory", "inventory_ui"),
     ("modules.export", "export_ui"),
