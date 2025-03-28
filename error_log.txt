@@ -2942,3 +2942,84 @@ ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent 
   File "<frozen importlib._bootstrap>", line 1009, in _find_and_load_unlocked
 KeyError: 'modules'
 
+ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/settings.py", line 40
+    ✅ 그리고 아래처럼 settings_ui() 함수 안에서 호출하면 돼:
+    ^
+SyntaxError: invalid character '✅' (U+2705)
+
+ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 50, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/settings.py", line 57, in settings_ui
+    st.experimental_rerun()  # 앱 자동 새로고침
+AttributeError: module 'streamlit' has no attribute 'experimental_rerun'. Did you mean: 'experimental_user'?
+
+ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/settings.py", line 64, in <module>
+    update_streamlit_theme(st.session_state["theme_mode"])  # 이미 정의된 함수 사용
+NameError: name 'update_streamlit_theme' is not defined
+
+ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 50, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/settings.py", line 64, in settings_ui
+    update_streamlit_theme(st.session_state["theme_mode"])  # 이미 정의된 함수 사용
+NameError: name 'update_streamlit_theme' is not defined
+
+ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 50, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/settings.py", line 56, in settings_ui
+    apply_custom_theme(st.session_state["theme_mode"])
+NameError: name 'apply_custom_theme' is not defined
+
+ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 50, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/settings.py", line 56, in settings_ui
+    apply_custom_theme(st.session_state["theme_mode"])
+NameError: name 'apply_custom_theme' is not defined
+
+ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 50, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/settings.py", line 25, in settings_ui
+    apply_custom_theme(st.session_state["theme_mode"])
+NameError: name 'apply_custom_theme' is not defined
+
+ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 50, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/settings.py", line 25, in settings_ui
+    apply_custom_theme(st.session_state["theme_mode"])
+NameError: name 'apply_custom_theme' is not defined
+
+ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 50, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/settings.py", line 24, in settings_ui
+    apply_custom_theme(st.session_state["theme_mode"])
+NameError: name 'apply_custom_theme' is not defined
+
+ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 50, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/settings.py", line 24, in settings_ui
+    apply_custom_theme(st.session_state["theme_mode"])
+NameError: name 'apply_custom_theme' is not defined
+
+ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+ModuleNotFoundError: No module named 'modules.settings'
+
+ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+ModuleNotFoundError: No module named 'modules.settings'
+
