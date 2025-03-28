@@ -2,40 +2,21 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 import pydeck as pdk
+import plotly.express as px
+import plotly.graph_objects as go
 import requests
 from datetime import datetime, timedelta
+import time
 import urllib3
 import re
 import os
+import ace_tools_open as tools
 
 # 수출관리 
+
 # SSL 경고 메시지 비활성화
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# 이전 평일 계산 함수
-def get_previous_weekday(date):
-    one_day = timedelta(days=1)
-    while True:
-        date -= one_day
-        if date.weekday() < 5:
-            return date
-
-# 환율 데이터 조회 함수
-def fetch_exim_exchange(date, api_key):
-    url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON"
-    params = {
-        "authkey": api_key,
-        "searchdate": date.strftime("%Y%m%d"),
-        "data": "AP01"
-    }
-    try:
-        response = requests.get(url, params=params, verify=False)
-        response.raise_for_status()
-        data = response.json()
-        return data
-    except Exception as e:
-        st.error(f"\u2757 API 호출 오류: {e}")
-        return None
 
 # 데이터 로드 함수 - 캐시 처리
 @st.cache_data
@@ -61,60 +42,27 @@ def load_and_merge_export_data(hyundai_path="data/processed/hyundai-by-region.cs
     if "차량 구분" not in df_h.columns:
         df_h["차량 구분"] = "기타"
     
-    # 데이터 병합
-    df = pd.concat([df_h, df_k], ignore_index=True)
-    
-    # '연도' 컬럼 추가
-    df = extract_year_column(df)  # 연도 컬럼 추가
-    
-    return df
+    return pd.concat([df_h, df_k], ignore_index=True)
 
 # 월별 컬럼 추출 함수
 def extract_month_columns(df):
     return [col for col in df.columns if "-" in col and col[:4].isdigit()]
 
 # 연도 리스트 추출 함수
-def extract_year_list(df):
-    return sorted({
+def extract_year_column(df):
+    years = sorted({
         int(col.split("-")[0])
         for col in df.columns
-        if re.match(r"\d{4}-\d{2}", col)
+        if "-" in col and col[:4].isdigit()
     })
-
-# 월 리스트 추출 함수 (특정 연도에 대해)
-def extract_month_list(df, year: int):
-    return sorted({
-        int(col.split("-")[1])
-        for col in df.columns
-        if col.startswith(str(year)) and re.match(r"\d{4}-\d{2}", col)
-    })
-
-# 연도 컬럼 추가 함수
-def extract_year_column(df):
-    # 월별 컬럼을 가져오는 함수
-    month_cols = extract_month_columns(df)
-    
-    # '연도' 컬럼이 없으면 추가
-    if "연도" not in df.columns:
-        def get_year(row):
-            # 유효한 월별 컬럼을 통해 연도 추출
-            valid_years = [int(col.split("-")[0]) for col in month_cols if pd.notnull(row[col])]
-            return max(valid_years) if valid_years else None
-        
-        # '연도' 컬럼 추가
-        df["연도"] = df.apply(get_year, axis=1)
-    
-    # NaN 값이 있는 '연도' 컬럼을 '전체'로 대체 (필요한 경우)
-    df["연도"].fillna('전체', inplace=True)
-
-    return df
+    return years
 
 # 필터링 UI 생성 함수
 def get_filter_values(df, key_prefix):
     brand = st.selectbox(f"브랜드 선택", df["브랜드"].dropna().unique(), key=f"{key_prefix}_brand")
     
     # 연도 추출 함수가 반환한 연도 리스트를 제대로 반영
-    year_list = extract_year_list(df)
+    year_list = extract_year_column(df)
     year = st.selectbox(f"연도 선택", year_list[::-1], key=f"{key_prefix}_year")
     
     # 국가 선택 UI
@@ -133,7 +81,8 @@ def export_ui():
         return
 
     month_cols = extract_month_columns(df)
-    year_list = extract_year_list(df)
+    year_list = extract_year_column(df)
+    
 
     # ✅ 탭 구성
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
@@ -206,24 +155,37 @@ def export_ui():
             avg_export = int(filtered[month_filter_cols].mean(numeric_only=True).mean(skipna=True))
             type_count = filtered["차량 구분"].nunique()
 
-            # KPI
-            kpi1, kpi2, kpi3 = st.columns(3)
-            kpi1.metric(label="총 수출량", value=f"{total_export:,} 대")
-            kpi2.metric(label="평균 수출량", value=f"{avg_export:,} 대")
-            kpi3.metric(label="차량 구분 수", value=f"{type_count} 종")
-
             # 월별 수출량 차트
             df_melted = filtered.melt(id_vars=["차량 구분"], value_vars=month_filter_cols, var_name="월", value_name="수출량")
             df_melted.dropna(subset=["수출량"], inplace=True)
 
             if not df_melted.empty:
-                chart = alt.Chart(df_melted).mark_line(point=True).encode(
+                fig = px.line(
+                    df_melted,
                     x="월",
                     y="수출량",
-                    color="차량 구분"
-                ).properties(width=900, height=400, title="📈 월별 차량 구분 수출 추이")
-                st.altair_chart(chart, use_container_width=True)
+                    color="차량 구분",
+                    markers=True,
+                    line_shape="spline",  # 곡선 형태
+                    title="📊 차량 구분별 수출량 변화 추이"
+                )
+                fig.update_layout(
+                    xaxis_title="월",
+                    yaxis_title="수출량",
+                    height=500,
+                    template="plotly_white"
+                )
 
+                st.plotly_chart(fig, use_container_width=True)
+            # 추가 정보 표시
+            st.info(f"{year}년 {brand} {country} 수출 실적 ")
+            col1, col2, col3= st.columns(3)
+            col1.info(f"총 수출량: {total_export:,} 대")
+            col2.info(f"평균 수출량: {avg_export:,} 대")
+            col3.info(f"차량 구분 수: {type_count} 종")
+
+            st.markdown("---")
+        
             # 원본 데이터 보기
             with st.expander("📋 원본 데이터 보기"):
                 st.dataframe(filtered, use_container_width=True)
@@ -282,105 +244,168 @@ def export_ui():
 
     # --- 목표 달성률 ---
     with tab4:
-        # 필터링 UI 호출
+        st.subheader("🎯 목표 수출 달성률")
         brand, year, country = get_filter_values(df, "export_4")
+        goal = st.number_input("🎯 수출 목표 (대)", min_value=0, step=1000000, value=5000000)
 
-        # 목표 수출량 입력
-        goal = st.number_input("🎯 수출 목표 (대)", min_value=0, step=1000)
-
-        # 필터링된 데이터
+        # 데이터 필터링
         filtered = df[(df["브랜드"] == brand) & (df["연도"] == year) & (df["지역명"] == country)]
-        
-        # 실제 수출량 계산
         actual = int(filtered[month_cols].sum(numeric_only=True).sum(skipna=True)) if not filtered.empty else 0
-        rate = (actual / goal * 100) if goal > 0 else 0
+        rate = round((actual / goal * 100), 2) if goal > 0 else 0
 
-        # KPI 카드
-        kpi1, kpi2 = st.columns(2)
-        kpi1.metric("총 수출량", f"{actual:,} 대")
-        kpi2.metric("목표 달성률", f"{rate:.2f}%")
-
-        # 목표 미달 경고 (목표 미달 또는 목표 초과)
-        if rate < 100:
-            st.warning(f"⚠️ 목표 달성률이 100% 미만입니다! 목표에 도달하기 위해 더 많은 수출이 필요합니다.")
-        elif rate == 100:
-            st.success(f"🎯 목표를 100% 달성했습니다!")
+        # 동적 색상 설정
+        if rate < 50:
+            bar_color = "#FF6B6B"  # 빨강
+            step_colors = ["#FFE8E8", "#FFC9C9", "#FFAAAA"]  # 연한 빨강 계열
+        elif rate < 75:
+            bar_color = "#FFD93D"  # 주황
+            step_colors = ["#FFF3CD", "#FFE69C", "#FFD96B"]  # 연한 주황 계열
         else:
-            st.success(f"🎯 목표를 초과 달성했습니다! ({rate:.2f}% 목표 초과)")
+            bar_color = "#6BCB77"  # 초록
+            step_colors = ["#E8F5E9", "#C8E6C9", "#A5D6A7"]  # 연한 초록 계열
 
-        # 수출 목표 대비 실적 변화 차트
-        data = pd.DataFrame({
-            "목표": [goal],
-            "실제": [actual]
-        })
+        # 게이지 차트 생성
+        fig_gauge = go.Figure(go.Indicator(
+            mode="gauge+number+delta",
+            value=rate,
+            title={'text': f"{year}년 {brand} {country} 목표 달성률"},
+            delta={'reference': 100},
+            gauge={
+                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "darkblue"},
+                'bar': {'color': bar_color},
+                'bgcolor': "white",
+                'borderwidth': 2,
+                'bordercolor': "gray",
+                'steps': [
+                    {'range': [0, 33], 'color': step_colors[0]},
+                    {'range': [33, 66], 'color': step_colors[1]},
+                    {'range': [66, 100], 'color': step_colors[2]}
+                ],
+                'threshold': {
+                    'line': {'color': "darkred", 'width': 4},
+                    'thickness': 0.75,
+                    'value': rate
+                }
+            }
+        ))
 
-        st.bar_chart(data, width=600, height=400)
+
+        fig_gauge.update_layout(
+            height=400,
+            margin=dict(l=20, r=20, t=50, b=20),
+            paper_bgcolor="white",
+            font=dict(color="darkblue", size=16)
+        )
+
+        # 차트 출력
+        st.plotly_chart(fig_gauge, use_container_width=True)
+
+        # 추가 정보 표시
+        st.write("### 추가 정보")
+        col1, col2,col3 = st.columns(3)
+        col1.info(f"**목표 수출량**\n\n{goal:,} 대")
+        col2.info(f"**실제 수출량**\n\n{actual:,} 대")
+        col3.info(f"**목표 달성률**\n\n{rate:.2f}%")
 
         # 원본 데이터 보기
         with st.expander("📋 원본 데이터 보기"):
             st.dataframe(filtered, use_container_width=True)
 
+
     # --- 수출 지도 ---
     with tab5:
-        # 공장 → 수출국 데이터 정의
+
+        # 📌 확장된 공장 → 수출국 데이터 정의 (공장 설명 포함)
         flow_data = {
-            "공장명": ["울산공장", "울산공장", "앨라배마공장", "인도공장"],
-            "수출국": ["미국", "독일", "캐나다", "인도네시아"],
-            "공장_위도": [35.546, 35.546, 32.806, 12.971],
-            "공장_경도": [129.317, 129.317, -86.791, 77.594],
-            "수출국_위도": [37.090, 51.1657, 56.1304, -6.200],
-            "수출국_경도": [-95.712, 10.4515, -106.3468, 106.816],
+            "공장명": [
+                "울산공장", "울산공장", "아산공장", "전주공장", "앨라배마공장", "중국공장",
+                "인도공장", "체코공장", "튀르키예공장", "브라질공장", "싱가포르공장", "인도네시아공장"
+            ],
+            "수출국": [
+                "미국", "독일", "사우디아라비아", "호주", "캐나다", "홍콩",
+                "인도네시아", "영국", "프랑스", "아르헨티나", "태국", "베트남"
+            ],
+            "공장_위도": [
+                35.546, 35.546, 36.790, 35.824, 32.806, 39.904,
+                12.971, 49.523, 40.922, -23.682, 1.352, -6.305
+            ],
+            "공장_경도": [
+                129.317, 129.317, 126.977, 127.148, -86.791, 116.407,
+                77.594, 17.642, 29.330, -46.875, 103.819, 107.097
+            ],
+            "수출국_위도": [
+                37.090, 51.165, 23.8859, -25.2744, 56.1304, 22.3193,
+                -6.200, 55.3781, 46.6034, -38.4161, 15.8700, 14.0583
+            ],
+            "수출국_경도": [
+                -95.712, 10.4515, 45.0792, 133.7751, -106.3468, 114.1694,
+                106.816, -3.4360, 1.8883, -63.6167, 100.9925, 108.2772
+            ],
+            "공장설명": [
+                "단일 자동차 공장 중 세계 최대 규모",
+                "5개 독립 제조 공장, 수출 부두 포함",
+                "쏘나타, 그랜저 등 수출용 승용차 생산",
+                "세계 최초 연료 전지 전기 트럭 제조",
+                "북미 생산 기준 표준 공장",
+                "중국 소형차 생산 및 베르나 판매 1위",
+                "신흥 시장을 위한 전략 차량 생산",
+                "유럽 전략 차종 및 i 시리즈 생산",
+                "현대차 최초 해외 공장, 100만대 생산",
+                "HB20 등 현지 맞춤형 전략 모델 생산",
+                "스마트 팩토리, 아이오닉5 제조",
+                "아세안 최초 완성차 공장, 최대 25만대"
+            ],
+            "브랜드컬러": [
+                "#1f77b4", "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
+                "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5", "#8c564b"
+            ]
         }
 
         df_flow = pd.DataFrame(flow_data)
+        tools.display_dataframe_to_user(name="수출 공장-국가 연결 데이터", dataframe=df_flow)
 
-        # UI 제목 (카드 스타일)
-        st.markdown("""
-        <div style='background-color:#f4faff; padding:20px; border-radius:10px; margin-bottom:15px;'>
-            <h3 style='margin:0;'>🚢 공장에서 수출국으로의 이동 시각화</h3>
-            <p style='margin:0; color:gray;'>현대/기아 공장에서 글로벌 주요 수출국으로 향하는 흐름을 화살표로 보여줍니다.</p>
-        </div>
-        """, unsafe_allow_html=True)
 
-        # 지도 시각화 구성
-        arc_layer = pdk.Layer(
-            "ArcLayer",
-            data=df_flow,
-            get_source_position=["공장_경도", "공장_위도"],
-            get_target_position=["수출국_경도", "수출국_위도"],
-            get_source_color=[255, 100, 30],
-            get_target_color=[30, 144, 255],
-            auto_highlight=True,
-            width_scale=0.0001,
-            get_width=30,
-            pickable=True,
+        # 🎞️ 프레임 데이터 생성
+        frames = []
+        for i, row in df_flow.iterrows():
+            frames.append({
+                "frame": i + 1,
+                "공장명": row["공장명"],
+                "수출국": row["수출국"],
+                "위도": row["공장_위도"],
+                "경도": row["공장_경도"],
+                "역할": "공장"
+            })
+            frames.append({
+                "frame": i + 1,
+                "공장명": row["공장명"],
+                "수출국": row["수출국"],
+                "위도": row["수출국_위도"],
+                "경도": row["수출국_경도"],
+                "역할": "수출국"
+            })
+
+        df_frames = pd.DataFrame(frames)
+        df_frames["경로"] = df_frames["공장명"] + " → " + df_frames["수출국"]
+
+        # 🌐 애니메이션 지도 시각화
+        fig = px.line_geo(
+            df_frames,
+            lat="위도",
+            lon="경도",
+            color="경로",
+            line_group="경로",
+            animation_frame="frame",
+            scope="world",
+            hover_name="역할",
+            title="✈️ 공장에서 수출국으로의 애니메이션 경로 시각화"
         )
+        fig.update_geos(projection_type="natural earth")
+        fig.update_layout(height=600)
 
-        scatter_layer = pdk.Layer(
-            "ScatterplotLayer",
-            data=df_flow.drop_duplicates(subset=["공장명"]),
-            get_position='[공장_경도, 공장_위도]',
-            get_radius=60000,
-            get_fill_color=[0, 122, 255, 180],
-            pickable=True,
-        )
-
-        # 초기 지도 뷰 설정
-        view_state = pdk.ViewState(
-            latitude=25,
-            longitude=40,
-            zoom=1.3,
-            pitch=0,
-        )
-
-        # 지도 렌더링
-        st.pydeck_chart(pdk.Deck(
-            map_style="mapbox://styles/mapbox/light-v9",
-            layers=[scatter_layer, arc_layer],
-            initial_view_state=view_state,
-            tooltip={"text": "공장: {공장명} → 수출국: {수출국}"}
-        ))
-
+        # 📍 Streamlit에서 출력
+        st.plotly_chart(fig, use_container_width=True)
+        
     # --- 성장률 분석 ---
     with tab6:
         st.subheader("📊 국가별 수출 성장률 분석")
@@ -388,7 +413,8 @@ def export_ui():
         # 필터링 UI 호출
         brand, year, country = get_filter_values(df, "export_6")
         
-        year_list = sorted(df["연도"].dropna().unique())
+        # 연도 데이터 타입 통일 및 정렬
+        year_list = sorted(df["연도"].dropna().astype(str).unique())
         
         if len(year_list) < 2:
             st.warning("성장률 분석을 위해 최소 2개 연도의 데이터가 필요합니다.")
