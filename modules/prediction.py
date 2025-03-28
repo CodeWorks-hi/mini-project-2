@@ -135,9 +135,11 @@ def prediction_ui():
             plt.close(fig1)
 
             # 저장 경로 생성
-            save_path = f"images/result/{region_name} LSTM 지역별 수출량 예측_{forecast_months}개월.png"
+            save_path = f"images/result/{region_name} LSTM 지역별 수출량 예측.png"
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             fig1.savefig(save_path, dpi=300)
+
+            return save_path
 
         def add_download_button(forecast_df, region_name, filename="lstm_forecast.csv"):
             csv = forecast_df.to_csv(index=False).encode('utf-8-sig')
@@ -160,15 +162,21 @@ def prediction_ui():
             forecast_df['전월 대비 증감률(%)'] = pct_change.apply(lambda x: f"{x:.2f}" if pd.notnull(x) else '-')
             
             st.subheader("📊 예측 결과 표 (LSTM 기반)")
-            col1, col2 = st.columns([1, 1])
+            col1, col2 = st.columns([1, 0.9])
             with col1:
                 st.dataframe(forecast_df, use_container_width=True, hide_index=True)
+                filename = "LSTM_수출예측.csv"
+                add_download_button(forecast_df, region_name, filename)
             with col2:
-                plot_lstm_forecast(region_data, lstm_forecast, region_name, forecast_months)
-            
-            # 다운로드 버튼
-            filename = "LSTM_수출예측.csv"
-            add_download_button(forecast_df, region_name, filename)
+                img_path = plot_lstm_forecast(region_data, lstm_forecast, region_name, forecast_months)
+                if os.path.exists(img_path):
+                    with open(img_path, "rb") as img_file:
+                        st.download_button(
+                            label="🖼️ 예측 그래프 이미지 다운로드",
+                            data=img_file,
+                            file_name=f"{region_name}_LSTM_예측.png",
+                            mime="image/png"
+                        )
 
         # 모델 및 스케일러 경로 함수
         def get_model_path(region_name):
@@ -328,9 +336,11 @@ def prediction_ui():
             plt.close(fig2)
 
             # 저장 경로 생성
-            save_path = f"images/result/{car_name} LSTM 지역별 수출량 예측_{forecast_months}개월.png"
+            save_path = f"images/result/{car_name} LSTM 지역별 수출량 예측.png"
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             fig2.savefig(save_path, dpi=300)
+
+            return save_path
 
         def add_download_button(forecast_df, car_name, filename="lstm_forecast.csv"):
             csv = forecast_df.to_csv(index=False).encode('utf-8-sig')
@@ -353,15 +363,21 @@ def prediction_ui():
             forecast_df['전월 대비 증감률(%)'] = pct_change.apply(lambda x: f"{x:.2f}" if pd.notnull(x) else '-')
             
             st.subheader("📊 예측 결과 표 (LSTM 기반)")
-            col1, col2 = st.columns([1, 1])
+            col1, col2 = st.columns([1, 0.9])
             with col1:
                 st.dataframe(forecast_df, use_container_width=True, hide_index=True)
+                filename = "LSTM_판매예측.csv"
+                add_download_button(forecast_df, car_name, filename)
             with col2:
-                plot_lstm_forecast(car_data, lstm_forecast, car_name, forecast_months)
-
-            # 다운로드 버튼
-            filename = "LSTM_판매예측.csv"
-            add_download_button(forecast_df, car_name, filename)
+                img_path = plot_lstm_forecast(car_data, lstm_forecast, car_name, forecast_months)
+                if os.path.exists(img_path):
+                    with open(img_path, "rb") as img_file:
+                        st.download_button(
+                            label="🖼️ 예측 그래프 이미지 다운로드",
+                            data=img_file,
+                            file_name=f"{car_name}_LSTM_예측.png",
+                            mime="image/png"
+                        )
 
         # 5. 실행 예시
         file_path = "data/processed/hyundai-by-car.csv"
@@ -520,7 +536,7 @@ def prediction_ui():
             return result
 
         # 4. 시각화 함수
-        def plot_lstm_forecast(series, forecast_df, plant_name, forecast_months, save_path=None):
+        def plot_lstm_forecast(series, forecast_df, plant_name, save_path=None):
             forecast_index = pd.to_datetime(forecast_df['연도'].astype(str) + '-' + forecast_df['월'].astype(str))
             forecast_values = forecast_df['예측 판매량'].values
 
@@ -539,9 +555,11 @@ def prediction_ui():
             plt.close(fig3)
 
             # 저장 경로 설정 및 디렉토리 생성
-            save_path = f"images/result/{plant_name} LSTM 공장별 판매량 예측_{forecast_months}개월.png"
+            save_path = f"images/result/{plant_name} LSTM 공장별 판매량 예측.png"
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             fig3.savefig(save_path, dpi=300)
+
+            return save_path
 
         def add_download_button(forecast_df, plant_name, filename="lstm_forecast.csv"):
             csv = forecast_df.to_csv(index=False).encode('utf-8-sig')
@@ -564,14 +582,21 @@ def prediction_ui():
             forecast_df['전월 대비 증감률(%)'] = pct_change.apply(lambda x: f"{x:.2f}" if pd.notnull(x) else '-')
 
             st.subheader("📊 예측 결과 표 (LSTM 기반)")
-            col1, col2 = st.columns([1, 1])
+            col1, col2 = st.columns([1, 0.9])
             with col1:
                 st.dataframe(forecast_df, use_container_width=True, hide_index=True)
+                filename = "LSTM_판매예측.csv"
+                add_download_button(forecast_df, plant_name, filename)
             with col2:
-                plot_lstm_forecast(plant_data, lstm_forecast, plant_name, forecast_months)
-            # 다운로드 버튼
-            filename = "LSTM_판매예측.csv"
-            add_download_button(forecast_df, plant_name, filename)
+                img_path = plot_lstm_forecast(plant_data, lstm_forecast, plant_name, forecast_months)
+                if os.path.exists(img_path):
+                    with open(img_path, "rb") as img_file:
+                        st.download_button(
+                            label="🖼️ 예측 그래프 이미지 다운로드",
+                            data=img_file,
+                            file_name=f"{plant_name}_LSTM_예측.png",
+                            mime="image/png"
+                        )
 
         # 5. 실행 예시
         file_path = "data/processed/hyundai-by-plant.csv"
