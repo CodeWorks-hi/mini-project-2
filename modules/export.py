@@ -373,7 +373,7 @@ def export_ui():
         col3.info(f"**목표 달성률**\n\n{rate:.2f}%")
 
         # 원본 데이터 보기
-        with st.expander(" 원본 데이터 보기"):
+        with st.expander("📋 원본 데이터 보기"):
             st.dataframe(filtered, use_container_width=True)
 
 
@@ -473,7 +473,7 @@ def export_ui():
         
     # --- 성장률 분석 ---
     with tab6:
-        st.subheader(" 국가별 수출 성장률 분석")
+        st.subheader("📊 국가별 수출 성장률 분석")
         
         # 필터링 UI 호출
         brand, year, country = get_filter_values(df, "export_6")
@@ -510,7 +510,7 @@ def export_ui():
                 y=alt.Y("지역명:N", sort="-x"),
                 color=alt.condition("datum.성장률 > 0", alt.value("#2E8B57"), alt.value("#DC143C"))
             ).properties(
-                title=f" {prev_year} → {year} 국가별 수출 성장률",
+                title=f"📊 {prev_year} → {year} 국가별 수출 성장률",
                 width=800,
                 height=400
             )

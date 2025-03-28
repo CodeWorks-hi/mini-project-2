@@ -3364,3 +3364,17 @@ ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent 
     calculate_kpis_by_car()
 TypeError: calculate_kpis_by_car() missing 2 required positional arguments: 'df' and 'month_cols'
 
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/export.py", line 265, in export_ui
+    brand, year = get_filter_values(df, "export_2")
+ValueError: too many values to unpack (expected 2)
+
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/export.py", line 265, in export_ui
+    brand, year = get_filter_values(df, "export_2")
+ValueError: too many values to unpack (expected 2)
+
