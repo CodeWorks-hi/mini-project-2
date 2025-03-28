@@ -3,7 +3,7 @@ import pandas as pd
 import pydeck as pdk
 import requests
 import altair as alt
-from modules.dashboard_data_loader import load_and_merge_export_data
+from modules.dashboard_data_loader import load_and_merge_car_data, load_and_merge_export_data, load_and_merge_plant_data
 from modules.dashboard_news import fetch_naver_news, render_news_results
 from modules.dashboard_charts import render_hyundai_chart, render_kia_chart, render_export_map, render_top_bottom_summary
 from modules.dashboard_filter import render_filter_options
@@ -53,28 +53,28 @@ def dashboard_ui():
 
 
     #데이터 로드 및 병합
-    df = load_and_merge_export_data()
-    if df is None:
+    df_region = load_and_merge_export_data()
+    if df_region is None:
         st.error("수출 데이터 로드 실패")
         st.stop()
+    df_car = load_and_merge_car_data()
+    if df_car is None:
+        st.error("차종 데이터 로드 실패")
+        st.stop()
+    df_plant = load_and_merge_plant_data()
+    if df_plant is None:
+        st.error("공장 데이터 로드 실패")
+        st.stop()
 
-    color_map = {
-        "Passenger Car": [152, 251, 152, 160],
-        "Recreational Vehicle": [255, 165, 0, 160],
-        "Commercial Vehicle": [34, 139, 34, 160],
-        "Special Vehicle": [220, 20, 60, 160],
-        "기타": [173, 216, 230, 160]
-    }
+    year, company = render_filter_options(df_region, df_car, df_plant)
+    month_cols = [col for col in df_region.columns if str(year) in col and "-" in col]
 
-    year, company = render_filter_options(df)
-    month_cols = [col for col in df.columns if str(year) in col and "-" in col]
-
-    df_filtered = df.copy()
-    df_filtered["총수출"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
+    new_df_region = df_region.copy()
+    new_df_region["총수출"] = new_df_region[month_cols].sum(axis=1, numeric_only=True)
     if company != "전체":
-        df_filtered = df_filtered[df_filtered["브랜드"] == company]
+        new_df_region = new_df_region[new_df_region["브랜드"] == company]
     else:
-        df_filtered["지역명"] = df_filtered["지역명"].apply(
+        new_df_region["지역명"] = new_df_region["지역명"].apply(
             lambda x: "동유럽 및 구소련" if "구소련" in x else ("유럽" if "유럽" in x else x)
         )
 
@@ -85,7 +85,7 @@ def dashboard_ui():
     with colB:
         render_kia_chart(year)
     with colC:
-        render_top_bottom_summary(df_filtered, company, year)
+        render_top_bottom_summary(new_df_region, company, year)
 
     # 데이터 시각화 전처리
     start_col = f"{year}-01"
