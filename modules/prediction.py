@@ -170,10 +170,10 @@ def prediction_ui():
 
         # 모델 및 스케일러 경로 함수
         def get_model_path(region_name):
-            return f"models/model/lstm_region_{region_name}_model.h5"
+            return f"models/lstm_region_{region_name}_model.h5"
 
         def get_scaler_path(region_name):
-            return f"models/scaler/lstm_region_{region_name}_scaler.pkl"
+            return f"models/lstm_region_{region_name}_scaler.pkl"
 
         def ensure_model(region_name):
             model_path = get_model_path(region_name)
@@ -397,10 +397,10 @@ def prediction_ui():
                 car_data = car_data.dropna()
 
                 def get_model_path(car_name):
-                    return f"models/model/lstm_car_{car_name}_model.h5"
+                    return f"models/lstm_car_{car_name}_model.h5"
 
                 def get_scaler_path(car_name):
-                    return f"models/scaler/lstm_car_{car_name}_scaler.pkl"
+                    return f"models/lstm_car_{car_name}_scaler.pkl"
 
                 def ensure_model(car_name):
                     model_path = get_model_path(car_name)
@@ -626,10 +626,10 @@ def prediction_ui():
                 plant_data = plant_data.dropna()
 
                 def get_model_path(plant_name):
-                    return f"models/model/lstm_plant_{plant_name}_model.h5"
+                    return f"models/lstm_plant_{plant_name}_model.h5"
 
                 def get_scaler_path(plant_name):
-                    return f"models/scaler/lstm_plant_{plant_name}_scaler.pkl"
+                    return f"models/lstm_plant_{plant_name}_scaler.pkl"
 
                 def ensure_model(plant_name):
                     model_path = get_model_path(plant_name)
