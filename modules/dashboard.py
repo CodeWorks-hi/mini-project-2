@@ -11,9 +11,14 @@ from modules.dashboard_filter import render_filter_options
 from datetime import datetime, timedelta
 import time
 from bs4 import BeautifulSoup
+import urllib3
+import re
 import os
 import plotly.express as px
+import requests
 
+
+# 이전 평일 계산 함수
 def get_previous_weekday(date):
     one_day = timedelta(days=1)
     while True:
@@ -21,18 +26,23 @@ def get_previous_weekday(date):
         if date.weekday() < 5:
             return date
 
-
-def get_exchange_rate(currency_code):
-    url = f"https://finance.naver.com/marketindex/exchangeDetail.naver?marketindexCd=FX_{currency_code}KRW"
+# 환율 데이터 조회 함수
+def fetch_exim_exchange(date, api_key):
+    url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON"
+    params = {
+        "authkey": api_key,
+        "searchdate": date.strftime("%Y%m%d"),
+        "data": "AP01"
+    }
     try:
-        response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        rate_info = soup.find('p', class_='no_today').get_text(strip=True)
-        change_icon = soup.find('span', class_='ico')
-        change_sign = '▲' if change_icon and 'up' in change_icon['class'] else '▼' if change_icon and 'down' in change_icon['class'] else ''
-        return f"{currency_code}: {rate_info} KRW | 변동: {change_sign}"
+        response = requests.get(url, params=params, verify=False)
+        response.raise_for_status()
+        data = response.json()
+        return data
     except Exception as e:
-        return f"❗ 데이터 가져오기 실패: {e}"
+        st.error(f"\u2757 API 호출 오류: {e}")
+        return None
+
 
 def dashboard_ui():
     st.markdown("""
@@ -55,21 +65,110 @@ def dashboard_ui():
         "기타": [173, 216, 230, 160]
     }
 
-    # KPI + 필터 카드
     col1, col2 = st.columns([1, 1])
     with col1:
         st.markdown("""
             <div style='padding: 10px; background-color: #e8f0fe; border-radius: 10px; margin-bottom: 15px;'>
-                <h4>💱 실시간 환율 (네이버 기준)</h4>
+                <h4>💱 국가별 실시간 환율 조회 </h4>
+            </div>
         """, unsafe_allow_html=True)
+        
+        # API 키 로드
+        try:
+            api_key = st.secrets["exim"]["apikey"]
+        except KeyError:
+            st.error("❌ API 키가 설정되지 않았습니다. `.streamlit/secrets.toml`을 확인해주세요.")
+            st.stop()
 
-        exchange_rate_placeholder = st.empty()
-        currencies = ['USD', 'EUR', 'JPY', 'CNY', 'GBP']
-        for currency in currencies:
-            rate_info = get_exchange_rate(currency)
-            exchange_rate_placeholder.markdown(f"<div style='margin-bottom: 5px;'>🪙 {rate_info}</div>", unsafe_allow_html=True)
+        # 날짜 선택 UI
+        now = datetime.now()
+        default_date = get_previous_weekday(now) if now.weekday() >= 5 or now.hour < 11 else now
+        selected_date = st.date_input("📆 환율 조회 날짜", default_date.date(), max_value=datetime.today())
+        query_date = datetime.combine(selected_date, datetime.min.time())
 
-        st.markdown("""</div>""", unsafe_allow_html=True)
+        # API 호출 및 데이터 처리
+        data = fetch_exim_exchange(query_date, api_key)
+        if not data or not isinstance(data, list):
+            st.warning("⚠️ 해당 날짜의 환율 데이터를 가져올 수 없습니다.")
+            st.stop()
+
+        # 데이터프레임 생성
+        all_rows = []
+        for row in data:
+            if isinstance(row, dict) and row.get("result") == 1:
+                try:
+                    rate = float(row["deal_bas_r"].replace(",", ""))
+                    all_rows.append({
+                        "통화": row.get("cur_unit"),
+                        "통화명": row.get("cur_nm"),
+                        "환율": rate
+                    })
+                except Exception as e:
+                    st.warning(f"데이터 처리 중 오류 발생: {e}")
+                    continue
+
+        if not all_rows:
+            st.warning("❗ 처리된 환율 데이터가 없습니다.")
+            st.stop()
+
+        # 기본 국가 리스트
+        default_countries = ['KRW', 'USD', 'JPY', 'CNY', 'EUR']
+        
+        # 모든 통화 리스트 생성
+        all_currencies = [row['통화'] for row in all_rows]
+        
+        # 사용자가 추가로 선택할 수 있는 통화 리스트
+        additional_currencies = [curr for curr in all_currencies if curr not in default_countries]
+        
+        # 사용자 선택 UI
+        selected_additional = st.multiselect("추가로 표시할 통화를 선택하세요:", additional_currencies)
+        
+        # 표시할 통화 리스트 생성
+        display_currencies = default_countries + selected_additional
+
+        # 표시할 통화만 필터링
+        df_display = pd.DataFrame([row for row in all_rows if row['통화'] in display_currencies])
+        df_display = df_display.sort_values('통화')
+
+        # 전날 환율 데이터 (실제로는 API나 데이터베이스에서 가져와야 함)
+        previous_day_rates = {row['통화']: row['환율'] * 0.99 for row in all_rows}  # 예시로 1% 낮은 값 사용
+
+        # 전날 환율과 변동 계산
+        df_display['전날 환율'] = df_display['통화'].map(previous_day_rates)
+        df_display['변동'] = df_display['환율'] - df_display['전날 환율']
+
+        # 삼각표 생성
+        def triangular_indicator(change):
+            if change > 0:
+                return '<span style="color: red;">▲</span>'
+            elif change < 0:
+                return '<span style="color: blue;">▼</span>'
+            else:
+                return '<span style="color: gray;">▶</span>'
+
+        df_display['삼각표'] = df_display['변동'].apply(triangular_indicator)
+
+        # 표시할 열 선택 및 재정렬
+        df_display = df_display[['통화', '통화명', '환율', '전날 환율', '변동', '삼각표']]
+
+        # 스타일 적용 및 표시
+        styled_df = df_display.style.format({
+            '환율': '{:,.2f} KRW',
+            '전날 환율': '{:,.2f} KRW',
+            '변동': '{:+,.2f} KRW'
+        }).hide(axis="index").set_properties(**{
+            'background-color': '#f0f2f6',
+            'color': 'black',
+            'border-color': 'white',
+            'text-align': 'center'
+        }).set_table_styles([
+            {'selector': 'th', 'props': [('background-color', '#4e73df'), ('color', 'white')]},
+            {'selector': 'tr:hover', 'props': [('background-color', '#e8eaf6')]},
+        ])
+
+        st.markdown(styled_df.to_html(escape=False, index=False), unsafe_allow_html=True)
+
+
     with col2:
         year, company = render_filter_options(df)
         month_cols = [col for col in df.columns if str(year) in col and "-" in col]
@@ -122,13 +221,12 @@ def dashboard_ui():
     )
 
     # Top 3
-    grouped_monthly["순위"] = grouped_monthly.groupby("월")["수출량"].rank(method="first", ascending=False).astype(int)
-    top_df = grouped_monthly[grouped_monthly["순위"] <= 3].sort_values(["월", "순위"])
+    grouped_monthly["순위_top"] = grouped_monthly.groupby("월")["수출량"].rank(method="first", ascending=False).astype(int)
+    top_df = grouped_monthly[grouped_monthly["순위_top"] <= 3].sort_values(["월", "순위_top"])
 
     # Bottom 3
     grouped_monthly["순위_bottom"] = grouped_monthly.groupby("월")["수출량"].rank(method="first", ascending=True).astype(int)
     bottom_df = grouped_monthly[grouped_monthly["순위_bottom"] <= 3].sort_values(["월", "순위_bottom"])
-    bottom_df.drop(columns=["순위_bottom"], inplace=True)
 
     colD, colE = st.columns([1, 1])
 
