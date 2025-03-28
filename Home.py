@@ -42,4 +42,9 @@ for i, (mod_path, ui_func_name) in enumerate(tab_modules):
             module = __import__(mod_path, fromlist=[ui_func_name])
             getattr(module, ui_func_name)()
         except Exception as e:
-            st.error(f"❗ [{mod_path}] 실행 중 오류 발생: {e}")
+            error_message = f"❗ [{mod_path}] 실행 중 오류 발생: {e}"
+            st.error(error_message)
+            
+            # Log detailed error information
+            logging.error(f"Error in module {mod_path}: {traceback.format_exc()}")
+            st.text(f"Details of the error have been logged. Check error_log.txt for more information.")

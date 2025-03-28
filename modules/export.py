@@ -106,9 +106,6 @@ def extract_year_column(df):
     
     # NaN 값이 있는 '연도' 컬럼을 '전체'로 대체 (필요한 경우)
     df["연도"].fillna('전체', inplace=True)
-    
-    # 추가: 연도 컬럼이 제대로 채워졌는지 출력해보기
-    st.write("연도 컬럼 확인:", df["연도"].unique())  # 디버깅용으로 연도값을 출력해 확인
 
     return df
 
