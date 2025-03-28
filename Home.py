@@ -27,19 +27,20 @@ logging.basicConfig(filename='error_log.txt', level=logging.ERROR)
 # ✅ 탭 UI 구성
 tabs = st.tabs([
     " 대시보드", " 생산 관리", " 재고 관리",
-    " 수출 관리", " 분석 리포트", " 인트로", " 설정", "예측 시스템", "추천 시스템"
+    " 수출 관리", " 분석 리포트",  "예측 시스템", "추천 시스템"," 인트로", " 설정"
 ])
 
 tab_modules = [
-    ("modules.dashboard", "dashboard_ui"),
-    ("modules.production", "production_ui"),
-    ("modules.inventory", "inventory_ui"),
-    ("modules.export", "export_ui"),
-    ("modules.analytics", "analytics_ui"),
-    ("modules.intro", "intro_ui"),
-    ("modules.settings", "settings_ui"),
-    ("modules.prediction", "prediction_ui"),
-    ("modules.recommendations", "recommendations_ui"),
+    ("modules.dashboard", "dashboard_ui"), # 데쉬보드
+    ("modules.production", "production_ui"), # 생산
+    ("modules.inventory", "inventory_ui"), #재고
+    ("modules.export", "export_ui"),  # 수출관리
+    ("modules.analytics", "analytics_ui"), # 분석관리
+    ("modules.prediction", "prediction_ui"), # 예측
+    ("modules.recommendations", "recommendations_ui"), #추천 
+    ("modules.intro", "intro_ui"), # 인트로
+    ("modules.settings", "settings_ui"), # 셋팅
+
 ]
 
 for i, (mod_path, ui_func_name) in enumerate(tab_modules):

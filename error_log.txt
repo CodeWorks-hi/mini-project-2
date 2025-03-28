@@ -2751,3 +2751,187 @@ ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent 
     filtered = inventory_df[inventory_df["연도"] == year_sel]
 NameError: name 'inventory_df' is not defined. Did you mean: 'inventory_ui'?
 
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 137, in inventory_ui
+    prod, sales, stock, low, high = get_kpi_summary(filtered)
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 70, in get_kpi_summary
+    total_stock = int(filtered_df["재고변동"].sum().Unique())
+AttributeError: 'numpy.float64' object has no attribute 'Unique'
+
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 48, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/export.py", line 13, in <module>
+    import ace_tools_open as tools
+ModuleNotFoundError: No module named 'ace_tools_open'
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 137, in inventory_ui
+    prod, sales, stock, low, high = get_kpi_summary(filtered)
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 70, in get_kpi_summary
+    total_stock = int(filtered_df["재고변동"].sum().Unique)
+AttributeError: 'numpy.float64' object has no attribute 'Unique'
+
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 48, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/export.py", line 13, in <module>
+    import ace_tools_open as tools
+ModuleNotFoundError: No module named 'ace_tools_open'
+
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 48, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/export.py", line 13, in <module>
+    import ace_tools_open as tools
+ModuleNotFoundError: No module named 'ace_tools_open'
+
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 48, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/export.py", line 13, in <module>
+    import ace_tools_open as tools
+ModuleNotFoundError: No module named 'ace_tools_open'
+
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 48, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/export.py", line 13, in <module>
+    import ace_tools_open as tools
+ModuleNotFoundError: No module named 'ace_tools_open'
+
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 48, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/export.py", line 13, in <module>
+    import ace_tools_open as tools
+ModuleNotFoundError: No module named 'ace_tools_open'
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 144, in inventory_ui
+    prod, sales, stock, low, high = get_kpi_summary(filtered)
+NameError: name 'get_kpi_summary' is not defined
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 146, in inventory_ui
+    k4, k5 = st.columns(5)
+ValueError: too many values to unpack (expected 2)
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 140, in inventory_ui
+    k1, k2, k3, k4, k5 = st.columns(3)
+ValueError: not enough values to unpack (expected 5, got 3)
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 144, in inventory_ui
+    k4.metric("재고 부족 차종", f"{low} 종")
+UnboundLocalError: local variable 'k4' referenced before assignment
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 145, in inventory_ui
+    k4, k5 = st.columns(3)
+ValueError: too many values to unpack (expected 2)
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 145, in inventory_ui
+    k4, k5,= st.columns(3)
+ValueError: too many values to unpack (expected 2)
+
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 48, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/dashboard.py", line 8, in <module>
+    from modules.dashboard_news import fetch_naver_news, render_news_results
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1009, in _find_and_load_unlocked
+KeyError: 'modules'
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 48, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 148
+    k6 :
+        ^
+SyntaxError: invalid syntax
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 48, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 148
+    k6.
+       ^
+SyntaxError: invalid syntax
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/pandas/core/indexes/base.py", line 3805, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "index.pyx", line 175, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index_class_helper.pxi", line 70, in pandas._libs.index.Int64Engine._check_type
+KeyError: '차종'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 139, in inventory_ui
+    prod, sales, stock, low, high = get_kpi_summary(filtered)
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 72, in get_kpi_summary
+    low_count = (filtered_df["재고변동"] < 100)["차종"].nunique()
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/pandas/core/series.py", line 1121, in __getitem__
+    return self._get_value(key)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/pandas/core/series.py", line 1237, in _get_value
+    loc = self.index.get_loc(label)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/pandas/core/indexes/base.py", line 3812, in get_loc
+    raise KeyError(key) from err
+KeyError: '차종'
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/pandas/core/indexes/base.py", line 3805, in get_loc
+    return self._engine.get_loc(casted_key)
+  File "index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "index.pyx", line 175, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index_class_helper.pxi", line 70, in pandas._libs.index.Int64Engine._check_type
+KeyError: '차종'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 49, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 139, in inventory_ui
+    prod, sales, stock, low, high = get_kpi_summary(filtered)
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 72, in get_kpi_summary
+    low_count = (filtered_df["재고변동"] < 100)["차종"].nunique()
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/pandas/core/series.py", line 1121, in __getitem__
+    return self._get_value(key)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/pandas/core/series.py", line 1237, in _get_value
+    loc = self.index.get_loc(label)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/pandas/core/indexes/base.py", line 3812, in get_loc
+    raise KeyError(key) from err
+KeyError: '차종'
+
+ERROR:root:Module modules.inventory에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 48, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/inventory.py", line 74
+    return total_prod, total_sales, total_stock, low_count, high_count
+IndentationError: unexpected indent
+

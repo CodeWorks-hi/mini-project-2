@@ -64,13 +64,15 @@ def calculate_inventory(prod_df, sales_df):
 # -----------------------------------
 
 # 3. KPI 계산 함수
+# 3-1 총 누적량 관련 KPI
 def get_kpi_summary(filtered_df):
     total_prod = int(filtered_df["누적생산"].sum())
     total_sales = int(filtered_df["누적판매"].sum())
     total_stock = int(filtered_df["재고변동"].sum())
-    low_count = (filtered_df["재고변동"] < 100).sum()
-    high_count = (filtered_df["재고변동"] > 10000).sum()
+    low_count = filtered_df[filtered_df["재고변동"] < 100]["차종"].nunique()
+    high_count = filtered_df[filtered_df["재고변동"] > 10000]["차종"].nunique()
     return total_prod, total_sales, total_stock, low_count, high_count
+
 
 # -----------------------------------
 
@@ -135,13 +137,15 @@ def inventory_ui():
     with col1:
         st.markdown("#### 📊 주요 지표")
         prod, sales, stock, low, high = get_kpi_summary(filtered)
-        k1, k2, k3, k4, k5 = st.columns(5)
+        k1, k2, k3 = st.columns(3)
         k1.metric("총 생산량", f"{prod:,} 대")
         k2.metric("총 판매량", f"{sales:,} 대")
         k3.metric("총 재고량", f"{stock:,} 대")
+        
+        k4, k5, k6 = st.columns(3)
         k4.metric("재고 부족 차종", f"{low} 종")
         k5.metric("재고 과잉 차종", f"{high} 종")
-
+        k6
     st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -165,23 +169,23 @@ def inventory_ui():
     
     top10 = filtered.sort_values("재고변동", ascending=False).head(10).reset_index(drop=True)
     bottom10 = filtered.sort_values("재고변동").head(10).reset_index(drop=True)
-
-    col1, col2, col3 = st.columns([3, 2, 2])
+    with st.expander(" 재고 상세 데이터 보기", expanded=False):
+        col1, col2, col3 = st.columns([3, 2, 2])
+        
+        with col1:
+            with st.container():
+                st.subheader("필터 결과 상세 데이터")
+        
+                st.dataframe(filtered_sorted, use_container_width=True, hide_index=True)
     
-    with col1:
+        
         with st.container():
-            st.subheader("필터 결과 상세 데이터")
-       
-            st.dataframe(filtered_sorted, use_container_width=True, hide_index=True)
- 
-    
-    with st.container():
-        with col2:
-            st.subheader("재고 과잉 차종")
-            st.dataframe(top10[["브랜드", "차종", "연도", "재고변동"]], use_container_width=True, hide_index=True)
-        with col3:
-            st.subheader("재고 부족 차종")
-            st.dataframe(bottom10[["브랜드", "차종", "연도", "재고변동"]], use_container_width=True, hide_index=True)
+            with col2:
+                st.subheader("재고 과잉 차종")
+                st.dataframe(top10[["브랜드", "차종", "연도", "재고변동"]], use_container_width=True, hide_index=True)
+            with col3:
+                st.subheader("재고 부족 차종")
+                st.dataframe(bottom10[["브랜드", "차종", "연도", "재고변동"]], use_container_width=True, hide_index=True)
 
 
 
