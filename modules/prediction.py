@@ -189,7 +189,9 @@ def prediction_ui():
         file_path = "data/processed/hyundai-by-region.csv"  # 현대만 할 거니까~
         df = pd.read_csv(file_path)
 
-        region_list = ["선택하세요"] + list(df['지역명'].unique())
+        region_list = ["선택하세요"] + sorted(df['지역명'].unique())
+        region_list.remove("서유럽")
+        region_list.remove("동유럽")
         region_name = st.selectbox("지역명을 선택하세요", region_list, key="region_list")
         forecast_months = st.number_input("몇 개월 뒤까지 예측할까요?", min_value=1, max_value=24, value=12, key="region_month")
 
@@ -211,28 +213,23 @@ def prediction_ui():
 
                 status = ensure_model(region_name)
 
-                # ✅ 특정 기간 값이 모두 0인지 확인
-                zero_check_range = region_data.loc["2024-09":"2025-02", "y"]
-                if zero_check_range.sum() == 0:
-                    st.error("🚫 이 지역은 현재 검색이 불가능합니다.")
-                else :
-                    if status:
-                        lstm_model = load_model(get_model_path(region_name), compile=False)
-                        scaler = joblib.load(get_scaler_path(region_name))
-                    else:
-                        st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
-                        st.info("30초 이상 소요될 수 있습니다.")
-                        with st.spinner("🔄 모델을 학습 중입니다... 잠시만 기다려주세요."):
-                            X, y, scaler = prepare_lstm_data(region_data)
-                            lstm_model = train_lstm_model(X, y, region_name=region_name)
-                            # 모델이 조기 종료되지 않은 경우에만 여기서 저장
-                            if not os.path.exists(get_model_path(region_name)):
-                                lstm_model.save(get_model_path(region_name))
-                                joblib.dump(scaler, get_scaler_path(region_name))
+                if status:
+                    lstm_model = load_model(get_model_path(region_name), compile=False)
+                    scaler = joblib.load(get_scaler_path(region_name))
+                else:
+                    st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
+                    st.info("30초 이상 소요될 수 있습니다.")
+                    with st.spinner("🔄 모델을 학습 중입니다... 잠시만 기다려주세요."):
+                        X, y, scaler = prepare_lstm_data(region_data)
+                        lstm_model = train_lstm_model(X, y, region_name=region_name)
+                        joblib.dump(scaler, get_scaler_path(region_name))
+                        # 모델이 조기 종료되지 않은 경우에만 여기서 저장
+                        if not os.path.exists(get_model_path(region_name)):
+                            lstm_model.save(get_model_path(region_name))
 
-                    lstm_forecast = forecast_lstm(lstm_model, region_data, forecast_months, scaler)
-                    # plot_lstm_forecast(region_data, lstm_forecast, region_name, forecast_months)
-                    display_lstm_forecast_table(lstm_forecast, region_name)
+                lstm_forecast = forecast_lstm(lstm_model, region_data, forecast_months, scaler)
+                # plot_lstm_forecast(region_data, lstm_forecast, region_name, forecast_months)
+                display_lstm_forecast_table(lstm_forecast, region_name)
     with tab2:
         # 2. 차종별 판매량 예측
         def prepare_lstm_data(series, time_steps=12):
@@ -372,9 +369,15 @@ def prediction_ui():
         cols = ['차종'] + [col for col in df.columns if col != '차종']
         df = df[cols]
 
-        car_list = ["선택하세요"] + list(set([x.split("-")[0] for x in df['차종'].unique()]))
-        range_list = ["선택하세요"] + list(set([x.split("-")[1] for x in df['차종'].unique()]))
-        car_name = st.selectbox("차종을 선택하세요.", car_list, key="car_list") + "-" + st.selectbox("거래 구분을 선택하세요.", range_list, key="range_list")
+        car_list = ["선택하세요"] + sorted(set([x.split("-")[0] for x in df['차종'].unique()]))
+        car_selection = st.selectbox("차종을 선택하세요.", car_list, key="car_list")
+        if car_selection != "선택하세요":
+            filtered_ranges = sorted(set(x.split("-")[1] for x in df['차종'].unique() if x.startswith(car_selection + "-")))
+            range_list = ["선택하세요"] + filtered_ranges
+        else:
+            range_list = ["선택하세요"]
+        range_selection = st.selectbox("거래 구분을 선택하세요.", range_list, key="range_list")
+        car_name = car_selection + "-" + range_selection
         forecast_months = st.number_input("몇 개월 뒤까지 예측할까요?", min_value=1, max_value=24, value=12, key="car_month")
 
         if st.button("차종별 판매량 예측 시작") :
@@ -382,56 +385,59 @@ def prediction_ui():
                 st.error("차종과 거래 구분을 선택해주세요.")
             else:   
                 car_data = df[df['차종'] == car_name].iloc[:, 1:].T
-                if car_data.empty:
-                    st.error("선택한 조건에 대한 데이터가 없습니다.")
-                else:
-                    car_data.columns = ['y']
-                    car_data.index = pd.to_datetime(car_data.index)
-                    car_data = car_data.asfreq('MS')
-                    car_data['y'] = pd.to_numeric(car_data['y'], errors='coerce')
-                    car_data = car_data.dropna()
+                # if car_data.empty:
+                #     car = car_name.split("-")[0]
+                #     purp = car_name.split("-")[1]
+                #     st.error(f"**{car}**은 **{purp}** 목적으로 생산되고 있지 않습니다.")
+                # else:
+                car_data.columns = ['y']
+                car_data.index = pd.to_datetime(car_data.index)
+                car_data = car_data.asfreq('MS')
+                car_data['y'] = pd.to_numeric(car_data['y'], errors='coerce')
+                car_data = car_data.dropna()
 
-                    def get_model_path(car_name):
-                        return f"models/lstm_car_{car_name}_model.h5"
+                def get_model_path(car_name):
+                    return f"models/lstm_car_{car_name}_model.h5"
 
-                    def get_scaler_path(car_name):
-                        return f"models/lstm_car_{car_name}_scaler.pkl"
+                def get_scaler_path(car_name):
+                    return f"models/lstm_car_{car_name}_scaler.pkl"
 
-                    def ensure_model(car_name):
-                        model_path = get_model_path(car_name)
-                        scaler_path = get_scaler_path(car_name)
+                def ensure_model(car_name):
+                    model_path = get_model_path(car_name)
+                    scaler_path = get_scaler_path(car_name)
 
-                        if os.path.exists(model_path) and os.path.exists(scaler_path):
-                            print(f"✅ 저장된 모델과 스케일러가 존재합니다: {model_path}")
-                            return True
-                        else:
-                            print(f"🚀 모델 또는 스케일러가 존재하지 않아 새로 학습합니다.")
-                            return False
+                    if os.path.exists(model_path) and os.path.exists(scaler_path):
+                        print(f"✅ 저장된 모델과 스케일러가 존재합니다: {model_path}")
+                        return True
+                    else:
+                        print(f"🚀 모델 또는 스케일러가 존재하지 않아 새로 학습합니다.")
+                        return False
 
-                    status = ensure_model(car_name)
+                status = ensure_model(car_name)
 
-                    # ✅ 특정 기간 값이 모두 0인지 확인
-                    zero_check_range = car_data.loc["2024-09":"2025-02", "y"]
-                    if zero_check_range.sum() == 0:
-                        st.error("🚫 이 차는 더 이상 생산하지 않습니다.")
-                    else :
-                        if status:
-                            lstm_model = load_model(get_model_path(car_name), compile=False)
-                            scaler = joblib.load(get_scaler_path(car_name))
-                        else:
-                            st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
-                            st.info("30초 이상 소요될 수 있습니다.")
-                            with st.spinner("🔄 모델을 학습 중입니다... 잠시만 기다려주세요."):
-                                X, y, scaler = prepare_lstm_data(car_data)
-                                lstm_model = train_lstm_model(X, y, car_name=car_name)
-                                # 모델이 조기 종료되지 않은 경우에만 여기서 저장
-                                if not os.path.exists(get_model_path(car_name)):
-                                    lstm_model.save(get_model_path(car_name))
-                                    joblib.dump(scaler, get_scaler_path(car_name))
+                # ✅ 특정 기간 값이 모두 0인지 확인
+                zero_check_range = car_data.loc["2024-09":"2025-02", "y"]
+                if zero_check_range.sum() == 0:
+                    st.error("🚫 이 차는 더 이상 생산하지 않습니다.")
+                    st.stop
+                else :
+                    if status:
+                        lstm_model = load_model(get_model_path(car_name), compile=False)
+                        scaler = joblib.load(get_scaler_path(car_name))
+                    else:
+                        st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
+                        st.info("30초 이상 소요될 수 있습니다.")
+                        with st.spinner("🔄 모델을 학습 중입니다... 잠시만 기다려주세요."):
+                            X, y, scaler = prepare_lstm_data(car_data)
+                            lstm_model = train_lstm_model(X, y, car_name=car_name)
+                            joblib.dump(scaler, get_scaler_path(car_name))
+                            # 모델이 조기 종료되지 않은 경우에만 여기서 저장
+                            if not os.path.exists(get_model_path(car_name)):
+                                lstm_model.save(get_model_path(car_name))
 
-                        lstm_forecast = forecast_lstm(lstm_model, car_data, forecast_months, scaler)
-                        # plot_lstm_forecast(car_data, lstm_forecast, car_name, forecast_months)
-                        display_lstm_forecast_table(lstm_forecast, car_name)
+                    lstm_forecast = forecast_lstm(lstm_model, car_data, forecast_months, scaler)
+                    # plot_lstm_forecast(car_data, lstm_forecast, car_name, forecast_months)
+                    display_lstm_forecast_table(lstm_forecast, car_name)
     with tab3:
         # 공장별 판매량 예측
         # 1. 데이터 준비 함수
@@ -572,12 +578,40 @@ def prediction_ui():
         cols = ['공장명(국가)'] + [col for col in df.columns if col != '공장명(국가)']
         df = df[cols]
 
-        plant_list = ["선택하세요"] + list(set([x.split("-")[0] for x in df['공장명(국가)'].unique()]))
-        if "CKD (모듈형 조립 방식)" in plant_list:
-            plant_list.remove("CKD (모듈형 조립 방식)")
-        car_list = ["선택하세요"] + list(set([x.split("-")[1] for x in df['공장명(국가)'].unique()]))
-        range_list = ["선택하세요"] + list(set([x.split("-")[2] for x in df['공장명(국가)'].unique()]))
-        plant_name = st.selectbox("공장을 선택하세요.", plant_list, key="plant_list") + "-" + st.selectbox("차종을 선택하세요.", car_list, key="plant_car_list") + "-" + st.selectbox("거래 구분을 선택하세요.", range_list, key="plant_range_list")
+        plant_raw = df['공장명(국가)'].unique()
+        plant_list = sorted(set(x.split("-")[0] for x in plant_raw if not x.startswith(("CKD", "기타")))) + ["기타"]
+        car_by_plant = {plant: set() for plant in plant_list}
+        range_by_plant_car = {}
+
+        for full in plant_raw:
+            parts = full.split("-")
+            if len(parts) == 3 and not parts[0].startswith("CKD"):
+                plant, car, rng = parts
+                car_by_plant[plant].add(car)
+                range_by_plant_car[(plant, car)] = range_by_plant_car.get((plant, car), set())
+                range_by_plant_car[(plant, car)].add(rng)
+        
+        plant_list = ["선택하세요"] + plant_list
+        plant_selection = st.selectbox("공장을 선택하세요.", plant_list, key="plant_list")
+
+        if plant_selection != "선택하세요":
+            cars = sorted(car_by_plant.get(plant_selection, []))
+            car_list = ["선택하세요"] + cars
+        else:
+            car_list = ["선택하세요"]
+        car_selection = st.selectbox("차종을 선택하세요.", car_list, key="plant_car_list")
+
+        if plant_selection != "선택하세요" and car_selection != "선택하세요":
+            ranges = sorted(range_by_plant_car.get((plant_selection, car_selection), []))
+            range_list = ["선택하세요"] + ranges
+        else:
+            range_list = ["선택하세요"]
+        range_selection = st.selectbox("거래 구분을 선택하세요.", range_list, key="plant_range_list")
+
+        # 최종 조합
+        if plant_selection != "선택하세요" and car_selection != "선택하세요" and range_selection != "선택하세요":
+            plant_name = f"{plant_selection}-{car_selection}-{range_selection}"
+
         forecast_months = st.number_input("몇 개월 뒤까지 예측할까요?", min_value=1, max_value=24, value=12, key="plant_month")
 
         if st.button("공장별 판매량 예측 시작") :
@@ -585,53 +619,52 @@ def prediction_ui():
                 st.error("공장, 차종, 거래 구분을 선택해주세요.")
             else:
                 plant_data = df[df['공장명(국가)'] == plant_name].iloc[:, 1:].T
-                if plant_data.empty:
-                    st.error("선택한 조건에 대한 데이터가 없습니다.")
-                else:
-                    plant_data.columns = ['y']
-                    plant_data.index = pd.to_datetime(plant_data.index)
-                    plant_data = plant_data.asfreq('MS')
-                    plant_data['y'] = pd.to_numeric(plant_data['y'], errors='coerce')
-                    plant_data = plant_data.dropna()
+                plant_data.columns = ['y']
+                plant_data.index = pd.to_datetime(plant_data.index)
+                plant_data = plant_data.asfreq('MS')
+                plant_data['y'] = pd.to_numeric(plant_data['y'], errors='coerce')
+                plant_data = plant_data.dropna()
 
-                    def get_model_path(plant_name):
-                        return f"models/lstm_plant_{plant_name}_model.h5"
+                def get_model_path(plant_name):
+                    return f"models/lstm_plant_{plant_name}_model.h5"
 
-                    def get_scaler_path(plant_name):
-                        return f"models/lstm_plant_{plant_name}_scaler.pkl"
+                def get_scaler_path(plant_name):
+                    return f"models/lstm_plant_{plant_name}_scaler.pkl"
 
-                    def ensure_model(plant_name):
-                        model_path = get_model_path(plant_name)
-                        scaler_path = get_scaler_path(plant_name)
+                def ensure_model(plant_name):
+                    model_path = get_model_path(plant_name)
+                    scaler_path = get_scaler_path(plant_name)
 
-                        if os.path.exists(model_path) and os.path.exists(scaler_path):
-                            print(f"✅ 저장된 모델과 스케일러가 존재합니다: {model_path}")
-                            return True
-                        else:
-                            print(f"🚀 모델 또는 스케일러가 존재하지 않아 새로 학습합니다.")
-                            return False
+                    if os.path.exists(model_path) and os.path.exists(scaler_path):
+                        print(f"✅ 저장된 모델과 스케일러가 존재합니다: {model_path}")
+                        return True
+                    else:
+                        print(f"🚀 모델 또는 스케일러가 존재하지 않아 새로 학습합니다.")
+                        return False
 
-                    status = ensure_model(plant_name)
+                status = ensure_model(plant_name)
 
-                    # ✅ 특정 기간 값이 모두 0인지 확인
-                    zero_check_range = plant_data.loc["2024-09":"2025-02", "y"]
-                    if zero_check_range.sum() == 0:
-                        st.error("🚫 이 차는 더 이상 생산하지 않습니다.")
-                    else :
-                        if status:
-                            lstm_model = load_model(get_model_path(plant_name), compile=False)
-                            scaler = joblib.load(get_scaler_path(plant_name))
-                        else:
-                            st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
-                            st.info("30초 이상 소요될 수 있습니다.")
-                            with st.spinner("🔄 모델을 학습 중입니다... 잠시만 기다려주세요."):
-                                X, y, scaler = prepare_lstm_data(plant_data)
-                                lstm_model = train_lstm_model(X, y, plant_name=plant_name)
-                                # 모델이 조기 종료되지 않은 경우에만 여기서 저장
-                                if not os.path.exists(get_model_path(plant_name)):
-                                    lstm_model.save(get_model_path(plant_name))
-                                    joblib.dump(scaler, get_scaler_path(plant_name))
+                # ✅ 특정 기간 값이 모두 0인지 확인
+                zero_check_range = plant_data.loc["2024-09":"2025-02", "y"]
+                if zero_check_range.sum() == 0:
+                    st.error("🚫 이 차는 더 이상 생산하지 않습니다.")
+                    st.stop
+                else :
+                    if status:
+                        lstm_model = load_model(get_model_path(plant_name), compile=False)
+                        scaler = joblib.load(get_scaler_path(plant_name))
+                    else:
+                        st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
+                        st.info("30초 이상 소요될 수 있습니다.")
+                        with st.spinner("🔄 모델을 학습 중입니다... 잠시만 기다려주세요."):
+                            X, y, scaler = prepare_lstm_data(plant_data)
+                            lstm_model = train_lstm_model(X, y, plant_name=plant_name)
+                            joblib.dump(scaler, get_scaler_path(plant_name))
+                            # 모델이 조기 종료되지 않은 경우에만 여기서 저장
+                            if not os.path.exists(get_model_path(plant_name)):
+                                lstm_model.save(get_model_path(plant_name))
+                                
 
-                        lstm_forecast = forecast_lstm(lstm_model, plant_data, forecast_months, scaler)
-                        # plot_lstm_forecast(plant_data, lstm_forecast, plant_name, forecast_months)
-                        display_lstm_forecast_table(lstm_forecast, plant_name)
+                    lstm_forecast = forecast_lstm(lstm_model, plant_data, forecast_months, scaler)
+                    # plot_lstm_forecast(plant_data, lstm_forecast, plant_name, forecast_months)
+                    display_lstm_forecast_table(lstm_forecast, plant_name)
