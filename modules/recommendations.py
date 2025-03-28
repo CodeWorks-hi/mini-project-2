@@ -14,7 +14,7 @@ def get_huggingface_token(model_type):
 def clean_input(text: str) -> str:
     return re.sub(r"(해줘|알려줘|설명해 줘|말해 줘)", "", text).strip()
 
-def generate_text_via_api(prompt: str, model_name: str = TEXT_MODEL_ID) -> str:
+def generate_text_via_api(prompt: str, predictions: dict, model_name: str = TEXT_MODEL_ID) -> str:
     token = get_huggingface_token("gemma")
     if not token:
         st.error("Hugging Face API 토큰이 없습니다.")
@@ -64,7 +64,7 @@ def generate_text_via_api(prompt: str, model_name: str = TEXT_MODEL_ID) -> str:
         "예상 수치를 포함해 구체적으로 설명해줘"
     ]
 
-    full_prompt = f"{system_prompt}\n\n[사용자 질문]\n{prompt}\n\n[추가 지시사항]\n" + "\n".join(text_prompt)
+    full_prompt = f"{system_prompt}\n\n[사용자 질문]\n{prompt}\n\n[예측 데이터]\n{predictions}\n\n[추가 지시사항]\n" + "\n".join(text_prompt)
 
     try:
         client = InferenceClient(model=model_name, token=token)
@@ -89,22 +89,20 @@ def recommendations_ui():
     """)
 
 
-    with st.form("analyze_form"):
-        user_input = st.text_area("예측 및 분석 입력", placeholder="예: 2025년 미국 수출 예측해줘 ")
-        submitted = st.form_submit_button("예측 및 분석 실행")
+    if 'predictions' in st.session_state:
+        predictions = st.session_state.predictions
+        with st.form("analyze_form"):
+            user_input = st.text_area("예측 및 분석 입력", placeholder="예: 2025년 미국 수출 예측해줘 ")
+            submitted = st.form_submit_button("예측 및 분석 실행")
 
-    st.warning("예측 결과는 확정된 분석이 아니므로 참고용으로만 활용해 주시기 바랍니다.")    
-
-    if submitted:
-        st.markdown("---")
-        if user_input:
+        if submitted:
             with st.spinner("시장 예측 및 분석 중..."):
                 cleaned = clean_input(user_input)
-                result_txt = generate_text_via_api(cleaned)
+                result_txt = generate_text_via_api(cleaned, predictions)
+                st.session_state.analysis_result = result_txt
                 st.markdown(f"### 종합 예측 및 분석 결과\n{result_txt}")
-                
-        else:
-            st.warning("입력 내용을 확인해주세요.")
+    else:
+        st.warning("먼저 예측을 실행해주세요.")
 
 
 

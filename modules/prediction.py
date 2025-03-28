@@ -2,8 +2,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
+import tensorflow as tf
 from tensorflow.keras.models import Sequential, load_model
-from tensorflow.keras.layers import LSTM, Dense
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.layers import Input, Dense, LSTM
 import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
 import platform
@@ -11,9 +13,10 @@ import os
 import joblib
 from sklearn.metrics import r2_score
 import matplotlib.dates as mdates
-import tensorflow as tf
 import io
-
+import joblib
+import matplotlib.pyplot as plt
+import time
 
 # 한글 폰트 조정
 plt.rcParams["axes.unicode_minus"] = False
@@ -32,8 +35,13 @@ elif platform.system() == "Linux":  # Linux (Ubuntu, Docker 등)
     rc("font", family=font_name)
 
 
+def send_predictions_to_recommendations(predictions):
+    st.session_state.predictions = predictions
+
 def prediction_ui():
+    st.title("AI 판매 예측 시스템")
     tab1, tab2, tab3 = st.tabs(["지역별 수출량 예측", "차종별 판매량 예측", "공장별 판매량 예측"])
+
 
     with tab1:
         # 1. 지역별 예측 시스템
@@ -42,20 +50,23 @@ def prediction_ui():
             values = series['y'].values.reshape(-1, 1)
             scaler = MinMaxScaler()
             scaled = scaler.fit_transform(values)
-
             X, y = [], []
             for i in range(time_steps, len(scaled)):
                 X.append(scaled[i-time_steps:i])
                 y.append(scaled[i])
-            X, y = np.array(X), np.array(y)
-            return X, y, scaler
+            return np.array(X), np.array(y), scaler
 
         # 1-2. 모델 정의 및 학습
-        def train_lstm_model(X, y, units=50, epochs=600, batch_size=16, region_name=None):
-            model = Sequential()
-            model.add(LSTM(units=units, activation='relu', input_shape=(X.shape[1], X.shape[2])))
-            model.add(Dense(1))
+        def train_lstm_model(X, y, units=50, epochs=600, batch_size=16, name=None):
+            input_shape = (X.shape[1], X.shape[2])
+            model = Sequential([
+                Input(shape=input_shape),
+                LSTM(units=units, activation='relu'),
+                Dense(1)
+            ])
             model.compile(optimizer='adam', loss='mse')
+    
+
             
             # 조기 종료를 위한 콜백 클래스 정의
             class EarlyStoppingByLoss(tf.keras.callbacks.Callback):
@@ -84,8 +95,28 @@ def prediction_ui():
                 verbose=1,
                 callbacks=[early_stopping]
             )
+            losses = []
             
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+            loss_chart = st.empty()
+
+
+            for epoch in range(epochs):
+                history = model.fit(X, y, epochs=1, batch_size=batch_size, verbose=0)
+                loss = history.history['loss'][0]
+                losses.append(loss)
+                
+                if epoch % 10 == 0 or epoch == epochs - 1:
+                    progress = (epoch + 1) / epochs
+                    progress_bar.progress(progress)
+                    status_text.text(f"Epoch {epoch+1}/{epochs} - loss: {loss:.4f}")
+    
+                time.sleep(0.1)  # 애니메이션 효과를 위한 짧은 대기 시간
+
             return model
+  
+
 
         # 1-3. 미래 예측
         def forecast_lstm(model, series, forecast_months, scaler, time_steps=12):
@@ -224,8 +255,7 @@ def prediction_ui():
                     lstm_model = load_model(get_model_path(region_name), compile=False)
                     scaler = joblib.load(get_scaler_path(region_name))
                 else:
-                    st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
-                    st.info("30초 이상 소요될 수 있습니다.")
+                    st.info("모델생성을 새로 시작중입니다. 모델생성이 30초 이상 소요될 수 있습니다")
                     with st.spinner("모델을 학습 중입니다... 잠시만 기다려주세요."):
                         X, y, scaler = prepare_lstm_data(region_data)
                         lstm_model = train_lstm_model(X, y, region_name=region_name)
@@ -235,6 +265,7 @@ def prediction_ui():
                             lstm_model.save(get_model_path(region_name))
 
                 lstm_forecast = forecast_lstm(lstm_model, region_data, forecast_months, scaler)
+                send_predictions_to_recommendations({"type": "region","name": region_name,"forecast": lstm_forecast.to_dict()})
                 # plot_lstm_forecast(region_data, lstm_forecast, region_name, forecast_months)
                 display_lstm_forecast_table(lstm_forecast, region_name)
     with tab2:
@@ -252,41 +283,83 @@ def prediction_ui():
             return X, y, scaler
 
         # 2. 모델 정의 및 학습
-        def train_lstm_model(X, y, units=50, epochs=600, batch_size=16, car_name=None):
-            model = Sequential()
-            model.add(LSTM(units=units, activation='relu', input_shape=(X.shape[1], X.shape[2])))
-            model.add(Dense(1))
+        def train_lstm_model(X, y, units=50, epochs=600, batch_size=16, name=None):
+            input_shape = (X.shape[1], X.shape[2])
+            model = Sequential([
+                Input(shape=input_shape),
+                LSTM(units=units, activation='relu'),
+                Dense(1)
+            ])
             model.compile(optimizer='adam', loss='mse')
-            
-            # 조기 종료를 위한 콜백 클래스 정의
-            class EarlyStoppingByLoss(tf.keras.callbacks.Callback):
-                def __init__(self, car_name):
-                    super(EarlyStoppingByLoss, self).__init__()
-                    self.car_name = car_name
-                    
+
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+            loss_chart = st.empty()
+
+            update_freq = max(1, epochs // 10)  # 10번 정도 업데이트하도록 설정
+
+            class CustomCallback(tf.keras.callbacks.Callback):
                 def on_epoch_end(self, epoch, logs=None):
-                    current_loss = logs.get('loss')
-                    if current_loss is not None and current_loss <= 0.01:
-                        print(f"\n🎉 조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({current_loss:.4f})로 떨어짐")
-                        # 모델 저장
-                        model_path = get_model_path(self.car_name)
-                        scaler_path = get_scaler_path(self.car_name)
+                    if epoch % update_freq == 0 or epoch == epochs - 1:
+                        loss = logs.get('loss')
+                        progress = (epoch + 1) / epochs
+                        progress_bar.progress(progress)
+                        status_text.text(f"Epoch {epoch+1}/{epochs} - loss: {loss:.4f}")
+
+                        if epoch % (update_freq * 2) == 0 or epoch == epochs - 1:
+                            fig, ax = plt.subplots(figsize=(6, 2))
+                            ax.plot(model.history.history['loss'])
+                            ax.set_title('Model Loss')
+                            ax.set_ylabel('Loss')
+                            loss_chart.pyplot(fig)
+                            plt.close(fig)
+
+                    if logs.get('loss') <= 0.01:
+                        print(f"\n🎉 조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({logs.get('loss'):.4f})로 떨어짐")
+                        self.model.stop_training = True
+
+                        if epoch % (update_freq * 2) == 0 or epoch == epochs - 1:
+                            fig, ax = plt.subplots(figsize=(6, 2))
+                            ax.plot(self.model.history.history['loss'])
+                            ax.set_title('Model Loss')
+                            ax.set_ylabel('Loss')
+                            loss_chart.pyplot(fig)
+                            plt.close(fig)
+
+                    if loss <= 0.01:
+                        print(f"\n🎉 조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({loss:.4f})로 떨어짐")
+                        model_path = get_model_path(plant_name)
                         self.model.save(model_path)
                         print(f"모델이 {model_path}에 저장되었습니다.")
                         self.model.stop_training = True
-            
-            # 콜백 인스턴스 생성
-            early_stopping = EarlyStoppingByLoss(car_name)
-            
+
+                        if epoch % (update_freq * 2) == 0 or epoch == epochs - 1:
+                            fig, ax = plt.subplots(figsize=(6, 2))
+                            ax.plot(self.model.history.history['loss'])
+                            ax.set_title('Model Loss')
+                            ax.set_ylabel('Loss')
+                            loss_chart.pyplot(fig)
+                            plt.close(fig)
+
+                    if loss <= 0.01:
+                        print(f"\n🎉 조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({loss:.4f})로 떨어짐")
+                        model_path = get_model_path(plant_name)
+                        self.model.save(model_path)
+                        print(f"모델이 {model_path}에 저장되었습니다.")
+                        self.model.stop_training = True
+
             history = model.fit(
                 X, y, 
                 epochs=epochs, 
                 batch_size=batch_size, 
-                verbose=1,
-                callbacks=[early_stopping]
+                verbose=0,
+                callbacks=[CustomCallback()]
             )
-            
+
             return model
+
+   
+             
 
         # 3. 미래 예측
         def forecast_lstm(model, series, forecast_months, scaler, time_steps=12):
@@ -442,8 +515,7 @@ def prediction_ui():
                         lstm_model = load_model(get_model_path(car_name), compile=False)
                         scaler = joblib.load(get_scaler_path(car_name))
                     else:
-                        st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
-                        st.info("30초 이상 소요될 수 있습니다.")
+                        st.info("모델생성을 새로 시작중입니다. 모델생성이 30초 이상 소요될 수 있습니다")
                         with st.spinner("모델을 학습 중입니다... 잠시만 기다려주세요."):
                             X, y, scaler = prepare_lstm_data(car_data)
                             lstm_model = train_lstm_model(X, y, car_name=car_name)
@@ -453,6 +525,7 @@ def prediction_ui():
                                 lstm_model.save(get_model_path(car_name))
 
                     lstm_forecast = forecast_lstm(lstm_model, car_data, forecast_months, scaler)
+                    send_predictions_to_recommendations({ "type": "car","name": car_name,"forecast": lstm_forecast.to_dict()})
                     # plot_lstm_forecast(car_data, lstm_forecast, car_name, forecast_months)
                     display_lstm_forecast_table(lstm_forecast, car_name)
     with tab3:
@@ -471,40 +544,49 @@ def prediction_ui():
             return X, y, scaler
 
         # 2. 모델 정의 및 학습
-        def train_lstm_model(X, y, units=50, epochs=600, batch_size=16, plant_name=None):
-            model = Sequential()
-            model.add(LSTM(units=units, activation='relu', input_shape=(X.shape[1], X.shape[2])))
-            model.add(Dense(1))
+        def train_lstm_model(X, y, units=50, epochs=600, batch_size=16, name=None):
+            input_shape = (X.shape[1], X.shape[2])
+            model = Sequential([
+                Input(shape=input_shape),
+                LSTM(units=units, activation='relu'),
+                Dense(1)
+            ])
             model.compile(optimizer='adam', loss='mse')
-            
-            # 조기 종료를 위한 콜백 클래스 정의
-            class EarlyStoppingByLoss(tf.keras.callbacks.Callback):
-                def __init__(self, plant_name):
-                    super(EarlyStoppingByLoss, self).__init__()
-                    self.plant_name = plant_name
-                    
+    
+
+            update_freq = max(1, epochs // 10)  # 10번 정도 업데이트하도록 설정
+
+            class CustomCallback(tf.keras.callbacks.Callback):
                 def on_epoch_end(self, epoch, logs=None):
-                    current_loss = logs.get('loss')
-                    if current_loss is not None and current_loss <= 0.01:
-                        print(f"\n조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({current_loss:.4f})로 떨어짐")
-                        # 모델 저장
-                        model_path = get_model_path(self.plant_name)
-                        scaler_path = get_scaler_path(self.plant_name)
+                    loss = logs.get('loss')
+                    if epoch % update_freq == 0 or epoch == epochs - 1:
+                        progress = (epoch + 1) / epochs
+                        progress_bar.progress(progress)
+                        status_text.text(f"Epoch {epoch+1}/{epochs} - loss: {loss:.4f}")
+
+                        if epoch % (update_freq * 2) == 0 or epoch == epochs - 1:
+                            fig, ax = plt.subplots(figsize=(6, 2))
+                            ax.plot(self.model.history.history['loss'])
+                            ax.set_title('Model Loss')
+                            ax.set_ylabel('Loss')
+                            loss_chart.pyplot(fig)
+                            plt.close(fig)
+
+                    if loss <= 0.01:
+                        print(f"\n🎉 조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({loss:.4f})로 떨어짐")
+                        model_path = get_model_path(plant_name)
                         self.model.save(model_path)
                         print(f"모델이 {model_path}에 저장되었습니다.")
                         self.model.stop_training = True
-            
-            # 콜백 인스턴스 생성
-            early_stopping = EarlyStoppingByLoss(plant_name)
-            
+
             history = model.fit(
                 X, y, 
                 epochs=epochs, 
                 batch_size=batch_size, 
-                verbose=1,
-                callbacks=[early_stopping]
+                verbose=0,
+                callbacks=[CustomCallback()]
             )
-            
+
             return model
 
         # 3. 미래 예측
@@ -681,8 +763,7 @@ def prediction_ui():
                         lstm_model = load_model(get_model_path(plant_name), compile=False)
                         scaler = joblib.load(get_scaler_path(plant_name))
                     else:
-                        st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
-                        st.info("30초 이상 소요될 수 있습니다.")
+                        st.info("모델생성을 새로 시작중입니다. 모델생성이 30초 이상 소요될 수 있습니다")
                         with st.spinner("모델을 학습 중입니다... 잠시만 기다려주세요."):
                             X, y, scaler = prepare_lstm_data(plant_data)
                             lstm_model = train_lstm_model(X, y, plant_name=plant_name)
@@ -693,5 +774,6 @@ def prediction_ui():
                                 
 
                     lstm_forecast = forecast_lstm(lstm_model, plant_data, forecast_months, scaler)
+                    send_predictions_to_recommendations({"type": "plant","name": plant_name,"forecast": lstm_forecast.to_dict()})
                     # plot_lstm_forecast(plant_data, lstm_forecast, plant_name, forecast_months)
                     display_lstm_forecast_table(lstm_forecast, plant_name)

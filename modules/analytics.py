@@ -7,6 +7,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import os
+import numpy as np
 
 #분석 리포트
 # 연도/월 컬럼 추출 함수 추가
@@ -90,6 +91,21 @@ def analytics_ui():
         if brand != "전체":
             filtered_df = filtered_df[filtered_df["브랜드"] == brand]
         return filtered_df
+    
+    if 'analysis_result' in st.session_state:
+        st.subheader("AI 분석 결과")
+        analysis_text = st.session_state.analysis_result
+        
+        # 텍스트에서 표 추출
+        table_start = analysis_text.find("|")
+        table_end = analysis_text.rfind("|")
+        if table_start != -1 and table_end != -1:
+            table_text = analysis_text[table_start:table_end+1]
+            rows = [row.strip().split("|") for row in table_text.split("\n")]
+            headers = [cell.strip() for cell in rows[0] if cell.strip()]
+            data = [[cell.strip() for cell in row if cell.strip()] for row in rows[2:]]
+            df = pd.DataFrame(data, columns=headers)
+            st.table(df)
 
     prod_filtered = apply_filters(prod_df)
     sales_filtered = apply_filters(sales_df)
@@ -106,27 +122,101 @@ def analytics_ui():
     k3.metric("총 수출량", f"{total_export:,} 대")
     k4.metric("예상 재고량", f"{total_stock:,} 대")
 
-    st.subheader("월별 판매 / 생산 / 수출 추이")
+    # 시나리오 데이터 시각화
+    st.subheader("📈 2025 시장 시나리오 분석")
+    scenario_data = {
+        '시나리오': ['낙관적', '중립적', '비관적'],
+        '선점 가능성': [90, 60, 30],
+        '리스크 수준': [20, 50, 80]
+    }
+    scenario_df = pd.DataFrame(scenario_data)
 
-    # 월별 합계 계산
-    def sum_by_month(df_):
-        existing_cols = [c for c in month_cols if c in df_.columns]
-        summed = df_[existing_cols].sum(numeric_only=True).reset_index(name="값").rename(columns={"index": "월"})
-        return summed
+    # 시나리오 버블 차트
+    bubble_chart = alt.Chart(scenario_df).mark_circle(size=300).encode(
+        x=alt.X('시나리오:N', title=None),
+        y=alt.Y('선점 가능성:Q', title='선점 가능성 (%)', scale=alt.Scale(domain=[0, 100])),
+        size=alt.Size('리스크 수준:Q', legend=None),
+        color=alt.Color('시나리오:N', legend=None),
+        tooltip=['시나리오', '선점 가능성', '리스크 수준']
+    ).properties(height=300)
+    st.altair_chart(bubble_chart, use_container_width=True)
 
-    prod_m = sum_by_month(prod_filtered).rename(columns={"값": "생산량"})
-    sales_m = sum_by_month(sales_filtered).rename(columns={"값": "판매량"})
-    export_m = sum_by_month(export_filtered).rename(columns={"값": "수출량"})
+    # 경쟁사 비교 분석
+    st.subheader("주요 경쟁사 비교 분석")
+    competitor_data = {
+        '브랜드': ['현대', '기아', 'BYD', '테슬라'],
+        '시장점유율': [8.2, 7.5, 12.3, 37.9],
+        '평균가격(만원)': [4500, 4200, 2800, 6500],
+        '충전속도(km/10분)': [120, 115, 90, 150]
+    }
+    competitor_df = pd.DataFrame(competitor_data)
 
+    # 경쟁사 레이더 차트
+    radar_chart = alt.Chart(competitor_df).transform_fold(
+        ['시장점유율', '평균가격(만원)', '충전속도(km/10분)'],
+        as_=['metric', 'value']
+    ).mark_line().encode(
+        x=alt.X('metric:N', axis=alt.Axis(labelAngle=0)),
+        y=alt.Y('value:Q', scale=alt.Scale(zero=False)),
+        color='브랜드:N',
+        strokeDash='브랜드:N'
+    ).properties(height=350)
+    st.altair_chart(radar_chart, use_container_width=True)
+
+    # 월별 추이 분석 강화
+    st.subheader(" 월별 생산-판매-수출 상관관계 분석")
     merged = prod_m.merge(sales_m, on="월", how="outer").merge(export_m, on="월", how="outer").fillna(0)
-    melted = merged.melt(id_vars="월", var_name="구분", value_name="수량")
+    
+    # 히트맵 시각화
+    heatmap = alt.Chart(merged.melt(id_vars="월")).mark_rect().encode(
+        x=alt.X('month(월):O', title='월'),
+        y=alt.Y('variable:N', title='지표'),
+        color=alt.Color('value:Q', legend=alt.Legend(title="수량"))
+    ).properties(height=250)
+    st.altair_chart(heatmap, use_container_width=True)
 
-    chart = alt.Chart(melted).mark_line(point=True).encode(
-        x="월",
-        y=alt.Y("수량:Q", title="수량"),
-        color="구분:N"
-    ).properties(width=800, height=400)
-    st.altair_chart(chart, use_container_width=True)
+    # 재고 분석 시각화 강화
+    st.subheader(" 재고 분석 (차종별)")
+    inventory_df["재고위험도"] = np.where(
+        inventory_df["예상재고"] < 100, "위험", 
+        np.where(inventory_df["예상재고"] > 10000, "과잉", "정상")
+    )
+    
+    # 재고 분포 히스토그램
+    hist = alt.Chart(inventory_df).mark_bar().encode(
+        alt.X("예상재고:Q", bin=True, title="재고량"),
+        alt.Y('count()', title="차종 수"),
+        color=alt.Color('재고위험도:N', scale=alt.Scale(
+            domain=['위험', '정상', '과잉'],
+            range=['#ff4b4b', '#0068c9', '#ffa600']
+        ))
+    ).properties(height=300)
+    st.altair_chart(hist, use_container_width=True)
+
+    # 인사이트 시각화 강화
+    st.subheader("🔍 주요 인사이트 시각화")
+    
+    # 상위 5개 모델 시각화
+    if not sales_filtered.empty:
+        top_models = sales_filtered.groupby("차종")[month_cols].sum(numeric_only=True).sum(axis=1).nlargest(5)
+        model_chart = alt.Chart(top_models.reset_index()).mark_bar().encode(
+            x=alt.X('차종:N', sort='-y'),
+            y=alt.Y('0:Q', title='판매량'),
+            color=alt.value('#0068c9')
+        ).properties(height=300, title="TOP 5 인기 모델")
+        st.altair_chart(model_chart, use_container_width=True)
+    
+    # 브랜드 비교 시각화
+    if brand == "전체":
+        brand_comparison = prod_df.groupby("브랜드")[month_cols].sum(numeric_only=True).sum(axis=1)
+        brand_chart = alt.Chart(brand_comparison.reset_index()).mark_arc(innerRadius=50).encode(
+            theta='0:Q',
+            color='브랜드:N',
+            tooltip=['브랜드', alt.Tooltip('0:Q', title='생산량')]
+        ).properties(height=300, title="브랜드별 생산 비중")
+        st.altair_chart(brand_chart, use_container_width=True)
+
+
 
     st.subheader("재고 경고 요약")
 

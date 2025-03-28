@@ -202,7 +202,7 @@ def dashboard_ui():
     with col1:
         st.markdown("""
             <div style='background-color:#e3f2fd;padding:10px;border-radius:12px;margin-top:40px;'>
-                <h4>💱 국가별 실시간 환율 조회 </h4>
+                <h4>국가별 실시간 환율 조회 </h4>
             </div>
         """, unsafe_allow_html=True)
         st.write("")
@@ -246,7 +246,7 @@ def dashboard_ui():
             st.stop()
 
         # 기본 국가 리스트
-        default_countries = ['KRW', 'USD', 'JPY', 'CNY', 'EUR']
+        default_countries = ['KRW', 'USD', 'JPY', 'CNY', 'EUR', 'GBP', 'AUD', 'CAD', 'CHF', 'HKD']
         
         # 모든 통화 리스트 생성
         all_currencies = [row['통화'] for row in all_rows]
@@ -280,10 +280,10 @@ def dashboard_ui():
             else:
                 return '<span style="color: gray;">▶</span>'
 
-        df_display['삼각표'] = df_display['변동'].apply(triangular_indicator)
+        df_display['등락'] = df_display['변동'].apply(triangular_indicator)
 
         # 표시할 열 선택 및 재정렬
-        df_display = df_display[['통화', '통화명', '환율', '전날 환율', '변동', '삼각표']]
+        df_display = df_display[['통화', '통화명', '환율', '전날 환율', '변동', '등락']]
 
         # 스타일 적용 및 표시
         styled_df = df_display.style.format({
@@ -294,13 +294,28 @@ def dashboard_ui():
             'background-color': '#f0f2f6',
             'color': 'black',
             'border-color': 'white',
-            'text-align': 'center'
+            'text-align': 'center',
+            'padding': '12px'  
         }).set_table_styles([
-            {'selector': 'th', 'props': [('background-color', '#4e73df'), ('color', 'white')]},
-            {'selector': 'tr:hover', 'props': [('background-color', '#e8eaf6')]},
+            {'selector': 'th', 'props': [
+                ('background-color', '#4e73df'),
+                ('color', 'white'),
+                ('padding', '14px'), 
+                ('font-size', '16px')
+            ]},
+            {'selector': 'td', 'props': [
+                ('padding', '12px'),  
+                ('font-size', '15px')
+            ]},
+            {'selector': 'tr:hover', 'props': [
+                ('background-color', '#e8eaf6')
+            ]}
         ])
 
+        # Streamlit에서 HTML로 렌더링
         st.markdown(styled_df.to_html(escape=False, index=False), unsafe_allow_html=True)
+
+
     with col2:
         with st.container():
             st.markdown("""
