@@ -19,7 +19,7 @@ import logging
 import traceback
 
 # ✅ 페이지 설정
-st.set_page_config(page_title="ERP 차량 관리 시스템", layout="wide", page_icon="🚗")
+st.set_page_config(page_title="ERP 차량 관리 시스템", layout="wide", page_icon="./images/favicon.ico")
 
 # 로그 설정
 logging.basicConfig(filename='error_log.txt', level=logging.ERROR)
