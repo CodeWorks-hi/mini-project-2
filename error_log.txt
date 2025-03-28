@@ -3023,3 +3023,131 @@ ERROR:root:Module modules.settings에서 오류 발생: Traceback (most recent c
     module = __import__(mod_path, fromlist=[ui_func_name])
 ModuleNotFoundError: No module named 'modules.settings'
 
+ERROR:root:Module modules.intro에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 51, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/intro.py", line 97, in intro_ui
+    st.download_button(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/metrics_util.py", line 410, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/button.py", line 528, in download_button
+    return self._download_button(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/button.py", line 815, in _download_button
+    element_id = compute_and_register_element_id(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 241, in compute_and_register_element_id
+    _register_element_id(ctx, element_type, element_id)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 147, in _register_element_id
+    raise StreamlitDuplicateElementId(element_type)
+streamlit.errors.StreamlitDuplicateElementId: There are multiple `download_button` elements with the same auto-generated ID. When this element is created, it is assigned an internal ID based on the element type and provided parameters. Multiple elements with the same type and parameters will cause this error.
+
+To fix this error, please pass a unique `key` argument to the `download_button` element.
+
+ERROR:root:Module modules.intro에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 51, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/intro.py", line 97, in intro_ui
+    st.download_button(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/metrics_util.py", line 410, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/button.py", line 528, in download_button
+    return self._download_button(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/button.py", line 815, in _download_button
+    element_id = compute_and_register_element_id(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 241, in compute_and_register_element_id
+    _register_element_id(ctx, element_type, element_id)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 147, in _register_element_id
+    raise StreamlitDuplicateElementId(element_type)
+streamlit.errors.StreamlitDuplicateElementId: There are multiple `download_button` elements with the same auto-generated ID. When this element is created, it is assigned an internal ID based on the element type and provided parameters. Multiple elements with the same type and parameters will cause this error.
+
+To fix this error, please pass a unique `key` argument to the `download_button` element.
+
+ERROR:root:Module modules.intro에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 51, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/intro.py", line 97, in intro_ui
+    st.download_button(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/metrics_util.py", line 410, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/button.py", line 528, in download_button
+    return self._download_button(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/button.py", line 815, in _download_button
+    element_id = compute_and_register_element_id(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 241, in compute_and_register_element_id
+    _register_element_id(ctx, element_type, element_id)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 147, in _register_element_id
+    raise StreamlitDuplicateElementId(element_type)
+streamlit.errors.StreamlitDuplicateElementId: There are multiple `download_button` elements with the same auto-generated ID. When this element is created, it is assigned an internal ID based on the element type and provided parameters. Multiple elements with the same type and parameters will cause this error.
+
+To fix this error, please pass a unique `key` argument to the `download_button` element.
+
+ERROR:root:Module modules.intro에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 51, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/intro.py", line 97, in intro_ui
+    st.download_button(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/metrics_util.py", line 410, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/button.py", line 528, in download_button
+    return self._download_button(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/widgets/button.py", line 815, in _download_button
+    element_id = compute_and_register_element_id(
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 241, in compute_and_register_element_id
+    _register_element_id(ctx, element_type, element_id)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 147, in _register_element_id
+    raise StreamlitDuplicateElementId(element_type)
+streamlit.errors.StreamlitDuplicateElementId: There are multiple `download_button` elements with the same auto-generated ID. When this element is created, it is assigned an internal ID based on the element type and provided parameters. Multiple elements with the same type and parameters will cause this error.
+
+To fix this error, please pass a unique `key` argument to the `download_button` element.
+
+ERROR:root:Module modules.data에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 51, in <module>
+    getattr(module, ui_func_name)()
+AttributeError: module 'modules.data' has no attribute 'intro_ui'
+
+ERROR:root:Module modules.data에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 51, in <module>
+    getattr(module, ui_func_name)()
+AttributeError: module 'modules.data' has no attribute 'intro_ui'
+
+ERROR:root:Module modules.data에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 50, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/data.py", line 13
+    return pd.read_csv(filepath. )
+                                 ^
+SyntaxError: invalid syntax
+
+ERROR:root:Module modules.data에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 50, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/data.py", line 13
+    return pd.read_csv(filepath. )
+                                 ^
+SyntaxError: invalid syntax
+
+ERROR:root:Module modules.data에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 51, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/data.py", line 36, in data_preview_ui
+    df = load_csv(selected_path, hide_index=True)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/caching/cache_utils.py", line 217, in __call__
+    return self._get_or_create_cached_value(args, kwargs, spinner_message)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/caching/cache_utils.py", line 259, in _get_or_create_cached_value
+    return self._handle_cache_miss(cache, value_key, func_args, func_kwargs)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/caching/cache_utils.py", line 317, in _handle_cache_miss
+    computed_value = self._info.func(*func_args, **func_kwargs)
+TypeError: load_csv() got an unexpected keyword argument 'hide_index'
+
+ERROR:root:Module modules.data에서 오류 발생: Traceback (most recent call last):
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/Home.py", line 51, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/choenamho/Documents/GitHub/mini-project-2/modules/data.py", line 36, in data_preview_ui
+    df = load_csv(selected_path, hide_index=True)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/caching/cache_utils.py", line 217, in __call__
+    return self._get_or_create_cached_value(args, kwargs, spinner_message)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/caching/cache_utils.py", line 259, in _get_or_create_cached_value
+    return self._handle_cache_miss(cache, value_key, func_args, func_kwargs)
+  File "/Users/choenamho/hi/lib/python3.10/site-packages/streamlit/runtime/caching/cache_utils.py", line 317, in _handle_cache_miss
+    computed_value = self._info.func(*func_args, **func_kwargs)
+TypeError: load_csv() got an unexpected keyword argument 'hide_index'
+
