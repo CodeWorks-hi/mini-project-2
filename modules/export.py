@@ -42,27 +42,61 @@ def load_and_merge_export_data(hyundai_path="data/processed/hyundai-by-region.cs
     if "차량 구분" not in df_h.columns:
         df_h["차량 구분"] = "기타"
     
-    return pd.concat([df_h, df_k], ignore_index=True)
+    # 데이터 병합
+    df = pd.concat([df_h, df_k], ignore_index=True)
+    
+    # '연도' 컬럼 추가
+    df = extract_year_column(df)  # 연도 컬럼 추가
+    
+    
+    return df
 
 # 월별 컬럼 추출 함수
 def extract_month_columns(df):
     return [col for col in df.columns if "-" in col and col[:4].isdigit()]
 
 # 연도 리스트 추출 함수
-def extract_year_column(df):
-    years = sorted({
+def extract_year_list(df):
+    return sorted({
         int(col.split("-")[0])
         for col in df.columns
-        if "-" in col and col[:4].isdigit()
+        if re.match(r"\d{4}-\d{2}", col)
     })
-    return years
+
+# 월 리스트 추출 함수 (특정 연도에 대해)
+def extract_month_list(df, year: int):
+    return sorted({
+        int(col.split("-")[1])
+        for col in df.columns
+        if col.startswith(str(year)) and re.match(r"\d{4}-\d{2}", col)
+    })
+
+# 연도 컬럼 추가 함수
+def extract_year_column(df):
+    # 월별 컬럼을 가져오는 함수
+    month_cols = extract_month_columns(df)
+    
+    # '연도' 컬럼이 없으면 추가
+    if "연도" not in df.columns:
+        def get_year(row):
+            # 유효한 월별 컬럼을 통해 연도 추출
+            valid_years = [int(col.split("-")[0]) for col in month_cols if pd.notnull(row[col])]
+            return max(valid_years) if valid_years else None
+        
+        # '연도' 컬럼 추가
+        df["연도"] = df.apply(get_year, axis=1)
+    
+    # NaN 값이 있는 '연도' 컬럼을 '전체'로 대체 (필요한 경우)
+    df["연도"].fillna('전체', inplace=True)
+
+    return df
 
 # 필터링 UI 생성 함수
 def get_filter_values(df, key_prefix):
     brand = st.selectbox(f"브랜드 선택", df["브랜드"].dropna().unique(), key=f"{key_prefix}_brand")
     
     # 연도 추출 함수가 반환한 연도 리스트를 제대로 반영
-    year_list = extract_year_column(df)
+    year_list = extract_year_list(df)
     year = st.selectbox(f"연도 선택", year_list[::-1], key=f"{key_prefix}_year")
     
     # 국가 선택 UI
@@ -81,7 +115,7 @@ def export_ui():
         return
 
     month_cols = extract_month_columns(df)
-    year_list = extract_year_column(df)
+    year_list = extract_year_list(df)
     
 
     # ✅ 탭 구성
@@ -224,6 +258,9 @@ def export_ui():
                 st.altair_chart(chart, use_container_width=True)
             else:
                 st.warning("수출량 데이터가 없습니다.")
+
+
+                
 
     # --- 연도별 추이 ---
     with tab3:
@@ -413,8 +450,7 @@ def export_ui():
         # 필터링 UI 호출
         brand, year, country = get_filter_values(df, "export_6")
         
-        # 연도 데이터 타입 통일 및 정렬
-        year_list = sorted(df["연도"].dropna().astype(str).unique())
+        year_list = sorted(df["연도"].dropna().unique())
         
         if len(year_list) < 2:
             st.warning("성장률 분석을 위해 최소 2개 연도의 데이터가 필요합니다.")
