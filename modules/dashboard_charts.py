@@ -115,6 +115,8 @@ def render_top_bottom_summary(merged_df: pd.DataFrame):
     <h5>📦 수출 상하위 국가 요약</h5>
     """, unsafe_allow_html=True)
 
+    st.dataframe(merged_df)
+
     top_table = merged_df.sort_values("총수출", ascending=False).head(3)
     bottom_table = merged_df.sort_values("총수출").head(3)
 

@@ -24,9 +24,6 @@ def load_and_merge_export_data(hyundai_path="data/processed/hyundai-by-region.cs
     df_h["브랜드"] = "현대"
     df_k["브랜드"] = "기아"
     
-    if "차량 구분" not in df_h.columns:
-        df_h["차량 구분"] = "기타"
-    
     df_merged = pd.concat([df_h, df_k], ignore_index=True)
     return df_merged
 

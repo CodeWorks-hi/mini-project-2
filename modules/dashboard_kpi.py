@@ -8,30 +8,27 @@
 import streamlit as st
 import pandas as pd
 
-def calculate_kpis(df: pd.DataFrame, month_cols: list, brand: str = "전체", country: str = "전체"):
-    # 연도 필터링을 마친 상태의 df를 받아서 KPI 계산
+def calculate_kpis(df: pd.DataFrame, month_cols: list, brand: str = "전체"):
     df_filtered = df.copy()
 
     if brand != "전체":
         df_filtered = df_filtered[df_filtered["브랜드"] == brand]
-    if country != "전체":
-        df_filtered = df_filtered[df_filtered["지역명"] == country]
 
     df_filtered["총수출"] = df_filtered[month_cols].sum(axis=1, numeric_only=True)
     total_export = int(df_filtered[month_cols].sum().sum())
     brand_count = df_filtered["브랜드"].nunique()
-    country_count = df_filtered["지역명"].nunique()
+
+    # ✅ 모든 month 값이 0 또는 NaN인 행 제거
+    active_export_df = df_filtered[df_filtered[month_cols].fillna(0).sum(axis=1) > 0]
+    country_count = active_export_df["지역명"].nunique()
 
     return total_export, brand_count, country_count
 
 def render_kpi_card(total_export: int, brand_count: int, country_count: int):
-    col4, col5, col6 = st.columns(3)
+    col4, col5 = st.columns(2)
     with col4:
         st.markdown("#### 🚗 총 수출량")
         st.metric(label="", value=f"{total_export:,} 대")
     with col5:
-        st.markdown("#### 🏢 브랜드 수")
-        st.metric(label="", value=brand_count)
-    with col6:
-        st.markdown("#### 🌍 수출 국가 수")
+        st.markdown("#### 🌍 수출 지역/국가 수")
         st.metric(label="", value=country_count)
