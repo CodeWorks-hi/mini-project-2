@@ -91,11 +91,11 @@ def intro_ui():
         buffer.seek(0)
         return buffer
 
-    # ✅ PDF 다운로드 버튼
+    # PDF 다운로드 버튼
     pdf_file = generate_pdf()
-    st.markdown("### 📥 기획서 PDF 다운로드")
+    st.markdown("### 기획서 PDF 다운로드")
     st.download_button(
-        label="📄 ERP 기획서 PDF 다운로드",
+        label="ERP 기획서 PDF 다운로드",
         data=pdf_file,
         file_name="ERP_기획서.pdf",
         mime="application/pdf"

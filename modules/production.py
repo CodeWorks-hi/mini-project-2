@@ -30,12 +30,12 @@ def load_data():
 def production_ui():
     df = load_data()
     tab1, tab2, tab3, tab4 = st.tabs([
-        "📊 기본 현황", "🏭 공장별 비교", "📈 연도별 추이", "🎯 목표 달성률"
+        "기본 현황", "공장별 비교", "연도별 추이", "목표 달성률"
     ])
 
-# 📊 기본 현황
+# 기본 현황
     with tab1:
-        st.subheader("📊 기본 현황")
+        st.subheader("기본 현황")
         brand = st.selectbox("브랜드 선택", df["브랜드"].unique())
         year = st.selectbox("연도 선택", sorted({str(c)[:4] for c in df.columns if re.match(r"\d{4}-\d{2}", str(c))}, reverse=True))
         factory = st.selectbox("공장 선택", df[df["브랜드"] == brand]["공장명(국가)"].unique())
@@ -57,8 +57,8 @@ def production_ui():
             st.warning("데이터가 없습니다.")
 
         else:
-            # 📈 라인차트 애니메이션 (차종별 월별 변화)
-            st.markdown("#### 📈 월별 차종 생산 추이 (라인차트)")
+            # 라인차트 애니메이션 (차종별 월별 변화)
+            st.markdown("#### 월별 차종 생산 추이 (라인차트)")
             fig_line = px.line(
                 df_melted,
                 x="차종",
@@ -76,8 +76,8 @@ def production_ui():
             )
             st.plotly_chart(fig_line, use_container_width=True)
 
-            # 📦 박스플롯 애니메이션
-            st.markdown("#### 📦 생산량 분포 (애니메이션 박스플롯)")
+            # 박스플롯 애니메이션
+            st.markdown("#### 생산량 분포 (애니메이션 박스플롯)")
             fig_box = px.box(
                 df_melted,
                 x="차종",
@@ -100,9 +100,9 @@ def production_ui():
                     
 
 
-    # 🏭 공장별 비교
+    # 공장별 비교
     with tab2:
-        st.subheader("🏭 공장별 생산량 비교")
+        st.subheader("공장별 생산량 비교")
         brand = st.selectbox("브랜드", df["브랜드"].unique(), key="brand_tab2")
         year = st.selectbox("연도", sorted({str(c)[:4] for c in df.columns if re.match(r"\d{4}-\d{2}", str(c))}, reverse=True), key="year_tab2")
         month_cols = [col for col in df.columns if str(col).startswith(str(year))]
@@ -125,9 +125,9 @@ def production_ui():
         col1.info(f"**{year}년 {brand} 총 생산량**\n\n{melted['생산량'].sum():,.0f}대")
         col2.info(f"**공장 수**\n\n{len(factory_totals)}개")
 
-    # 📈 연도별 추이
+    # 연도별 추이
     with tab3:
-        st.subheader("📈 연도별 생산 추이")
+        st.subheader("연도별 생산 추이")
 
         brand = st.selectbox("브랜드 선택", df["브랜드"].unique(), key="brand_tab3")
         factory = st.selectbox("공장 선택", df[df["브랜드"] == brand]["공장명(국가)"].unique(), key="factory_tab3")
@@ -171,9 +171,9 @@ def production_ui():
         col2.info(f"**연평균 생산량**\n\n{df_year_month.groupby('연도')['총생산'].sum().mean():,.0f}대")
 
 
-    # 🎯 목표 달성률
+    # 목표 달성률
     with tab4:
-        st.subheader("🎯 목표 생산 달성률")
+        st.subheader("목표 생산 달성률")
         brand = st.selectbox("브랜드", df["브랜드"].unique(), key="brand_tab4")
         year = st.selectbox("연도", sorted({str(c)[:4] for c in df.columns if re.match(r"\d{4}-\d{2}", str(c))}, reverse=True), key="year_tab4")
         factory = st.selectbox("공장", df[df["브랜드"] == brand]["공장명(국가)"].unique(), key="factory_tab4")

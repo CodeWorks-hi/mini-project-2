@@ -69,12 +69,12 @@ def prediction_ui():
                 def on_epoch_end(self, epoch, logs=None):
                     current_loss = logs.get('loss')
                     if current_loss is not None and current_loss <= 0.01:
-                        print(f"\n🎉 조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({current_loss:.4f})로 떨어짐")
+                        print(f"\n조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({current_loss:.4f})로 떨어짐")
                         # 모델 저장
                         model_path = get_model_path(self.region_name)
                         scaler_path = get_scaler_path(self.region_name)
                         self.model.save(model_path)
-                        print(f"💾 모델이 {model_path}에 저장되었습니다.")
+                        print(f"모델이 {model_path}에 저장되었습니다.")
                         self.model.stop_training = True
             
             # 콜백 인스턴스 생성
@@ -144,7 +144,7 @@ def prediction_ui():
         def add_download_button(forecast_df, region_name, filename="lstm_forecast.csv"):
             csv = forecast_df.to_csv(index=False).encode('utf-8-sig')
             st.download_button(
-                label="📥 예측 결과 CSV 다운로드",
+                label="예측 결과 CSV 다운로드",
                 data=csv,
                 file_name=f"{region_name}_{filename}",
                 mime='text/csv'
@@ -161,7 +161,7 @@ def prediction_ui():
             pct_change = pct_change.round(2)
             forecast_df['전월 대비 증감률(%)'] = pct_change.apply(lambda x: f"{x:.2f}" if pd.notnull(x) else '-')
             
-            st.subheader("📊 예측 결과 표 (LSTM 기반)")
+            st.subheader("예측 결과 표 (LSTM 기반)")
             col1, col2 = st.columns([1, 0.9])
             with col1:
                 st.dataframe(forecast_df, use_container_width=True, hide_index=True)
@@ -172,7 +172,7 @@ def prediction_ui():
                 if os.path.exists(img_path):
                     with open(img_path, "rb") as img_file:
                         st.download_button(
-                            label="🖼️ 예측 그래프 이미지 다운로드",
+                            label="예측 그래프 이미지 다운로드",
                             data=img_file,
                             file_name=f"{region_name}_LSTM_예측.png",
                             mime="image/png"
@@ -190,10 +190,10 @@ def prediction_ui():
             scaler_path = get_scaler_path(region_name)
 
             if os.path.exists(model_path) and os.path.exists(scaler_path):
-                print(f"✅ 저장된 모델과 스케일러가 존재합니다: {model_path}")
+                print(f"저장된 모델과 스케일러가 존재합니다: {model_path}")
                 return True
             else:
-                print(f"🚀 모델 또는 스케일러가 존재하지 않아 새로 학습합니다.")
+                print(f"모델 또는 스케일러가 존재하지 않아 새로 학습합니다.")
                 return False
         # 1. 지역별 수출량 예측
         file_path = "data/processed/hyundai-by-region.csv"  # 현대만 할 거니까~
@@ -229,7 +229,7 @@ def prediction_ui():
                 else:
                     st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
                     st.info("30초 이상 소요될 수 있습니다.")
-                    with st.spinner("🔄 모델을 학습 중입니다... 잠시만 기다려주세요."):
+                    with st.spinner("모델을 학습 중입니다... 잠시만 기다려주세요."):
                         X, y, scaler = prepare_lstm_data(region_data)
                         lstm_model = train_lstm_model(X, y, region_name=region_name)
                         joblib.dump(scaler, get_scaler_path(region_name))
@@ -275,7 +275,7 @@ def prediction_ui():
                         model_path = get_model_path(self.car_name)
                         scaler_path = get_scaler_path(self.car_name)
                         self.model.save(model_path)
-                        print(f"💾 모델이 {model_path}에 저장되었습니다.")
+                        print(f"모델이 {model_path}에 저장되었습니다.")
                         self.model.stop_training = True
             
             # 콜백 인스턴스 생성
@@ -345,7 +345,7 @@ def prediction_ui():
         def add_download_button(forecast_df, car_name, filename="lstm_forecast.csv"):
             csv = forecast_df.to_csv(index=False).encode('utf-8-sig')
             st.download_button(
-                label="📥 예측 결과 CSV 다운로드",
+                label="예측 결과 CSV 다운로드",
                 data=csv,
                 file_name=f"{car_name}_{filename}",
                 mime='text/csv'
@@ -362,7 +362,7 @@ def prediction_ui():
             pct_change = pct_change.round(2)
             forecast_df['전월 대비 증감률(%)'] = pct_change.apply(lambda x: f"{x:.2f}" if pd.notnull(x) else '-')
             
-            st.subheader("📊 예측 결과 표 (LSTM 기반)")
+            st.subheader("예측 결과 표 (LSTM 기반)")
             col1, col2 = st.columns([1, 0.9])
             with col1:
                 st.dataframe(forecast_df, use_container_width=True, hide_index=True)
@@ -373,7 +373,7 @@ def prediction_ui():
                 if os.path.exists(img_path):
                     with open(img_path, "rb") as img_file:
                         st.download_button(
-                            label="🖼️ 예측 그래프 이미지 다운로드",
+                            label="예측 그래프 이미지 다운로드",
                             data=img_file,
                             file_name=f"{car_name}_LSTM_예측.png",
                             mime="image/png"
@@ -427,10 +427,10 @@ def prediction_ui():
                     scaler_path = get_scaler_path(car_name)
 
                     if os.path.exists(model_path) and os.path.exists(scaler_path):
-                        print(f"✅ 저장된 모델과 스케일러가 존재합니다: {model_path}")
+                        print(f"저장된 모델과 스케일러가 존재합니다: {model_path}")
                         return True
                     else:
-                        print(f"🚀 모델 또는 스케일러가 존재하지 않아 새로 학습합니다.")
+                        print(f" 모델 또는 스케일러가 존재하지 않아 새로 학습합니다.")
                         return False
 
                 status = ensure_model(car_name)
@@ -438,7 +438,7 @@ def prediction_ui():
                 # ✅ 특정 기간 값이 모두 0인지 확인
                 zero_check_range = car_data.loc["2024-09":"2025-02", "y"]
                 if zero_check_range.sum() == 0:
-                    st.error("🚫 이 차는 더 이상 생산하지 않습니다.")
+                    st.error(" 이 차는 더 이상 생산하지 않습니다.")
                     st.stop
                 else :
                     if status:
@@ -447,7 +447,7 @@ def prediction_ui():
                     else:
                         st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
                         st.info("30초 이상 소요될 수 있습니다.")
-                        with st.spinner("🔄 모델을 학습 중입니다... 잠시만 기다려주세요."):
+                        with st.spinner("모델을 학습 중입니다... 잠시만 기다려주세요."):
                             X, y, scaler = prepare_lstm_data(car_data)
                             lstm_model = train_lstm_model(X, y, car_name=car_name)
                             joblib.dump(scaler, get_scaler_path(car_name))
@@ -489,12 +489,12 @@ def prediction_ui():
                 def on_epoch_end(self, epoch, logs=None):
                     current_loss = logs.get('loss')
                     if current_loss is not None and current_loss <= 0.01:
-                        print(f"\n🎉 조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({current_loss:.4f})로 떨어짐")
+                        print(f"\n조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({current_loss:.4f})로 떨어짐")
                         # 모델 저장
                         model_path = get_model_path(self.plant_name)
                         scaler_path = get_scaler_path(self.plant_name)
                         self.model.save(model_path)
-                        print(f"💾 모델이 {model_path}에 저장되었습니다.")
+                        print(f"모델이 {model_path}에 저장되었습니다.")
                         self.model.stop_training = True
             
             # 콜백 인스턴스 생성
@@ -564,7 +564,7 @@ def prediction_ui():
         def add_download_button(forecast_df, plant_name, filename="lstm_forecast.csv"):
             csv = forecast_df.to_csv(index=False).encode('utf-8-sig')
             st.download_button(
-                label="📥 예측 결과 CSV 다운로드",
+                label="예측 결과 CSV 다운로드",
                 data=csv,
                 file_name=f"{plant_name}_{filename}",
                 mime='text/csv'
@@ -581,7 +581,7 @@ def prediction_ui():
             pct_change = pct_change.round(2)
             forecast_df['전월 대비 증감률(%)'] = pct_change.apply(lambda x: f"{x:.2f}" if pd.notnull(x) else '-')
 
-            st.subheader("📊 예측 결과 표 (LSTM 기반)")
+            st.subheader("예측 결과 표 (LSTM 기반)")
             col1, col2 = st.columns([1, 0.9])
             with col1:
                 st.dataframe(forecast_df, use_container_width=True, hide_index=True)
@@ -592,7 +592,7 @@ def prediction_ui():
                 if os.path.exists(img_path):
                     with open(img_path, "rb") as img_file:
                         st.download_button(
-                            label="🖼️ 예측 그래프 이미지 다운로드",
+                            label="예측 그래프 이미지 다운로드",
                             data=img_file,
                             file_name=f"{plant_name}_LSTM_예측.png",
                             mime="image/png"
@@ -666,10 +666,10 @@ def prediction_ui():
                     scaler_path = get_scaler_path(plant_name)
 
                     if os.path.exists(model_path) and os.path.exists(scaler_path):
-                        print(f"✅ 저장된 모델과 스케일러가 존재합니다: {model_path}")
+                        print(f"저장된 모델과 스케일러가 존재합니다: {model_path}")
                         return True
                     else:
-                        print(f"🚀 모델 또는 스케일러가 존재하지 않아 새로 학습합니다.")
+                        print(f"모델 또는 스케일러가 존재하지 않아 새로 학습합니다.")
                         return False
 
                 status = ensure_model(plant_name)
@@ -677,7 +677,7 @@ def prediction_ui():
                 # ✅ 특정 기간 값이 모두 0인지 확인
                 zero_check_range = plant_data.loc["2024-09":"2025-02", "y"]
                 if zero_check_range.sum() == 0:
-                    st.error("🚫 이 차는 더 이상 생산하지 않습니다.")
+                    st.error("이 차는 더 이상 생산하지 않습니다.")
                     st.stop
                 else :
                     if status:
@@ -686,7 +686,7 @@ def prediction_ui():
                     else:
                         st.info("생성된 모델이 존재하지 않아 모델 생성을 시작합니다.")
                         st.info("30초 이상 소요될 수 있습니다.")
-                        with st.spinner("🔄 모델을 학습 중입니다... 잠시만 기다려주세요."):
+                        with st.spinner("모델을 학습 중입니다... 잠시만 기다려주세요."):
                             X, y, scaler = prepare_lstm_data(plant_data)
                             lstm_model = train_lstm_model(X, y, plant_name=plant_name)
                             joblib.dump(scaler, get_scaler_path(plant_name))
