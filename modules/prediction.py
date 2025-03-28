@@ -33,9 +33,6 @@ elif platform.system() == "Linux":  # Linux (Ubuntu, Docker 등)
 
 
 def prediction_ui():
-
-    st.title("AI 판매 예측 시스템")
-
     tab1, tab2, tab3 = st.tabs(["지역별 수출량 예측", "차종별 판매량 예측", "공장별 판매량 예측"])
 
     with tab1:
