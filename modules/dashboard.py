@@ -122,12 +122,13 @@ def dashboard_ui():
     )
 
     # Top 3
-    grouped_monthly["순위_top"] = grouped_monthly.groupby("월")["수출량"].rank(method="first", ascending=False).astype(int)
-    top_df = grouped_monthly[grouped_monthly["순위_top"] <= 3].sort_values(["월", "순위_top"])
+    grouped_monthly["순위"] = grouped_monthly.groupby("월")["수출량"].rank(method="first", ascending=False).astype(int)
+    top_df = grouped_monthly[grouped_monthly["순위"] <= 3].sort_values(["월", "순위"])
 
     # Bottom 3
     grouped_monthly["순위_bottom"] = grouped_monthly.groupby("월")["수출량"].rank(method="first", ascending=True).astype(int)
     bottom_df = grouped_monthly[grouped_monthly["순위_bottom"] <= 3].sort_values(["월", "순위_bottom"])
+    bottom_df.drop(columns=["순위_bottom"], inplace=True)
 
     colD, colE = st.columns([1, 1])
 
