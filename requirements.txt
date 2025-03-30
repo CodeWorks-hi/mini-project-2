@@ -1,8 +1,8 @@
 # Streamlit 기반 대시보드
-streamlit
+streamlit==1.30.0
 streamlit_option_menu
 pydeck
-altair
+altair==5.1.2
 six==1.15.0
 
 # 데이터 처리
