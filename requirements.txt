@@ -24,8 +24,6 @@ sentencepiece>=0.1.99
 transformers
 torchvision
 tensorflow>=2.18
-tensorflow-macos==2.9.0
-tensorflow-metal==0.5.0
 keras==2.9.0
 ace_tools_open
 tensorboard==2.9.0
