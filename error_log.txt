@@ -3895,3 +3895,247 @@ ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent 
     return _getattr(attr)
 AttributeError: 'Chart' object has no attribute 'mark_arc'
 
+ERROR:root:Module modules.prediction에서 오류 발생: Traceback (most recent call last):
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/Home.py", line 59, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/prediction.py", line 5, in <module>
+    import tensorflow as tf
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/tensorflow/__init__.py", line 37, in <module>
+    from tensorflow.python.tools import module_util as _module_util
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/tensorflow/python/__init__.py", line 37, in <module>
+    from tensorflow.python.eager import context
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/tensorflow/python/eager/context.py", line 29, in <module>
+    from tensorflow.core.framework import function_pb2
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/tensorflow/core/framework/function_pb2.py", line 16, in <module>
+    from tensorflow.core.framework import attr_value_pb2 as tensorflow_dot_core_dot_framework_dot_attr__value__pb2
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/tensorflow/core/framework/attr_value_pb2.py", line 16, in <module>
+    from tensorflow.core.framework import tensor_pb2 as tensorflow_dot_core_dot_framework_dot_tensor__pb2
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/tensorflow/core/framework/tensor_pb2.py", line 16, in <module>
+    from tensorflow.core.framework import resource_handle_pb2 as tensorflow_dot_core_dot_framework_dot_resource__handle__pb2
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/tensorflow/core/framework/resource_handle_pb2.py", line 16, in <module>
+    from tensorflow.core.framework import tensor_shape_pb2 as tensorflow_dot_core_dot_framework_dot_tensor__shape__pb2
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/tensorflow/core/framework/tensor_shape_pb2.py", line 36, in <module>
+    _descriptor.FieldDescriptor(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/google/protobuf/descriptor.py", line 553, in __new__
+    _message.Message._CheckCalledFromGeneratedFile()
+TypeError: Descriptors cannot be created directly.
+If this call came from a _pb2.py file, your generated code is out of date and must be regenerated with protoc >= 3.19.0.
+If you cannot immediately regenerate your protos, some other possible workarounds are:
+ 1. Downgrade the protobuf package to 3.20.x or lower.
+ 2. Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python (but this will use pure-Python parsing and will be much slower).
+
+More information: https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
+
+ERROR:root:Module modules.analytics에서 오류 발생: Traceback (most recent call last):
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/analytics.py", line 147, in analytics_ui
+    radar_chart = alt.Chart(competitor_df).transform_fold(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/vegalite/v4/api.py", line 1159, in transform_fold
+    return self._add_transform(core.FoldTransform(fold=fold, **{"as": as_}))
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/vegalite/v4/schema/core.py", line 18192, in __init__
+    super(FoldTransform, self).__init__(fold=fold, **kwds)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/vegalite/v4/schema/core.py", line 17975, in __init__
+    super(Transform, self).__init__(*args, **kwds)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 176, in __init__
+    self.to_dict(validate=True)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 337, in to_dict
+    self.validate(result)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 442, in validate
+    return jsonschema.validate(instance, schema, resolver=resolver)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 1330, in validate
+    error = exceptions.best_match(validator.iter_errors(instance))
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/exceptions.py", line 475, in best_match
+    best = next(errors, None)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 384, in iter_errors
+    for error in errors:
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 482, in _validate_reference
+    return list(self.descend(instance, resolved))
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 432, in descend
+    for error in errors:
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 432, in descend
+    for error in errors:
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/_keywords.py", line 78, in items
+    yield from validator.descend(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 418, in descend
+    evolved = self.evolve(schema=schema)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 348, in evolve
+    return NewValidator(**changes)
+  File "<attrs generated methods jsonschema.validators.create.<locals>.Validator>", line 32, in __init__
+    self.__attrs_post_init__()
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 296, in __attrs_post_init__
+    for k, v in applicable_validators(self.schema)
+AttributeError: 'list' object has no attribute 'items'
+
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/dashboard.py", line 84, in dashboard_ui
+    render_hyundai_chart(year)
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/dashboard_charts.py", line 36, in render_hyundai_chart
+    chart = alt.Chart(grouped).mark_arc(innerRadius=60).encode(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 257, in __getattr__
+    return _getattr(attr)
+AttributeError: 'Chart' object has no attribute 'mark_arc'
+
+ERROR:root:Module modules.analytics에서 오류 발생: Traceback (most recent call last):
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/analytics.py", line 147, in analytics_ui
+    radar_chart = alt.Chart(competitor_df).transform_fold(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/vegalite/v4/api.py", line 1159, in transform_fold
+    return self._add_transform(core.FoldTransform(fold=fold, **{"as": as_}))
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/vegalite/v4/schema/core.py", line 18192, in __init__
+    super(FoldTransform, self).__init__(fold=fold, **kwds)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/vegalite/v4/schema/core.py", line 17975, in __init__
+    super(Transform, self).__init__(*args, **kwds)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 176, in __init__
+    self.to_dict(validate=True)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 337, in to_dict
+    self.validate(result)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 442, in validate
+    return jsonschema.validate(instance, schema, resolver=resolver)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 1119, in validate
+    error = exceptions.best_match(validator.iter_errors(instance))
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/exceptions.py", line 384, in best_match
+    best = next(errors, None)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 288, in iter_errors
+    for error in errors:
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/_validators.py", line 298, in ref
+    yield from validator.descend(instance, resolved)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 305, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 288, in iter_errors
+    for error in errors:
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/_validators.py", line 332, in properties
+    yield from validator.descend(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 305, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 288, in iter_errors
+    for error in errors:
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/_validators.py", line 76, in items
+    yield from validator.descend(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 305, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 278, in iter_errors
+    scope = id_of(_schema)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 101, in _id_of
+    return schema.get("$id", "")
+AttributeError: 'list' object has no attribute 'get'
+
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/dashboard.py", line 84, in dashboard_ui
+    render_hyundai_chart(year)
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/dashboard_charts.py", line 36, in render_hyundai_chart
+    chart = alt.Chart(grouped).mark_arc(innerRadius=60).encode(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 257, in __getattr__
+    return _getattr(attr)
+AttributeError: 'Chart' object has no attribute 'mark_arc'
+
+ERROR:root:Module modules.analytics에서 오류 발생: Traceback (most recent call last):
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/analytics.py", line 147, in analytics_ui
+    radar_chart = alt.Chart(competitor_df).transform_fold(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/vegalite/v4/api.py", line 1159, in transform_fold
+    return self._add_transform(core.FoldTransform(fold=fold, **{"as": as_}))
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/vegalite/v4/schema/core.py", line 18192, in __init__
+    super(FoldTransform, self).__init__(fold=fold, **kwds)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/vegalite/v4/schema/core.py", line 17975, in __init__
+    super(Transform, self).__init__(*args, **kwds)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 176, in __init__
+    self.to_dict(validate=True)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 337, in to_dict
+    self.validate(result)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 442, in validate
+    return jsonschema.validate(instance, schema, resolver=resolver)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 1119, in validate
+    error = exceptions.best_match(validator.iter_errors(instance))
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/exceptions.py", line 384, in best_match
+    best = next(errors, None)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 288, in iter_errors
+    for error in errors:
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/_validators.py", line 298, in ref
+    yield from validator.descend(instance, resolved)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 305, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 288, in iter_errors
+    for error in errors:
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/_validators.py", line 332, in properties
+    yield from validator.descend(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 305, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 288, in iter_errors
+    for error in errors:
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/_validators.py", line 76, in items
+    yield from validator.descend(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 305, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 278, in iter_errors
+    scope = id_of(_schema)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 101, in _id_of
+    return schema.get("$id", "")
+AttributeError: 'list' object has no attribute 'get'
+
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/dashboard.py", line 84, in dashboard_ui
+    render_hyundai_chart(year)
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/dashboard_charts.py", line 36, in render_hyundai_chart
+    chart = alt.Chart(grouped).mark_arc(innerRadius=60).encode(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 257, in __getattr__
+    return _getattr(attr)
+AttributeError: 'Chart' object has no attribute 'mark_arc'
+
+ERROR:root:Module modules.analytics에서 오류 발생: Traceback (most recent call last):
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/analytics.py", line 147, in analytics_ui
+    radar_chart = alt.Chart(competitor_df).transform_fold(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/vegalite/v4/api.py", line 1159, in transform_fold
+    return self._add_transform(core.FoldTransform(fold=fold, **{"as": as_}))
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/vegalite/v4/schema/core.py", line 18192, in __init__
+    super(FoldTransform, self).__init__(fold=fold, **kwds)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/vegalite/v4/schema/core.py", line 17975, in __init__
+    super(Transform, self).__init__(*args, **kwds)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 176, in __init__
+    self.to_dict(validate=True)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 337, in to_dict
+    self.validate(result)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 442, in validate
+    return jsonschema.validate(instance, schema, resolver=resolver)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 1119, in validate
+    error = exceptions.best_match(validator.iter_errors(instance))
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/exceptions.py", line 384, in best_match
+    best = next(errors, None)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 288, in iter_errors
+    for error in errors:
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/_validators.py", line 298, in ref
+    yield from validator.descend(instance, resolved)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 305, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 288, in iter_errors
+    for error in errors:
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/_validators.py", line 332, in properties
+    yield from validator.descend(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 305, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 288, in iter_errors
+    for error in errors:
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/_validators.py", line 76, in items
+    yield from validator.descend(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 305, in descend
+    for error in self.evolve(schema=schema).iter_errors(instance):
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 278, in iter_errors
+    scope = id_of(_schema)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/jsonschema/validators.py", line 101, in _id_of
+    return schema.get("$id", "")
+AttributeError: 'list' object has no attribute 'get'
+
