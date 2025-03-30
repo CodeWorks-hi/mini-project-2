@@ -1,35 +1,34 @@
-#  Streamlit & Visualization
-streamlit==1.23.1
-streamlit_option_menu
+
+streamlit
+pandas
 altair==4.2.2
 pydeck
-plotly
+numpy==1.23.5
 matplotlib
 seaborn
-
-# Data Processing
-pandas==2.1.0
-numpy==1.23.5
+components
 scikit-learn
-openpyxl
-joblib
+streamlit_option_menu
+reportlab
 fonttools
-reportlab==3.6.12
-
-# Web Crawling & Requests
-beautifulsoup4
+openpyxl
+reportlab>=3.6.12
 requests>=2.31.0
-
-# AI & NLP
-transformers
-torch>=2.0.0
-torchvision
+beautifulsoup4
+plotly
 accelerate>=0.26.0
+torch>=2.0.0
 sentencepiece>=0.1.99
-
-# M1/M2/M3/M4 Mac용 TensorFlow 환경
+transformers
+torchvision
+tensorflow>=2.18
 tensorflow-macos==2.9.0
 tensorflow-metal==0.5.0
 keras==2.9.0
+ace_tools_open
 tensorboard==2.9.0
 flatbuffers==1.12
+
+
+
+
