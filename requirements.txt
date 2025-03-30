@@ -1,36 +1,33 @@
-# Streamlit 기반 대시보드
-streamlit==1.30.0
-streamlit_option_menu
-altair==5.1.2
-pydeck
 
-# 데이터 처리
-pandas>=1.5.0
+streamlit
+pandas
+altair
+pydeck
 numpy==1.23.5
-openpyxl
 matplotlib
 seaborn
+components
 scikit-learn
-joblib
+streamlit_option_menu
+reportlab
 fonttools
-
-# 리포트 생성
-reportlab==3.6.12
-
-# AI 모델 및 자연어 처리
-transformers
-torch>=2.0.0
-torchvision
-accelerate>=0.26.0
-sentencepiece>=0.1.99
-beautifulsoup4
+openpyxl
+reportlab>=3.6.12
 requests>=2.31.0
+pandas>=2.1.0
+altair>=5.0.0
+pydeck
+beautifulsoup4
 plotly
-
-# TensorFlow + Keras 
+accelerate>=0.26.0
+torch>=2.0.0
+sentencepiece>=0.1.99
+transformers
+torchvision
+tensorflow>=2.18
 tensorflow-macos==2.9.0
 tensorflow-metal==0.5.0
 keras==2.9.0
+ace_tools_open
 tensorboard==2.9.0
 flatbuffers==1.12
-
