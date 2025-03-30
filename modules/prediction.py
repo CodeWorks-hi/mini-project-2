@@ -4,8 +4,8 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 import tensorflow as tf
 from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.layers import LSTM, Dense, Input
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.layers import Input, Dense, LSTM
 import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
 import platform

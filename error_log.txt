@@ -3884,3 +3884,14 @@ ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent 
     st.metric(label="", value=top_plant)
 NameError: name 'top_plant' is not defined
 
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/dashboard.py", line 84, in dashboard_ui
+    render_hyundai_chart(year)
+  File "/Users/mi-yeonlim/Documents/Github/mini-project-2/modules/dashboard_charts.py", line 36, in render_hyundai_chart
+    chart = alt.Chart(grouped).mark_arc(innerRadius=60).encode(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/altair/utils/schemapi.py", line 257, in __getattr__
+    return _getattr(attr)
+AttributeError: 'Chart' object has no attribute 'mark_arc'
+
