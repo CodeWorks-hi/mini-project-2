@@ -88,24 +88,29 @@ def dashboard_ui():
         render_top_bottom_summary(new_df_region, company, year)
 
     # 데이터 시각화 전처리
-    start_col = f"{year}-01"
-    end_col = f"{year}-12"
-    df_filtered = pd.concat([new_df_region.iloc[:, 0], new_df_region.loc[:, start_col:end_col]], axis = 1)
-    merged_df = df_filtered[df_filtered.loc[:, start_col:end_col].fillna(0).sum(axis=1) > 0]
+    # 실제 존재하는 컬럼 중 해당 연도 월만 선택
+    month_cols = [col for col in new_df_region.columns if col.startswith(f"{year}-")]
+
+    if not month_cols:
+        st.warning(f"{year}년의 월별 데이터가 없습니다.")
+        st.stop()
+
+    df_filtered = pd.concat([new_df_region.iloc[:, 0], new_df_region[month_cols]], axis=1)
+    merged_df = df_filtered[df_filtered[month_cols].fillna(0).sum(axis=1) > 0]
     new_df = merged_df.copy()
+
+    # 총수출 시각화용 컬럼 생성
+    merged_df["총수출"] = merged_df[month_cols].sum(axis=1)
 
     monthly_data = []
 
-    # 총수출 시각화용 컬럼 생성
-    merged_df["총수출"] = merged_df.loc[:, start_col:end_col].sum(axis=1)
-    for month in pd.date_range(start=start_col, end=end_col, freq='MS').strftime('%Y-%m'):
-        if month in merged_df.columns:
-            month_data = merged_df[["지역명", month]].copy()
-            month_data = month_data.dropna()
-            month_data = month_data[month_data[month] > 0]
-            month_data["월"] = month
-            month_data.rename(columns={month: "수출량"}, inplace=True)
-            monthly_data.append(month_data)
+    for month in month_cols:
+        month_data = merged_df[["지역명", month]].copy()
+        month_data = month_data.dropna()
+        month_data = month_data[month_data[month] > 0]
+        month_data["월"] = month
+        month_data.rename(columns={month: "수출량"}, inplace=True)
+        monthly_data.append(month_data)
 
     monthly_df = pd.concat(monthly_data).reset_index(drop=True)
 
@@ -155,7 +160,7 @@ def dashboard_ui():
             st.dataframe(bottom_df.style.format({'수출량': '{:,}'}), use_container_width=True, hide_index=True)
 
 
-    col_left, col_right = st.columns([1, 1])
+    col_left, col_right = st.columns([1, 1.2])
 
     with col_left:
         # 월별 국가별 판매량 변화 추이 (라인 차트)
@@ -165,13 +170,16 @@ def dashboard_ui():
         </div>
         """, unsafe_allow_html=True)
 
-        # 월별 컬럼만 추출
-        month_cols = pd.date_range(start=start_col, end=end_col, freq='MS').strftime('%Y-%m')
+        # 실제 존재하는 월 컬럼만 필터링
+        month_cols = [col for col in merged_df.columns if col.startswith(f"{year}-")]
+        if not month_cols:
+            st.warning(f"{year}년의 월별 데이터가 없습니다.")
+            st.stop()
 
-        # melt 전에 국가별로 월별 합계 집계
+        # 국가별 월별 수출량 집계
         aggregated = merged_df.groupby("지역명")[month_cols].sum().reset_index()
 
-        # 그 후 melt
+        # melt
         line_df = aggregated.melt(
             id_vars="지역명",
             value_vars=month_cols,

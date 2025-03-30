@@ -109,7 +109,6 @@ def render_export_map(merged_df: pd.DataFrame, vehicle_type: str, color_map: dic
     st.markdown("</div>", unsafe_allow_html=True)
 
 def render_top_bottom_summary(merged_df: pd.DataFrame, company, year):
-
     st.markdown(f"""
     <div style='background-color:#ede7f6;padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.05);'>
         <h4>{year}년 {company} 국가별 총 판매량</h4>
@@ -117,20 +116,20 @@ def render_top_bottom_summary(merged_df: pd.DataFrame, company, year):
     """, unsafe_allow_html=True)
 
     merged_df.drop(columns=["대륙"], inplace=True)
-    start_col = f"{year}-01"
-    end_col = f"{year}-12"
-    merged_df = pd.concat([merged_df.iloc[:, 0], merged_df.loc[:, start_col:end_col]], axis = 1)
-    merged_df = merged_df[merged_df.loc[:, start_col:end_col].fillna(0).sum(axis=1) > 0]
+
+    # 해당 연도의 실제 존재하는 월 컬럼만 필터링
+    available_cols = [col for col in merged_df.columns if col.startswith(f"{year}-")]
+    if not available_cols:
+        st.warning(f"{year}년의 유효한 데이터가 없습니다.")
+        return
+
+    merged_df = pd.concat([merged_df.iloc[:, 0], merged_df.loc[:, available_cols]], axis=1)
+    merged_df = merged_df[merged_df.loc[:, available_cols].fillna(0).sum(axis=1) > 0]
     new_df = merged_df.copy()
 
     # 총수출 시각화용 컬럼 생성
-    merged_df["총수출"] = merged_df.loc[:, start_col:end_col].sum(axis=1)
+    merged_df["총수출"] = merged_df.loc[:, available_cols].sum(axis=1)
 
-    # st.markdown("""
-    # <div style='margin-top:20px; padding:10px; background-color:#fff3e0; border-radius:10px;'>
-    #     <h5 style='margin-bottom:10px;'>국가별 총 판매량 시각화</h5>
-    # </div>
-    # """, unsafe_allow_html=True)
     total_export_df = merged_df[["지역명", "총수출"]].sort_values("총수출", ascending=False)
     fig_total = px.bar(total_export_df, x="지역명", y="총수출", color="지역명",
                        labels={"총수출": "총수출", "지역명": "국가"},
