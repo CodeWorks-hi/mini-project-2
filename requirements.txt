@@ -1,7 +1,6 @@
-
 streamlit
 pandas
-altair==4.2.2
+altair
 pydeck
 numpy==1.23.5
 matplotlib
@@ -14,6 +13,9 @@ fonttools
 openpyxl
 reportlab>=3.6.12
 requests>=2.31.0
+pandas>=2.1.0
+altair>=5.0.0
+pydeck
 beautifulsoup4
 plotly
 accelerate>=0.26.0
@@ -28,7 +30,3 @@ keras==2.9.0
 ace_tools_open
 tensorboard==2.9.0
 flatbuffers==1.12
-
-
-
-
