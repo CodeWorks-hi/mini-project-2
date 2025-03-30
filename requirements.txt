@@ -24,7 +24,7 @@ sentencepiece>=0.1.99
 transformers
 torchvision
 tensorflow>=2.18
-keras==2.9.0
+keras>=2.9.0
 ace_tools_open
 tensorboard
 flatbuffers
