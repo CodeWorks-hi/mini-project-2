@@ -33,7 +33,7 @@ def render_hyundai_chart(year: int):
     if grouped.empty:
         st.warning(f"{year}년 현대 생산 데이터가 없습니다.")
     else:
-        chart = alt.Chart(grouped).mark_arc(innerRadius=60).encode(
+        chart = alt.Chart(grouped).mark_arc().encode(
             theta=alt.Theta(field="총생산", type="quantitative"),
             color=alt.Color(field="공장명(국가)", type="nominal", legend=alt.Legend(title="공장")),
             tooltip=["공장명(국가)", "총생산"]
@@ -65,7 +65,7 @@ def render_kia_chart(year: int):
     if grouped.empty:
         st.warning(f"{year}년 기아 생산 데이터가 없습니다.")
     else:
-        chart = alt.Chart(grouped).mark_arc(innerRadius=60).encode(
+        chart = alt.Chart(grouped).mark_arc().encode(
             theta=alt.Theta(field="총생산", type="quantitative"),
             color=alt.Color(field="공장명(국가)", type="nominal", legend=alt.Legend(title="공장")),
             tooltip=["공장명(국가)", "총생산"]
