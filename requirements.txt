@@ -1,33 +1,38 @@
-
-streamlit
-pandas
-altair
+# Streamlit & 시각화
+streamlit==1.28.2
+streamlit_option_menu
+altair==5.1.2
 pydeck
-numpy==1.23.5
+plotly
 matplotlib
 seaborn
-components
+
+# 데이터 처리
+pandas==2.1.0
+numpy==1.23.5
 scikit-learn
-streamlit_option_menu
-reportlab
-fonttools
+joblib
 openpyxl
-reportlab>=3.6.12
-requests>=2.31.0
-pandas>=2.1.0
-altair>=5.0.0
-pydeck
+fonttools
+reportlab==3.6.12
+
+# 웹 스크래핑 및 요청
 beautifulsoup4
-plotly
-accelerate>=0.26.0
-torch>=2.0.0
-sentencepiece>=0.1.99
+requests>=2.31.0
+
+# 자연어 처리 & 딥러닝
 transformers
+torch>=2.0.0
 torchvision
-tensorflow>=2.18
+accelerate>=0.26.0
+sentencepiece>=0.1.99
+
+# TensorFlow (M1 맥북용 버전 통일)
 tensorflow-macos==2.9.0
 tensorflow-metal==0.5.0
 keras==2.9.0
-ace_tools_open
 tensorboard==2.9.0
 flatbuffers==1.12
+
+# ❌ 제거: components (미정의 패키지)
+# ❌ 제거: ace_tools_open (PyPI에 없음 또는 로컬 모듈)
