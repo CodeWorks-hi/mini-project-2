@@ -57,7 +57,7 @@ def prediction_ui():
             return np.array(X), np.array(y), scaler
 
         # 1-2. 모델 정의 및 학습
-        def train_lstm_model(X, y, units=50, epochs=600, batch_size=16, name=None):
+        def train_lstm_model(X, y, units=50, epochs=600, batch_size=16, region_name=None):
             input_shape = (X.shape[1], X.shape[2])
             model = Sequential([
                 Input(shape=input_shape),
@@ -65,8 +65,6 @@ def prediction_ui():
                 Dense(1)
             ])
             model.compile(optimizer='adam', loss='mse')
-    
-
             
             # 조기 종료를 위한 콜백 클래스 정의
             class EarlyStoppingByLoss(tf.keras.callbacks.Callback):
@@ -283,7 +281,7 @@ def prediction_ui():
             return X, y, scaler
 
         # 2. 모델 정의 및 학습
-        def train_lstm_model(X, y, units=50, epochs=600, batch_size=16, name=None):
+        def train_lstm_model(X, y, units=50, epochs=600, batch_size=16, car_name=None):
             input_shape = (X.shape[1], X.shape[2])
             model = Sequential([
                 Input(shape=input_shape),
@@ -291,75 +289,54 @@ def prediction_ui():
                 Dense(1)
             ])
             model.compile(optimizer='adam', loss='mse')
-
-            progress_bar = st.progress(0)
-            status_text = st.empty()
-            loss_chart = st.empty()
-
-            update_freq = max(1, epochs // 10)  # 10번 정도 업데이트하도록 설정
-
-            class CustomCallback(tf.keras.callbacks.Callback):
+            
+            # 조기 종료를 위한 콜백 클래스 정의
+            class EarlyStoppingByLoss(tf.keras.callbacks.Callback):
+                def __init__(self, car_name):
+                    super(EarlyStoppingByLoss, self).__init__()
+                    self.car_name = car_name
+                    
                 def on_epoch_end(self, epoch, logs=None):
-                    if epoch % update_freq == 0 or epoch == epochs - 1:
-                        loss = logs.get('loss')
-                        progress = (epoch + 1) / epochs
-                        progress_bar.progress(progress)
-                        status_text.text(f"Epoch {epoch+1}/{epochs} - loss: {loss:.4f}")
-
-                        if epoch % (update_freq * 2) == 0 or epoch == epochs - 1:
-                            fig, ax = plt.subplots(figsize=(6, 2))
-                            ax.plot(model.history.history['loss'])
-                            ax.set_title('Model Loss')
-                            ax.set_ylabel('Loss')
-                            loss_chart.pyplot(fig)
-                            plt.close(fig)
-
-                    if logs.get('loss') <= 0.01:
-                        print(f"\n🎉 조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({logs.get('loss'):.4f})로 떨어짐")
-                        self.model.stop_training = True
-
-                        if epoch % (update_freq * 2) == 0 or epoch == epochs - 1:
-                            fig, ax = plt.subplots(figsize=(6, 2))
-                            ax.plot(self.model.history.history['loss'])
-                            ax.set_title('Model Loss')
-                            ax.set_ylabel('Loss')
-                            loss_chart.pyplot(fig)
-                            plt.close(fig)
-
-                    if loss <= 0.01:
-                        print(f"\n🎉 조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({loss:.4f})로 떨어짐")
-                        model_path = get_model_path(plant_name)
+                    current_loss = logs.get('loss')
+                    if current_loss is not None and current_loss <= 0.01:
+                        print(f"\n조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({current_loss:.4f})로 떨어짐")
+                        # 모델 저장
+                        model_path = get_model_path(self.car_name)
+                        scaler_path = get_scaler_path(self.car_name)
                         self.model.save(model_path)
                         print(f"모델이 {model_path}에 저장되었습니다.")
                         self.model.stop_training = True
-
-                        if epoch % (update_freq * 2) == 0 or epoch == epochs - 1:
-                            fig, ax = plt.subplots(figsize=(6, 2))
-                            ax.plot(self.model.history.history['loss'])
-                            ax.set_title('Model Loss')
-                            ax.set_ylabel('Loss')
-                            loss_chart.pyplot(fig)
-                            plt.close(fig)
-
-                    if loss <= 0.01:
-                        print(f"\n🎉 조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({loss:.4f})로 떨어짐")
-                        model_path = get_model_path(plant_name)
-                        self.model.save(model_path)
-                        print(f"모델이 {model_path}에 저장되었습니다.")
-                        self.model.stop_training = True
-
+            
+            # 콜백 인스턴스 생성
+            early_stopping = EarlyStoppingByLoss(car_name)
+            
             history = model.fit(
                 X, y, 
                 epochs=epochs, 
                 batch_size=batch_size, 
-                verbose=0,
-                callbacks=[CustomCallback()]
+                verbose=1,
+                callbacks=[early_stopping]
             )
+            losses = []
+            
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+            loss_chart = st.empty()
+
+
+            for epoch in range(epochs):
+                history = model.fit(X, y, epochs=1, batch_size=batch_size, verbose=0)
+                loss = history.history['loss'][0]
+                losses.append(loss)
+                
+                if epoch % 10 == 0 or epoch == epochs - 1:
+                    progress = (epoch + 1) / epochs
+                    progress_bar.progress(progress)
+                    status_text.text(f"Epoch {epoch+1}/{epochs} - loss: {loss:.4f}")
+    
+                time.sleep(0.1)  # 애니메이션 효과를 위한 짧은 대기 시간
 
             return model
-
-   
-             
 
         # 3. 미래 예측
         def forecast_lstm(model, series, forecast_months, scaler, time_steps=12):
@@ -475,11 +452,6 @@ def prediction_ui():
                 st.error("차종과 거래 구분을 선택해주세요.")
             else:   
                 car_data = df[df['차종'] == car_name].iloc[:, 1:].T
-                # if car_data.empty:
-                #     car = car_name.split("-")[0]
-                #     purp = car_name.split("-")[1]
-                #     st.error(f"**{car}**은 **{purp}** 목적으로 생산되고 있지 않습니다.")
-                # else:
                 car_data.columns = ['y']
                 car_data.index = pd.to_datetime(car_data.index)
                 car_data = car_data.asfreq('MS')
@@ -544,7 +516,7 @@ def prediction_ui():
             return X, y, scaler
 
         # 2. 모델 정의 및 학습
-        def train_lstm_model(X, y, units=50, epochs=600, batch_size=16, name=None):
+        def train_lstm_model(X, y, units=50, epochs=600, batch_size=16, plant_name=None):
             input_shape = (X.shape[1], X.shape[2])
             model = Sequential([
                 Input(shape=input_shape),
@@ -552,40 +524,52 @@ def prediction_ui():
                 Dense(1)
             ])
             model.compile(optimizer='adam', loss='mse')
-    
-
-            update_freq = max(1, epochs // 10)  # 10번 정도 업데이트하도록 설정
-
-            class CustomCallback(tf.keras.callbacks.Callback):
+            
+            # 조기 종료를 위한 콜백 클래스 정의
+            class EarlyStoppingByLoss(tf.keras.callbacks.Callback):
+                def __init__(self, plant_name):
+                    super(EarlyStoppingByLoss, self).__init__()
+                    self.plant_name = plant_name
+                    
                 def on_epoch_end(self, epoch, logs=None):
-                    loss = logs.get('loss')
-                    if epoch % update_freq == 0 or epoch == epochs - 1:
-                        progress = (epoch + 1) / epochs
-                        progress_bar.progress(progress)
-                        status_text.text(f"Epoch {epoch+1}/{epochs} - loss: {loss:.4f}")
-
-                        if epoch % (update_freq * 2) == 0 or epoch == epochs - 1:
-                            fig, ax = plt.subplots(figsize=(6, 2))
-                            ax.plot(self.model.history.history['loss'])
-                            ax.set_title('Model Loss')
-                            ax.set_ylabel('Loss')
-                            loss_chart.pyplot(fig)
-                            plt.close(fig)
-
-                    if loss <= 0.01:
-                        print(f"\n🎉 조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({loss:.4f})로 떨어짐")
-                        model_path = get_model_path(plant_name)
+                    current_loss = logs.get('loss')
+                    if current_loss is not None and current_loss <= 0.01:
+                        print(f"\n조기 종료: epoch {epoch+1}에서 loss가 0.01 이하({current_loss:.4f})로 떨어짐")
+                        # 모델 저장
+                        model_path = get_model_path(self.plant_name)
+                        scaler_path = get_scaler_path(self.plant_name)
                         self.model.save(model_path)
                         print(f"모델이 {model_path}에 저장되었습니다.")
                         self.model.stop_training = True
-
+            
+            # 콜백 인스턴스 생성
+            early_stopping = EarlyStoppingByLoss(plant_name)
+            
             history = model.fit(
                 X, y, 
                 epochs=epochs, 
                 batch_size=batch_size, 
-                verbose=0,
-                callbacks=[CustomCallback()]
+                verbose=1,
+                callbacks=[early_stopping]
             )
+            losses = []
+            
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+            loss_chart = st.empty()
+
+
+            for epoch in range(epochs):
+                history = model.fit(X, y, epochs=1, batch_size=batch_size, verbose=0)
+                loss = history.history['loss'][0]
+                losses.append(loss)
+                
+                if epoch % 10 == 0 or epoch == epochs - 1:
+                    progress = (epoch + 1) / epochs
+                    progress_bar.progress(progress)
+                    status_text.text(f"Epoch {epoch+1}/{epochs} - loss: {loss:.4f}")
+    
+                time.sleep(0.1)  # 애니메이션 효과를 위한 짧은 대기 시간
 
             return model
 
