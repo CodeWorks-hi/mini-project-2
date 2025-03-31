@@ -17,23 +17,36 @@ import io
 import joblib
 import matplotlib.pyplot as plt
 import time
+from matplotlib import font_manager, rc
+import matplotlib.pyplot as plt
+import os
+import platform
 
 
-# 한글 폰트 조정
-plt.rcParams["axes.unicode_minus"] = False
+# 한글 폰트 설정 함수
+def set_korean_font():
+    try:
+        if platform.system() == "Darwin":  # macOS
+            rc("font", family="AppleGothic")
+        elif platform.system() == "Windows":
+            font_path = "C:/Windows/Fonts/malgun.ttf"
+            if os.path.exists(font_path):
+                font_name = font_manager.FontProperties(fname=font_path).get_name()
+                rc("font", family=font_name)
+        elif platform.system() == "Linux":
+            font_path = "fonts/NanumGothic.ttf"
+            if os.path.exists(font_path):
+                font_manager.fontManager.addfont(font_path)
+                font_name = font_manager.FontProperties(fname=font_path).get_name()
+                rc("font", family=font_name)
+            else:
+                st.error("Linux 환경에서 NanumGothic.ttf 폰트가 없습니다. 'fonts' 폴더에 추가해주세요.")
+    except Exception as e:
+        st.warning(f"폰트 설정 중 오류 발생: {e}")
+    plt.rcParams["axes.unicode_minus"] = False
 
-if platform.system() == "Darwin":  # macOS
-    rc("font", family="AppleGothic")
-elif platform.system() == "Windows":  # Windows
-    font_path = "C:/Windows/Fonts/malgun.ttf"  # 맑은 고딕
-    font_name = font_manager.FontProperties(fname=font_path).get_name()
-    rc("font", family=font_name)
-elif platform.system() == "Linux":  # Linux (Ubuntu, Docker 등)
-    font_path = "fonts/NanumGothic.ttf"
-    if not os.path.exists(font_path):
-        st.error("NanumGothic.ttf 폰트 파일이 존재하지 않습니다. 'fonts' 폴더 내에 폰트 파일을 확인하세요.")
-    font_name = font_manager.FontProperties(fname=font_path).get_name()
-    rc("font", family=font_name)
+# 호출
+set_korean_font()
 
 
 def send_predictions_to_recommendations(predictions):
