@@ -57,6 +57,26 @@ def clean_input(text: str) -> str:
 def clean_html_tags(text):
     return re.sub(r'<[^>]+>', '', text)
 
+def remove_unwanted_phrases(text: str) -> str:
+    """
+    생성된 결과 텍스트에서 특정 문구(예: '[기타]', '위 내용은 질문에 대한', 
+    '보고서 작성을 위해 필요한 정보는 무엇인지요?' 등)를 포함한 줄을 제거
+    """
+    lines = text.splitlines()
+    filtered_lines = []
+    for line in lines:
+        if "[기타]" in line:
+            continue
+        if "위 내용은 질문에 대한" in line:
+            continue
+        # 추가: 보고서 작성을 위한 문구 제거
+        if "보고서 작성을 위해 필요한 정보는 무엇인지요?" in line:
+            continue
+        
+        filtered_lines.append(line)
+    
+    return "\n".join(filtered_lines)
+
 def format_news_for_prompt(news_items):
     if not news_items:
         return "최신 뉴스 데이터가 없습니다."
@@ -133,77 +153,31 @@ def generate_text_via_api(prompt: str, predictions: dict, news_items: list, mode
         st.error("Hugging Face API 토큰이 없습니다.")
         return ""
 
-    # 예측 데이터 형식 변환
     predictions_formatted = format_predictions_for_api(predictions)
-    
-    # 뉴스 텍스트 포맷팅
     news_text = format_news_for_prompt(news_items)
     
     system_prompt = """
     [시스템 지시사항]
-    ###  분석 목표
-    - {news_text}를 참고하여 최신 자동차 산업 동향을 반영한 분석을 작성해주세요.
-    - {predictions_formatted}를 기반으로 예측 결과를 포함해주세요.
-    - {text_prompt}에 따라 요약된 분석을 작성해주세요.
-    - 아래의 형식을 따라 표와 요약 분석을 작성해주세요.
+    ### 1. 분석 요구사항
+    - 현대/기아 글로벌 판매 전략 분석
+    - 예측 데이터와 최신 뉴스를 종합적으로 고려한 분석
+    - 지역별(북미, 유럽, 아시아) 판매 전략 구분 설명
+    - 환율 변동이 수출 전략에 미치는 영향 분석
+    - 경제 상황에 따른 긍정적/부정적 요인 구분
+    - 3가지 시나리오(낙관/중립/비관)로 판매량 예측
 
-    ---
+    ### 2. 출력 형식
+    ## 2025 현대/기아 글로벌 시장 전망 보고서
+    | 구분 | 2024 | 2025예상 | 증감률 |
+    |------|------|----------|--------|
+    | 글로벌 판매량 | X만 대 | Y만 대 | Z% |
+    | 주요 시장 점유율 | A% | B% | C%p |
 
-    ###  표 형식 출력 (예시)
-    ## 2025 현대/기아 전기차 전략 요약 보고서
-
-    | 항목          | 2024 수치 | 2025 예측 | 증감률 또는 비중 |
-    |---------------|------------|------------|------------------|
-    | 글로벌 EV 시장 | 890만대    | 1,160만대  | +30%             |
-    | 현대/기아 EV   | 48만대     | 67만대     | 7.2% 점유율      |
-
-    ---
-
-    ###  시장 동향 요약
-    - 글로벌 EV 수요는 30% 증가 예상
-    - 북미·유럽 중심으로 고성장세 유지
-
-    ---
-
-    ### ⚠️ 주요 리스크
-    - 중국 BYD의 가격 경쟁 심화
-    - Euro7 규제 대응 비용 증가
-    - 충전 인프라 표준화 지연
-
-    ---
-
-    ###  전략 제안
-    - 북미: 아이오닉9 등 SUV 라인업 강화
-    - 유럽: EV5 중심 판매 채널 확장
-    - 중국: X-GMP 플랫폼 현지화 투자 강화
+    - 주요 전략:
+    - 리스크 요인:
     """
 
-    text_prompt = [
-        "한국어로 작성해줘",
-        "현대/기아 글로벌 판매 전략을 중점으로 분석해줘",
-        "최신 OECD 경제 전망과 환율 데이터를 반영해줘",
-        "prediction.py의 예측 모델 결과를 기반으로 작성해줘",
-        "글로벌 경제 성장률 둔화와 무역 긴장 상황을 고려해줘",
-        "주요 시장별(북미, 유럽, 아시아) 판매 전략을 구분해서 설명해줘",
-        "환율 변동이 수출 전략에 미치는 영향을 분석해줘",
-        "인플레이션과 소비자 구매력 변화를 고려한 전략을 제시해줘",
-        "표 형식으로 핵심 지표를 정리해줘",
-        "경제 상황에 따른 긍정적/부정적 요인을 구분해줘",
-        "3가지 시나리오(낙관/중립/비관)로 판매량 예측해줘",
-        "간결하게 핵심 위주로 요약해줘",
-        "전문가처럼 객관적인 톤으로 설명해줘",
-        "2025년 3월 기준 최신 경제 데이터를 반영해줘",
-        "글로벌 경제 흐름을 먼저 설명하고 자동차 산업 영향을 분석해줘",
-        "지역별 판매 목표치와 환율 예측치를 구체적으로 포함해줘",
-        "차량 추천 시스템의 인공지능 모델을 활용한 맞춤형 추천 방식을 설명해줘",
-        "기존 데이터 분석에서 고객과 판매 데이터를 어떻게 활용하는지 자세히 설명해줘",
-        "마케팅 전략 수립 시 고객 정보를 바탕으로 한 프로모션 전략의 구체적인 예시를 들어줘",
-        "매장 찾기 서비스의 위치 기반 기능과 실시간 재고 확인 기능에 대해 상세히 설명해줘",
-        "관리자 서비스에서 제공하는 판매 현황 및 재고 관리 대시보드의 주요 기능들을 나열해줘"
-    ]
-
-    # 전체 프롬프트 구성
-    full_prompt = f"{system_prompt}\n\n[예측 데이터]\n{predictions_formatted}\n\n[최신 뉴스]\n{news_text}\n\n[사용자 질문]\n{prompt}\n\n[추가 지시사항]\n" + "\n".join(text_prompt)
+    full_prompt = f"{system_prompt}\n\n[예측 데이터]\n{predictions_formatted}\n\n[최신 뉴스]\n{news_text}\n\n[사용자 질문]\n{prompt}"
     
     try:
         client = InferenceClient(model=model_name, token=token)
@@ -216,6 +190,7 @@ def generate_text_via_api(prompt: str, predictions: dict, news_items: list, mode
     except Exception as e:
         st.error(f"텍스트 생성 오류: {e}")
         return ""
+
 
 def recommendations_ui():
     st.title("AI 기반 시장 예측 및 분석")
@@ -245,6 +220,22 @@ def recommendations_ui():
                 st.error("뉴스를 가져오지 못했습니다.")
                 return
 
+    # 첫 번째 폼 (키: analyze_form)
+    with st.form("analyze_form"):
+        user_input = st.text_area("예측 및 분석 입력", placeholder="예: 2025년 미국 수출 예측해줘")
+        submitted = st.form_submit_button("예측 및 분석 실행")
+    
+    if submitted:
+        with st.spinner("시장 예측 및 분석 중..."):
+            cleaned = clean_input(user_input)
+            raw_result_txt = generate_text_via_api(cleaned, st.session_state.predictions, st.session_state.latest_news)
+            
+            # 후처리: 원치 않는 문구 제거
+            final_result_txt = remove_unwanted_phrases(raw_result_txt)
+            
+            st.session_state.analysis_result = final_result_txt
+            st.markdown(f"### 종합 예측 및 분석 결과\n{final_result_txt}")
+
     # 최신 뉴스 표시
     with st.expander("📰 분석에 사용된 최신 뉴스"):
         for i, news in enumerate(st.session_state.latest_news[:5], 1):
@@ -261,18 +252,6 @@ def recommendations_ui():
                 """, 
                 unsafe_allow_html=True
             )
-
-    # 첫 번째 폼 (키: analyze_form)
-    with st.form("analyze_form"):
-        user_input = st.text_area("예측 및 분석 입력", placeholder="예: 2025년 미국 수출 예측해줘")
-        submitted = st.form_submit_button("예측 및 분석 실행")
-    
-    if submitted:
-        with st.spinner("시장 예측 및 분석 중..."):
-            cleaned = clean_input(user_input)
-            result_txt = generate_text_via_api(cleaned, st.session_state.predictions, st.session_state.latest_news)
-            st.session_state.analysis_result = result_txt
-            st.markdown(f"### 종합 예측 및 분석 결과\n{result_txt}")
 
     # ---- 중복 폼 제거 또는 키 변경 ----
     #
