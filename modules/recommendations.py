@@ -220,7 +220,7 @@ def recommendations_ui():
                 st.error("뉴스를 가져오지 못했습니다.")
                 return
     # 최신 뉴스 표시
-    with st.expander("📰 분석에 사용된 최신 뉴스"):
+    with st.expander(" 분석에 사용된 최신 뉴스"):
         for i, news in enumerate(st.session_state.latest_news[:5], 1):
             title = clean_html_tags(news['title'])
             description = clean_html_tags(news['description'])
