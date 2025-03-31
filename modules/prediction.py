@@ -144,52 +144,9 @@ def prediction_ui():
 
         # 1-4. 시각화 함수
         def plot_lstm_forecast(series, forecast_df, region_name, forecast_months):
-            # 한글 폰트 설정
-            import matplotlib.font_manager as fm
-            import os
-            
-            # 폰트 등록 함수 (캐싱 적용)
-            @st.cache_resource
-            def setup_korean_font():
-                # 폰트 디렉토리 생성
-                font_dir = os.path.join(os.getcwd(), 'fonts')
-                os.makedirs(font_dir, exist_ok=True)
-                
-                # 나눔고딕 폰트 다운로드 (없는 경우)
-                font_path = os.path.join(font_dir, 'NanumGothic.ttf')
-                if not os.path.exists(font_path):
-                    import urllib.request
-                    font_url = "https://github.com/googlefonts/nanum-gothic/raw/main/fonts/NanumGothic-Regular.ttf"
-                    try:
-                        urllib.request.urlretrieve(font_url, font_path)
-                    except:
-                        # 다운로드 실패 시 기본 폰트 사용
-                        return None
-                
-                # 폰트 등록
-                font_prop = fm.FontProperties(fname=font_path)
-                return font_prop
-            
-            # 한글 폰트 설정 적용
-            font_prop = setup_korean_font()
-            if font_prop:
-                plt.rc('font', family=font_prop.get_name())
-            else:
-                # Mac OS의 경우 AppleGothic 사용
-                if os.name == 'posix':  # Mac OS
-                    plt.rc('font', family='AppleGothic')
-                # Windows의 경우 Malgun Gothic 사용
-                else:
-                    plt.rc('font', family='Malgun Gothic')
-            
-            # 마이너스 기호 깨짐 방지
-            plt.rcParams['axes.unicode_minus'] = False
-            
-            # 예측 데이터 준비
             forecast_index = pd.to_datetime(forecast_df['연도'].astype(str) + '-' + forecast_df['월'].astype(str))
             forecast_values = forecast_df['예측 수출량'].values
 
-            # 그래프 생성
             fig1, ax = plt.subplots(figsize=(12, 6))
             ax.plot(series.index, series['y'], label='실제 수출량', color='black')
             ax.plot(forecast_index, forecast_values, label='LSTM 예측', color='red', linestyle='--')
@@ -201,7 +158,6 @@ def prediction_ui():
             ax.grid(True)
             fig1.tight_layout()
 
-            # 스트림릿에 그래프 표시
             st.pyplot(fig1)
             plt.close(fig1)
 

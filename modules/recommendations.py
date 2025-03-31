@@ -3,6 +3,7 @@ import re
 import requests
 from huggingface_hub import InferenceClient
 from bs4 import BeautifulSoup
+import json
 
 TEXT_MODEL_ID = "google/gemma-2-9b-it"
 
@@ -231,7 +232,6 @@ def recommendations_ui():
         )
 
     # 이후 필요하다면 추가 UI, 예: 뉴스 표시, 추가 분석 폼 등
-    st.write("추가 UI나 분석 로직을 여기서 이어서 구현하세요.")
     # 뉴스가 없으면 가져오기
     if 'latest_news' not in st.session_state:
         with st.spinner("최신 뉴스를 가져오는 중..."):
