@@ -224,6 +224,7 @@ def prediction_ui():
         # 1. 지역별 수출량 예측
         file_path = "data/processed/hyundai-by-region.csv"  # 현대만 할 거니까~
         df = pd.read_csv(file_path)
+        st.dataframe(df)
 
         region_list = ["선택하세요"] + sorted(df['지역명'].unique())
         region_list.remove("서유럽")
@@ -242,7 +243,7 @@ def prediction_ui():
             else:
                 region_data = df[df['지역명'] == region_name].iloc[:, 1:].T
                 region_data.columns = ['y']
-                region_data.index = pd.to_datetime(region_data.index)
+                region_data.index = pd.to_datetime(region_data.index, format='%Y-%m', errors='coerce')
                 region_data = region_data.asfreq('MS')
                 region_data['y'] = pd.to_numeric(region_data['y'], errors='coerce')
                 region_data = region_data.dropna()
