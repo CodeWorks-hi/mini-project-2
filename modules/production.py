@@ -161,8 +161,7 @@ def production_ui():
                                 range_y=[0, df_year_month["총생산"].max() * 1.1],
                                 title=f"{brand} - {factory} 연도별 생산 추이 (월별 애니메이션)")
         
-        fig_animated.update_traces(marker=dict(sizemin=5, sizeref=2.*df_year_month["총생산"].max()/(40.**2)))
-        fig_animated.update_layout(transition = {'duration': 500})
+        fig_animated.update_traces(marker=dict(sizemin=5, sizeref=2.*df_year_month["총생산"].max()/(40.**2)))        
 
         st.plotly_chart(fig_animated, use_container_width=True)
         # 추가 정보 표시
