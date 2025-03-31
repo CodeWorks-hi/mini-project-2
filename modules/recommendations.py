@@ -219,6 +219,22 @@ def recommendations_ui():
             else:
                 st.error("뉴스를 가져오지 못했습니다.")
                 return
+    # 최신 뉴스 표시
+    with st.expander("📰 분석에 사용된 최신 뉴스"):
+        for i, news in enumerate(st.session_state.latest_news[:5], 1):
+            title = clean_html_tags(news['title'])
+            description = clean_html_tags(news['description'])
+            
+            st.markdown(
+                f"""
+                <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 15px; border-left: 4px solid #4285f4;">
+                    <h4 style="margin-top: 0; color: #333;">{i}. {title}</h4>
+                    <p style="color: #555;">{description[:150]}...</p>
+                    <p style="color: #888; font-size: 0.8em;">{news.get('pubDate', '')}</p>
+                </div>
+                """, 
+                unsafe_allow_html=True
+            )
 
     # 첫 번째 폼 (키: analyze_form)
     with st.form("analyze_form"):
@@ -236,22 +252,6 @@ def recommendations_ui():
             st.session_state.analysis_result = final_result_txt
             st.markdown(f"### 종합 예측 및 분석 결과\n{final_result_txt}")
 
-    # 최신 뉴스 표시
-    with st.expander("📰 분석에 사용된 최신 뉴스"):
-        for i, news in enumerate(st.session_state.latest_news[:5], 1):
-            title = clean_html_tags(news['title'])
-            description = clean_html_tags(news['description'])
-            
-            st.markdown(
-                f"""
-                <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 15px; border-left: 4px solid #4285f4;">
-                    <h4 style="margin-top: 0; color: #333;">{i}. {title}</h4>
-                    <p style="color: #555;">{description[:150]}...</p>
-                    <p style="color: #888; font-size: 0.8em;">{news.get('pubDate', '')}</p>
-                </div>
-                """, 
-                unsafe_allow_html=True
-            )
 
     # ---- 중복 폼 제거 또는 키 변경 ----
     #
