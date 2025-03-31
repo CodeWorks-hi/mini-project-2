@@ -30,9 +30,8 @@ tabs = st.tabs([
 "생산 관리",  
 "재고 관리",  
 "판매 관리",  
-"AI 예측 & 분석 시스템",  
-"AI",  
-"리포트 센터",
+"AI 예측 시스템",  
+"AI 분석 시스템",  
 "데이터 뷰어",  
 "시스템 소개"
 ])
@@ -43,9 +42,7 @@ tab_modules = [
     ("modules.inventory", "inventory_ui"), #재고
     ("modules.export", "export_ui"),  # 수출관리
     ("modules.prediction", "prediction_ui"), # 예측
-
     ("modules.recommendations", "recommendations_ui"), #추천 
-    ("modules.analytics", "analytics_ui"), # 분석관리
     ("modules.data", "data_preview_ui"), # 인트로
     ("modules.intro", "intro_ui") # 인트로
 
