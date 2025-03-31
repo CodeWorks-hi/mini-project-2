@@ -103,6 +103,7 @@ def get_filter_values(df, key_prefix):
         year = st.selectbox(
             "연도 선택",
             options=year_list[::-1],  # 역순으로 정렬
+            index=1,
             key=f"{key_prefix}_year"
         )
     
@@ -303,7 +304,7 @@ def export_ui():
                 y="수출량",
                 color="지역명",
                 animation_frame="월",
-                title=f"{year}년 {brand} 국가별 월별 수출량 비교"
+                title=f"{brand} 국가별 월별 수출량 비교"
             )
             fig.update_layout(height=600, width=800)
             st.plotly_chart(fig, use_container_width=True)
@@ -332,6 +333,7 @@ def export_ui():
             end_year = st.selectbox(
                 "끝 연도 선택",
                 options=year_list[::-1],  # 역순으로 정렬
+                index=1,
                 key="t3_end_year"
             )
         
@@ -609,6 +611,7 @@ def export_ui():
             end_year = st.selectbox(
                 "끝 연도 선택",
                 options=year_list[::-1],  # 역순으로 정렬
+                index=1,
                 key="t5_end_year"
             )
         

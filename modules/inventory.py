@@ -124,8 +124,8 @@ def inventory_ui():
     # ✅ 필터 UI - 연도
     with col3:
         st.markdown("#### 연도 필터")
-        available_years = sorted(inventory_df["연도"].dropna().unique(), reverse=True)
-        year_sel = st.selectbox("연도 선택", available_years, key="inventory_year")
+        available_years = list(range(2025, 2015, -1))
+        year_sel = st.selectbox("연도 선택", available_years, index=1, key="inventory_year")
 
 
     # 필터링
