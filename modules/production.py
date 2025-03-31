@@ -37,7 +37,7 @@ def production_ui():
     with tab1:
         st.subheader("기본 현황")
         brand = st.selectbox("브랜드 선택", df["브랜드"].unique())
-        year = st.selectbox("연도 선택", sorted({str(c)[:4] for c in df.columns if re.match(r"\d{4}-\d{2}", str(c))}, reverse=True))
+        year = st.selectbox("연도 선택", list(range(2025, 2015, -1)), index=1)
         factory = st.selectbox("공장 선택", df[df["브랜드"] == brand]["공장명(국가)"].unique())
         month_cols = [col for col in df.columns if str(col).startswith(str(year))]
 
@@ -104,7 +104,7 @@ def production_ui():
     with tab2:
         st.subheader("공장별 생산량 비교")
         brand = st.selectbox("브랜드", df["브랜드"].unique(), key="brand_tab2")
-        year = st.selectbox("연도", sorted({str(c)[:4] for c in df.columns if re.match(r"\d{4}-\d{2}", str(c))}, reverse=True), key="year_tab2")
+        year = st.selectbox("연도", list(range(2025, 2015, -1)), index=1)
         month_cols = [col for col in df.columns if str(col).startswith(str(year))]
 
         subset = df[df["브랜드"] == brand]
@@ -175,7 +175,7 @@ def production_ui():
     with tab4:
         st.subheader("목표 생산 달성률")
         brand = st.selectbox("브랜드", df["브랜드"].unique(), key="brand_tab4")
-        year = st.selectbox("연도", sorted({str(c)[:4] for c in df.columns if re.match(r"\d{4}-\d{2}", str(c))}, reverse=True), key="year_tab4")
+        year = st.selectbox("연도", list(range(2025, 2015, -1)), index=1, key="year_tab4")
         factory = st.selectbox("공장", df[df["브랜드"] == brand]["공장명(국가)"].unique(), key="factory_tab4")
         goal = st.number_input("목표 생산량 (대)", min_value=100000, step=100000, value=500000)
 

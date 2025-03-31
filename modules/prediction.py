@@ -224,7 +224,6 @@ def prediction_ui():
         # 1. 지역별 수출량 예측
         file_path = "data/processed/hyundai-by-region.csv"  # 현대만 할 거니까~
         df = pd.read_csv(file_path)
-        st.dataframe(df)
 
         region_list = ["선택하세요"] + sorted(df['지역명'].unique())
         region_list.remove("서유럽")

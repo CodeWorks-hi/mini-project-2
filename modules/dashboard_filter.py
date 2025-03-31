@@ -13,7 +13,7 @@ def render_filter_options(df_region, df_car, df_plant):
     with col1:
         years = sorted({col.split("-")[0] for col in df_region.columns if "-" in col and col[:4].isdigit()})
         years = [int(y) for y in years]
-        year = st.selectbox("연도", years, index=years.index(2023), key="dashboard_year")
+        year = st.selectbox("연도", years, index=years.index(2024), key="dashboard_year")
     with col2:
         company = st.selectbox("기업명", ["전체", "기아", "현대"], key="dashboard_company")
     with col3:
