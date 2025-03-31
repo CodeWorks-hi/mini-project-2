@@ -127,71 +127,14 @@ def export_ui():
 
     month_cols = extract_month_columns(df)
     year_list = extract_year_list(df)
-    
 
     # ✅ 탭 구성
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-        "수출실적 대시보드", "국가별 비교", "연도별 추이", "목표 달성률", "수출 지도", "성장률 분석"
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "수출실적 대시보드", "국가별 비교", "연도별 추이", "목표 달성률", "성장률 분석"
     ])
-
-    # ✅ 수출 등록 토글 함수
-    def toggle_export_form():
-        st.session_state["show_export_form"] = not st.session_state.get("show_export_form", False)
 
     # --- 탭 1: 수출 실적 대시보드 ---
     with tab1:
-        # 등록 버튼 (토글)
-        btn_label = "등록 취소" if st.session_state.get("show_export_form", False) else "수출 등록"
-        st.button(btn_label, on_click=toggle_export_form)
-
-        # 수출 등록 폼 표시
-        if st.session_state.get("show_export_form", False):
-            with st.form("add_export_form"):
-                st.subheader("신규 수출 데이터 등록")
-
-                col1, col2 = st.columns(2)
-                with col1:
-                    brand = st.selectbox("브랜드", ["현대", "기아"])
-                    year = st.selectbox("연도", sorted({col.split("-")[0] for col in df.columns if "-" in col}), key="exp_year")
-                    count = st.number_input("수출량", min_value=0, step=100, value=100)
-                with col2:
-                    # 지역명 정제 처리
-                    raw_countries = df["지역명"].dropna().astype(str)
-                    processed_countries = []
-                    for country_name in raw_countries:
-                        if "구소련" in country_name:
-                            processed_countries.append("구소련")
-                        elif "유럽" in country_name:
-                            processed_countries.append("유럽")
-                        else:
-                            processed_countries.append(country_name)
-                    country_options = sorted(set(processed_countries))
-
-                    country = st.selectbox("국가명", ["직접 입력"] + country_options)
-                    month = st.selectbox("월", [f"{i:02d}" for i in range(1, 13)], key="exp_month")
-                
-                
-
-                submitted = st.form_submit_button("등록하기")
-                if submitted:
-                    st.success("✅ 수출 데이터가 등록되었습니다!")
-
-                    new_col = f"{year}-{month}"
-                    new_row = pd.DataFrame([{
-                        "브랜드": brand,
-                        "지역명": country,
-                        new_col: count
-                    }])
-
-                    if country != "직접 입력" :
-                        df = pd.concat([df, new_row], ignore_index=True)
-
-                    # 저장
-                    if brand == "기아":
-                        df[df["브랜드"] == "기아"].to_csv("data/processed/kia-by-region.csv", index=False, encoding="utf-8-sig")
-                    elif brand == "현대":
-                        df[df["브랜드"] == "현대"].to_csv("data/processed/hyundai-by-region.csv", index=False, encoding="utf-8-sig")
-
         # 월 컬럼 추출
         month_cols = extract_month_columns(df)
 
@@ -491,102 +434,8 @@ def export_ui():
             st.dataframe(filtered, use_container_width=True)
 
 
-    # --- 수출 지도 ---
-    with tab5:
-
-        # 📌 확장된 공장 → 수출국 데이터 정의 (공장 설명 포함)
-        flow_data = {
-            "공장명": [
-                "울산공장", "울산공장", "아산공장", "전주공장", "앨라배마공장", "중국공장",
-                "인도공장", "체코공장", "튀르키예공장", "브라질공장", "싱가포르공장", "인도네시아공장"
-            ],
-            "수출국": [
-                "미국", "독일", "사우디아라비아", "호주", "캐나다", "홍콩",
-                "인도네시아", "영국", "프랑스", "아르헨티나", "태국", "베트남"
-            ],
-            "공장_위도": [
-                35.546, 35.546, 36.790, 35.824, 32.806, 39.904,
-                12.971, 49.523, 40.922, -23.682, 1.352, -6.305
-            ],
-            "공장_경도": [
-                129.317, 129.317, 126.977, 127.148, -86.791, 116.407,
-                77.594, 17.642, 29.330, -46.875, 103.819, 107.097
-            ],
-            "수출국_위도": [
-                37.090, 51.165, 23.8859, -25.2744, 56.1304, 22.3193,
-                -6.200, 55.3781, 46.6034, -38.4161, 15.8700, 14.0583
-            ],
-            "수출국_경도": [
-                -95.712, 10.4515, 45.0792, 133.7751, -106.3468, 114.1694,
-                106.816, -3.4360, 1.8883, -63.6167, 100.9925, 108.2772
-            ],
-            "공장설명": [
-                "단일 자동차 공장 중 세계 최대 규모",
-                "5개 독립 제조 공장, 수출 부두 포함",
-                "쏘나타, 그랜저 등 수출용 승용차 생산",
-                "세계 최초 연료 전지 전기 트럭 제조",
-                "북미 생산 기준 표준 공장",
-                "중국 소형차 생산 및 베르나 판매 1위",
-                "신흥 시장을 위한 전략 차량 생산",
-                "유럽 전략 차종 및 i 시리즈 생산",
-                "현대차 최초 해외 공장, 100만대 생산",
-                "HB20 등 현지 맞춤형 전략 모델 생산",
-                "스마트 팩토리, 아이오닉5 제조",
-                "아세안 최초 완성차 공장, 최대 25만대"
-            ],
-            "브랜드컬러": [
-                "#1f77b4", "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
-                "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5", "#8c564b"
-            ]
-        }
-
-        df_flow = pd.DataFrame(flow_data)
-        # tools.display_dataframe_to_user(name="수출 공장-국가 연결 데이터", dataframe=df_flow)
-
-
-        # 프레임 데이터 생성
-        frames = []
-        for i, row in df_flow.iterrows():
-            frames.append({
-                "frame": i + 1,
-                "공장명": row["공장명"],
-                "수출국": row["수출국"],
-                "위도": row["공장_위도"],
-                "경도": row["공장_경도"],
-                "역할": "공장"
-            })
-            frames.append({
-                "frame": i + 1,
-                "공장명": row["공장명"],
-                "수출국": row["수출국"],
-                "위도": row["수출국_위도"],
-                "경도": row["수출국_경도"],
-                "역할": "수출국"
-            })
-
-        df_frames = pd.DataFrame(frames)
-        df_frames["경로"] = df_frames["공장명"] + " → " + df_frames["수출국"]
-
-        # 애니메이션 지도 시각화
-        fig = px.line_geo(
-            df_frames,
-            lat="위도",
-            lon="경도",
-            color="경로",
-            line_group="경로",
-            animation_frame="frame",
-            scope="world",
-            hover_name="역할",
-            title="✈️ 공장에서 수출국으로의 애니메이션 경로 시각화"
-        )
-        fig.update_geos(projection_type="natural earth")
-        fig.update_layout(height=600)
-
-        #  Streamlit에서 출력
-        st.plotly_chart(fig, use_container_width=True)
-        
     # --- 성장률 분석 ---
-    with tab6:
+    with tab5:
         st.subheader("📈 국가별 수출 성장률 분석")
 
         col1, col2, col3, col4 = st.columns(4)

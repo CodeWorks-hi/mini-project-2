@@ -11,3 +11,17 @@ Traceback (most recent call last):
   File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/tornado/websocket.py", line 1090, in wrapper
     raise WebSocketClosedError()
 tornado.websocket.WebSocketClosedError
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/ENZO/KOOKIZ/GITHUB/mini-project-2/Home.py", line 55, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/ENZO/KOOKIZ/GITHUB/mini-project-2/modules/export.py", line 132, in export_ui
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+ValueError: too many values to unpack (expected 5)
+
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/ENZO/KOOKIZ/GITHUB/mini-project-2/Home.py", line 55, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/ENZO/KOOKIZ/GITHUB/mini-project-2/modules/export.py", line 532, in export_ui
+    with tab6:
+NameError: name 'tab6' is not defined. Did you mean: 'tab1'?
+
