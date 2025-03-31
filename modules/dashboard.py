@@ -134,7 +134,7 @@ def dashboard_ui():
     with colD:
         st.markdown("""
         <div style='margin-top:20px; padding:10px; background-color:#ede7f6; border-radius:10px;'>
-            <h4>월별 Top 3 수출 국가</h4>
+            <h4>월별 최대 수출국</h4>
         </div>
         """, unsafe_allow_html=True)
         fig_top = px.bar(top_df, x="월", y="수출량", color="지역명", barmode="group",
@@ -148,7 +148,7 @@ def dashboard_ui():
     with colE:
         st.markdown("""
         <div style='margin-top:20px; padding:10px; background-color:#f0f4c3; border-radius:10px;'>
-            <h4>월별 Bottom 3 수출 국가</h4>
+            <h4>월별 최소 수출국</h4>
         </div>
         """, unsafe_allow_html=True)
         fig_bottom = px.bar(bottom_df, x="월", y="수출량", color="지역명", barmode="group",
