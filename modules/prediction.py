@@ -747,7 +747,7 @@ def prediction_ui():
                         lstm_model = load_model(get_model_path(plant_name), compile=False)
                         scaler = joblib.load(get_scaler_path(plant_name))
                     else:
-                        st.info("모델생성을 새로 시작중입니다. 모델생성이 30초 이상 소요될 수 있습니다")
+                        st.info("모델생성을 새로 시작중입니다. 모델생성이 1분 이상 소요될 수 있습니다")
                         with st.spinner("모델을 학습 중입니다... 잠시만 기다려주세요."):
                             X, y, scaler = prepare_lstm_data(plant_data)
                             lstm_model = train_lstm_model(X, y, plant_name=plant_name)
