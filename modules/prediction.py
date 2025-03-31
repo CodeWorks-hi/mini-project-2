@@ -221,9 +221,13 @@ def prediction_ui():
             else:
                 print(f"모델 또는 스케일러가 존재하지 않아 새로 학습합니다.")
                 return False
+
         # 1. 지역별 수출량 예측
         file_path = "data/processed/hyundai-by-region.csv"  # 현대만 할 거니까~
         df = pd.read_csv(file_path)
+
+        with st.expander("원본 데이터 확인") :
+            st.dataframe(df)
 
         region_list = ["선택하세요"] + sorted(df['지역명'].unique())
         region_list.remove("서유럽")
@@ -429,6 +433,9 @@ def prediction_ui():
         # 5. 실행 예시
         file_path = "data/processed/hyundai-by-car.csv"
         df = pd.read_csv(file_path)
+
+        with st.expander("원본 데이터 확인") :
+            st.dataframe(df)
 
         # 전처리: 인덱스 통합
         df['차종'] = df['차종'].astype(str) + '-' + df['거래 구분'].astype(str).str.zfill(2)
@@ -664,6 +671,9 @@ def prediction_ui():
         # 5. 실행 예시
         file_path = "data/processed/hyundai-by-plant.csv"
         df = pd.read_csv(file_path)
+
+        with st.expander("원본 데이터 확인") :
+            st.dataframe(df)
 
         # 전처리: 인덱스 통합
         df['공장명(국가)'] = df['공장명(국가)'].astype(str) + '-' + df['차종'].astype(str).str.zfill(2) + '-' + df['거래 구분'].astype(str).str.zfill(2)

@@ -25,3 +25,10 @@ ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent cal
     with tab6:
 NameError: name 'tab6' is not defined. Did you mean: 'tab1'?
 
+ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent call last):
+  File "/Users/ENZO/KOOKIZ/GITHUB/mini-project-2/Home.py", line 54, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/ENZO/KOOKIZ/GITHUB/mini-project-2/modules/dashboard.py", line 19, in <module>
+    from modules.dashboard_exim import exchange_ui
+ModuleNotFoundError: No module named 'modules.dashboard_exim'
+
