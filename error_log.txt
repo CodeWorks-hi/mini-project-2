@@ -4301,3 +4301,28 @@ If you cannot immediately regenerate your protos, some other possible workaround
 
 More information: https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
 
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/ENZO/KOOKIZ/GITHUB/mini-project-2/Home.py", line 59, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/ENZO/KOOKIZ/GITHUB/mini-project-2/modules/export.py", line 155
+    count = st.number_input("수출량", min_value=0, step=100, value=100, s)
+                                                                       ^
+SyntaxError: positional argument follows keyword argument
+
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/ENZO/KOOKIZ/GITHUB/mini-project-2/Home.py", line 60, in <module>
+    getattr(module, ui_func_name)()
+  File "/Users/ENZO/KOOKIZ/GITHUB/mini-project-2/modules/export.py", line 256, in export_ui
+    st.plotly_chart(fig_line, use_container_width=True)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/streamlit/runtime/metrics_util.py", line 409, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/streamlit/elements/plotly_chart.py", line 510, in plotly_chart
+    plotly_chart_proto.id = compute_and_register_element_id(
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 226, in compute_and_register_element_id
+    _register_element_id(ctx, element_type, element_id)
+  File "/opt/anaconda3/envs/hi/lib/python3.10/site-packages/streamlit/elements/lib/utils.py", line 132, in _register_element_id
+    raise StreamlitDuplicateElementId(element_type)
+streamlit.errors.StreamlitDuplicateElementId: There are multiple `plotly_chart` elements with the same auto-generated ID. When this element is created, it is assigned an internal ID based on the element type and provided parameters. Multiple elements with the same type and parameters will cause this error.
+
+To fix this error, please pass a unique `key` argument to the `plotly_chart` element.
+

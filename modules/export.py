@@ -179,11 +179,11 @@ def export_ui():
                     new_row = pd.DataFrame([{
                         "브랜드": brand,
                         "지역명": country,
-                        "차량 구분": car_type,
                         new_col: count
                     }])
 
-                    df = pd.concat([df, new_row], ignore_index=True)
+                    if country != "직접 입력" :
+                        df = pd.concat([df, new_row], ignore_index=True)
 
                     # 저장
                     if brand == "기아":
@@ -248,8 +248,11 @@ def export_ui():
                     height=400,
                     template="plotly_white"
                 )
-                st.plotly_chart(fig_line, use_container_width=True)
-                st.plotly_chart(fig_bar, use_container_width=True)
+                col1, col2 = st.columns([1,1])
+                with col1:
+                    st.plotly_chart(fig_line, use_container_width=True)
+                with col2:
+                    st.plotly_chart(fig_bar, use_container_width=True)
             # 추가 정보 표시
             st.info(f"{year}년 {brand} {country} 수출 실적 ")
             col1, col2, col3= st.columns(3)
