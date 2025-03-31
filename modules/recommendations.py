@@ -204,12 +204,34 @@ def recommendations_ui():
         st.warning("먼저 '예측 시스템' 탭에서 예측을 실행해주세요.")
         return
 
-    with st.expander("예측 결과 표 (LSTM 기반)"):
+    # 1) 예측 결과 (LSTM 기반)
+    with st.expander("예측 결과 표 (LSTM 기반)", expanded=False):
+        # (디버그용) 원본 출력
         st.write(st.session_state.predictions)
-        formatted_predictions = format_predictions_for_api(st.session_state.predictions)
-        st.markdown("### 형식 변환된 예측 데이터")
-        st.markdown(formatted_predictions)
 
+        # 2) 예: format_predictions_for_api()를 통해 HTML 또는 Markdown을 생성했다고 가정
+        # 여기서는 간단히 JSON을 예쁘게 출력하는 예시
+        # 필요하다면 format_predictions_for_api()로 표 형식 가공 가능
+        predictions_str = json.dumps(st.session_state.predictions, ensure_ascii=False, indent=2)
+
+        # 3) 최종 HTML 블록
+        st.markdown("### 형식 변환된 예측 데이터")
+        st.markdown(
+            f"""
+            <div style="background-color: #f8f9fa; 
+                        padding: 15px; 
+                        border-radius: 8px; 
+                        margin-bottom: 10px; 
+                        border-left: 4px solid #4285f4;">
+                <h4 style="margin-top: 0; color: #333;">예측 데이터</h4>
+                <pre style="color: #555; white-space: pre-wrap;">{predictions_str}</pre>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    # 이후 필요하다면 추가 UI, 예: 뉴스 표시, 추가 분석 폼 등
+    st.write("추가 UI나 분석 로직을 여기서 이어서 구현하세요.")
     # 뉴스가 없으면 가져오기
     if 'latest_news' not in st.session_state:
         with st.spinner("최신 뉴스를 가져오는 중..."):
