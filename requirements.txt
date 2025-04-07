@@ -15,7 +15,7 @@ requests>=2.31.0
 beautifulsoup4
 plotly
 accelerate>=0.26.0
-torch==2.0.0
+torch==2.4.0
 torchvision==0.15.1
 sentencepiece>=0.1.99
 transformers
