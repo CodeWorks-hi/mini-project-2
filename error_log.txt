@@ -32,3 +32,24 @@ ERROR:root:Module modules.dashboard에서 오류 발생: Traceback (most recent 
     from modules.dashboard_exim import exchange_ui
 ModuleNotFoundError: No module named 'modules.dashboard_exim'
 
+ERROR:root:Module modules.export에서 오류 발생: Traceback (most recent call last):
+  File "/Users/yeonu/yeonu/git/mini-project-2/Home.py", line 54, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/yeonu/yeonu/git/mini-project-2/modules/export.py", line 9, in <module>
+    import ace_tools_open as tools
+ModuleNotFoundError: No module named 'ace_tools_open'
+
+ERROR:root:Module modules.prediction에서 오류 발생: Traceback (most recent call last):
+  File "/Users/yeonu/yeonu/git/mini-project-2/Home.py", line 54, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/yeonu/yeonu/git/mini-project-2/modules/prediction.py", line 5, in <module>
+    import tensorflow as tf
+ModuleNotFoundError: No module named 'tensorflow'
+
+ERROR:root:Module modules.recommendations에서 오류 발생: Traceback (most recent call last):
+  File "/Users/yeonu/yeonu/git/mini-project-2/Home.py", line 54, in <module>
+    module = __import__(mod_path, fromlist=[ui_func_name])
+  File "/Users/yeonu/yeonu/git/mini-project-2/modules/recommendations.py", line 4, in <module>
+    from huggingface_hub import InferenceClient
+ModuleNotFoundError: No module named 'huggingface_hub'
+
